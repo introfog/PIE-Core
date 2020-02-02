@@ -1,6 +1,6 @@
 package com.introfog.pie.core.collisionDetection;
 
-import com.introfog.pie.core.AABB;
+import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.MathPIE;
 

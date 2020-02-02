@@ -1,8 +1,7 @@
 package com.introfog.pie.core.collisions;
 
-import com.introfog.pie.core.Circle;
-import com.introfog.pie.core.Manifold;
-import com.introfog.pie.core.Polygon;
+import com.introfog.pie.core.shape.Circle;
+import com.introfog.pie.core.shape.Polygon;
 import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.math.Vector2f;
 

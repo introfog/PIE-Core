@@ -1,8 +1,11 @@
-package com.introfog.pie.core;
+package com.introfog.pie.core.collisions;
 
-import com.introfog.pie.core.collisions.Collisions;
+import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.math.Vector2f;
+import com.introfog.pie.core.shape.Circle;
+import com.introfog.pie.core.shape.Polygon;
+import com.introfog.pie.core.shape.Shape;
 
 public class Manifold {
     public boolean areBodiesCollision;
@@ -102,7 +105,8 @@ public class Manifold {
             // Вычисляем относительную скорость
             // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
             // A->velocity - Cross( A->angularVelocity, ra );
-            Vector2f rv = Vector2f.sub(b.velocity, a.velocity); //relativeVelocity
+            // relativeVelocity
+            Vector2f rv = Vector2f.sub(b.velocity, a.velocity);
             rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
             rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
 

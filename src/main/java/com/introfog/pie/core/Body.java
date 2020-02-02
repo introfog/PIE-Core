@@ -1,6 +1,7 @@
 package com.introfog.pie.core;
 
 import com.introfog.pie.core.math.Vector2f;
+import com.introfog.pie.core.shape.Shape;
 
 public class Body {
     public float invertMass;

@@ -1,7 +1,5 @@
 package com.introfog.pie.core.collisions;
 
-import com.introfog.pie.core.Manifold;
-
 public class CollisionPolygonCircle implements CollisionCallback {
     public static final CollisionPolygonCircle instance = new CollisionPolygonCircle();
 

@@ -1,7 +1,6 @@
 package com.introfog.pie.core.collisions;
 
-import com.introfog.pie.core.Circle;
-import com.introfog.pie.core.Manifold;
+import com.introfog.pie.core.shape.Circle;
 import com.introfog.pie.core.math.Vector2f;
 
 public class CollisionCircleCircle implements CollisionCallback {

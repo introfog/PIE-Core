@@ -1,8 +1,8 @@
 package com.introfog.pie.core.collisionDetection;
 
-import com.introfog.pie.core.AABB;
+import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.Body;
-import com.introfog.pie.core.Shape;
+import com.introfog.pie.core.shape.Shape;
 import com.introfog.pie.core.math.Vector2f;
 
 import java.util.LinkedList;

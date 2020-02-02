@@ -1,5 +1,6 @@
-package com.introfog.pie.core;
+package com.introfog.pie.core.shape;
 
+import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.math.Vector2f;
 

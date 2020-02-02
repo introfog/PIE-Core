@@ -1,7 +1,9 @@
 package com.introfog.pie.core;
 
 import com.introfog.pie.core.collisionDetection.BroadPhase;
+import com.introfog.pie.core.collisions.Manifold;
 import com.introfog.pie.core.math.MathPIE;
+import com.introfog.pie.core.shape.Shape;
 
 import java.util.LinkedList;
 
@@ -43,7 +45,7 @@ public class World {
         broadPhase.spatialHashing(mayBeCollision);
 
         // Integrate forces
-        //Hanna modification Euler's method is used!
+        // Hanna modification Euler's method is used!
         bodies.forEach((body) -> integrateForces(body));
 
         narrowPhase();
@@ -57,7 +59,7 @@ public class World {
         bodies.forEach((body) -> integrateVelocity(body));
 
         // Integrate forces
-        //Hanna modification Euler's method is used!
+        // Hanna modification Euler's method is used!
         bodies.forEach((body) -> integrateForces(body));
 
         // Correct positions
