@@ -2,21 +2,22 @@ package com.introfog.pie.core.collisionDetection;
 
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.Body;
-import com.introfog.pie.core.shape.Shape;
+import com.introfog.pie.core.shape.IShape;
 import com.introfog.pie.core.math.Vector2f;
 
 import java.util.LinkedList;
 
+import java.util.List;
 import javafx.util.Pair;
 
 public class BroadPhase {
     public static int INTERSECTED_COUNTER = 0;
-    private LinkedList<Body> bodies;
+    private List<Body> bodies;
 
     // For my realisation sweep and prune method
-    private LinkedList<Body> xAxisProjection;
-    private LinkedList<Body> yAxisProjection;
-    private LinkedList<Body> activeList;
+    private List<Body> xAxisProjection;
+    private List<Body> yAxisProjection;
+    private List<Body> activeList;
 
     // For sweep and prune method (dispersion)
     private int CURRENT_AXIS = 0;
@@ -28,7 +29,7 @@ public class BroadPhase {
     private float averageMaxBodiesSize = 0f;
     private SpatialHash spatialHash;
 
-    public BroadPhase(LinkedList<Body> bodies) {
+    public BroadPhase(List<Body> bodies) {
         this.bodies = bodies;
 
         xAxisProjection = new LinkedList<>();
@@ -69,14 +70,14 @@ public class BroadPhase {
         xAxisProjection.sort((a, b) -> (int) (a.shape.aabb.min.x - b.shape.aabb.min.x));
         // TODO использовать сортировку вставкой (эффективна когда почти отсортирован список)
 
-        activeList.add(xAxisProjection.getFirst());
-        float currEnd = xAxisProjection.getFirst().shape.aabb.max.x;
+        activeList.add(xAxisProjection.get(0));
+        float currEnd = xAxisProjection.get(0).shape.aabb.max.x;
 
         for (int i = 1; i < xAxisProjection.size(); i++) {
             if (xAxisProjection.get(i).shape.aabb.min.x <= currEnd) {
                 activeList.add(xAxisProjection.get(i));
             } else {
-                Body first = activeList.removeFirst();
+                Body first = activeList.remove(0);
                 activeList.forEach((body) -> {
                     INTERSECTED_COUNTER++;
                     if (AABB.isIntersected(first.shape.aabb, body.shape.aabb)) {
@@ -88,13 +89,13 @@ public class BroadPhase {
                 } else {
                     activeList.add(xAxisProjection.get(i));
                 }
-                currEnd = activeList.getFirst().shape.aabb.max.x;
+                currEnd = activeList.get(0).shape.aabb.max.x;
             }
         }
         if (!activeList.isEmpty()) {
             int size = activeList.size();
             for (int i = 0; i < size; i++) {
-                Body first = activeList.removeFirst();
+                Body first = activeList.remove(0);
                 activeList.forEach((body) -> {
                     INTERSECTED_COUNTER++;
                     if (AABB.isIntersected(first.shape.aabb, body.shape.aabb)) {
@@ -169,7 +170,7 @@ public class BroadPhase {
         }
     }
 
-    public void spatialHashing(LinkedList<Pair<Body, Body>> mayBeCollision) {
+    public void spatialHashing(List<Pair<Body, Body>> mayBeCollision) {
         // Сложность O(n) если минимальный и максимальный размер объектов не сильно отличаются, но если очень сильно,
         // то сложность близиться к O(n^2)
 
@@ -187,7 +188,7 @@ public class BroadPhase {
         });
     }
 
-    public void addBody(Shape shape) {
+    public void addBody(IShape shape) {
         xAxisProjection.add(shape.body);
         yAxisProjection.add(shape.body);
 

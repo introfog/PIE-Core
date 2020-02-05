@@ -1,5 +1,6 @@
 package com.introfog.pie.core.math;
 
+// TODO Change class to context or property class
 public class MathPIE {
     public static final Vector2f GRAVITY = new Vector2f(0f, 50f); //9.807f
     public static final float FIXED_DELTA_TIME = 1f / 60f;

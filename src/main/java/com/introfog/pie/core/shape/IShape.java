@@ -3,7 +3,7 @@ package com.introfog.pie.core.shape;
 import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.Mat22;
 
-public abstract class Shape {
+public abstract class IShape {
     public enum Type {
         circle, polygon
     }
@@ -14,7 +14,7 @@ public abstract class Shape {
     public Body body;
 
 
-    public Shape() {
+    public IShape() {
         aabb = new AABB();
         rotateMatrix = new Mat22();
         rotateMatrix.setAngle(0f);

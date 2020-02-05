@@ -1,7 +1,7 @@
 package com.introfog.pie.core;
 
 import com.introfog.pie.core.math.Vector2f;
-import com.introfog.pie.core.shape.Shape;
+import com.introfog.pie.core.shape.IShape;
 
 public class Body {
     public float invertMass;
@@ -9,18 +9,19 @@ public class Body {
     public float density;
     public float staticFriction;
     public float dynamicFriction;
-    // Радианы
+
+    /** Orientation in radians. */
     public float orientation;
+
     public float angularVelocity;
-    // Крутящий момент
     public float torque;
     public float invertInertia;
     public Vector2f position;
     public Vector2f force;
     public Vector2f velocity;
-    public Shape shape;
+    public IShape shape;
 
-    public Body(Shape shape, float positionX, float positionY, float density, float restitution) {
+    public Body(IShape shape, float positionX, float positionY, float density, float restitution) {
         this.shape = shape;
         this.density = density;
         this.restitution = restitution;
@@ -44,6 +45,7 @@ public class Body {
         angularVelocity += invertInertia * Vector2f.crossProduct(contactVector, impulse);
     }
 
+    // TODO Is the method used? if so, then check whether the method should compare links or check for identity objects.
     @Override
     public boolean equals(Object obj) {
         return this == obj;

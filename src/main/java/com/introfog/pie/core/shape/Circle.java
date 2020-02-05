@@ -3,7 +3,7 @@ package com.introfog.pie.core.shape;
 import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.MathPIE;
 
-public class Circle extends Shape {
+public class Circle extends IShape {
     public float radius;
 
     public Circle(float radius, float centreX, float centreY, float density, float restitution) {
