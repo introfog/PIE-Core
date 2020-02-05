@@ -1,6 +1,7 @@
 package com.introfog.pie.core.collisions;
 
 import com.introfog.pie.core.Body;
+import com.introfog.pie.core.Context;
 import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.math.Vector2f;
 import com.introfog.pie.core.shape.Circle;
@@ -16,6 +17,7 @@ public class Manifold {
     public Vector2f normal;
     public int contactCount = 0;
     public Vector2f[] contacts;
+    public Context context;
     public Polygon polygonA;
     public Polygon polygonB;
     public Circle circleA;
@@ -23,9 +25,10 @@ public class Manifold {
     public Body a;
     public Body b;
 
-    public Manifold(Body a, Body b) {
+    public Manifold(Body a, Body b, Context context) {
         this.a = a;
         this.b = b;
+        this.context = new Context(context);
 
         areBodiesCollision = true;
         normal = new Vector2f();
@@ -88,7 +91,7 @@ public class Manifold {
             // Идея заключается в том, что единственное, что движет этим объектом, - это гравитация,
             // то столкновение должно выполняться без какой-либо реституции
             // if(rv.LenSqr( ) < (dt * gravity).LenSqr( ) + EPSILON)
-            if (rv.lengthWithoutSqrt() < MathPIE.RESTING) {
+            if (rv.lengthWithoutSqrt() < context.getResting()) {
                 e = 0.0f;
             }
         }
@@ -173,11 +176,11 @@ public class Manifold {
     }
 
     public void correctPosition() {
-        if (penetration < MathPIE.MIN_BORDER_SLOP) {
+        if (penetration < context.getMinBorderSlop()) {
             return;
         }
-        Vector2f correction = Vector2f.mul(normal,
-                penetration * MathPIE.CORRECT_POSITION_PERCENT / (a.invertMass + b.invertMass));
+        Vector2f correction = Vector2f.mul(normal, penetration *
+                context.getCorrectPositionPercent() / (a.invertMass + b.invertMass));
         a.position.sub(Vector2f.mul(correction, a.invertMass));
         b.position.add(Vector2f.mul(correction, b.invertMass));
     }

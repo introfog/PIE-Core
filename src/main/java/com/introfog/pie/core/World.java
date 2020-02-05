@@ -2,7 +2,6 @@ package com.introfog.pie.core;
 
 import com.introfog.pie.core.collisionDetection.BroadPhase;
 import com.introfog.pie.core.collisions.Manifold;
-import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.shape.IShape;
 
 import java.util.LinkedList;
@@ -17,16 +16,17 @@ import javafx.util.Pair;
 public class World {
     private int collisionSolveIterations;
     private float accumulator;
+    private Context context;
     private BroadPhase broadPhase;
     private List<Pair<Body, Body>> mayBeCollision;
     private List<Body> bodies;
     private List<Manifold> collisions;
 
-    // TODO Add constructor with PIE properties class or PIE context class
     /**
      * Instantiates a new {@link World} instance.
      */
-    public World() {
+    public World(Context context) {
+        this.context = new Context(context);
         collisionSolveIterations = 1;
         bodies = new LinkedList<>();
         mayBeCollision = new LinkedList<>();
@@ -38,7 +38,7 @@ public class World {
     /**
      * Updating the physical condition of all bodies in the world.
      *
-     * The world will be updated after an equal period of time equal to the {@link MathPIE#FIXED_DELTA_TIME} value.
+     * The world will be updated after an equal period of time equal to the {@link Context#getFixedDeltaTime()} value.
      *
      * @param deltaTime the time elapsed since the last method call
      */
@@ -47,14 +47,14 @@ public class World {
 
         // Prevention of the death loop (when step takes more time than there is for one step,
         // and the engine starts to slow down more and more).
-        if (accumulator > MathPIE.DEAD_LOOP_BORDER) {
-            accumulator = MathPIE.DEAD_LOOP_BORDER;
+        if (accumulator > context.getDeadLoopBorder()) {
+            accumulator = context.getDeadLoopBorder();
         }
 
-        while (accumulator > MathPIE.FIXED_DELTA_TIME) {
+        while (accumulator > context.getFixedDeltaTime()) {
             // Physics update always occurs after an equal period of time.
             step();
-            accumulator -= MathPIE.FIXED_DELTA_TIME;
+            accumulator -= context.getFixedDeltaTime();
         }
     }
 
@@ -100,7 +100,7 @@ public class World {
         collisions.clear();
         mayBeCollision.forEach((collision) -> {
             if (collision.getKey().invertMass != 0f || collision.getValue().invertMass != 0f) {
-                Manifold manifold = new Manifold(collision.getKey(), collision.getValue());
+                Manifold manifold = new Manifold(collision.getKey(), collision.getValue(), context);
                 manifold.initializeCollision();
                 if (manifold.areBodiesCollision) {
                     collisions.add(manifold);
@@ -149,9 +149,9 @@ public class World {
             return;
         }
 
-        b.velocity.add(b.force, b.invertMass * MathPIE.FIXED_DELTA_TIME * 0.5f);
-        b.velocity.add(MathPIE.GRAVITY, MathPIE.FIXED_DELTA_TIME * 0.5f);
-        b.angularVelocity += b.torque * b.invertInertia * MathPIE.FIXED_DELTA_TIME * 0.5f;
+        b.velocity.add(b.force, b.invertMass * context.getFixedDeltaTime() * 0.5f);
+        b.velocity.add(context.getGravity(), context.getFixedDeltaTime() * 0.5f);
+        b.angularVelocity += b.torque * b.invertInertia * context.getFixedDeltaTime() * 0.5f;
     }
 
     private void integrateVelocity(Body b) {
@@ -159,8 +159,8 @@ public class World {
             return;
         }
 
-        b.position.add(b.velocity, MathPIE.FIXED_DELTA_TIME);
-        b.orientation += b.angularVelocity * MathPIE.FIXED_DELTA_TIME;
+        b.position.add(b.velocity, context.getFixedDeltaTime());
+        b.orientation += b.angularVelocity * context.getFixedDeltaTime();
         b.setOrientation(b.orientation);
     }
 }

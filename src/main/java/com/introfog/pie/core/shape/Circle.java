@@ -24,7 +24,7 @@ public class Circle extends IShape {
 
     @Override
     protected void computeMass() {
-        float mass = MathPIE.PI * radius * radius * body.density;
+        float mass = (float) Math.PI * radius * radius * body.density;
         body.invertMass = (mass == 0f) ? 0f : 1f / mass;
 
         float inertia = radius * radius / body.invertMass;
