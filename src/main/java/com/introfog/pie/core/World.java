@@ -1,6 +1,6 @@
 package com.introfog.pie.core;
 
-import com.introfog.pie.core.collisionDetection.BroadPhase;
+import com.introfog.pie.core.collisions.broadphase.BroadPhase;
 import com.introfog.pie.core.collisions.Manifold;
 import com.introfog.pie.core.shape.IShape;
 

@@ -1,4 +1,4 @@
-package com.introfog.pie.core.collisionDetection;
+package com.introfog.pie.core.collisions.broadphase;
 
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.Body;
