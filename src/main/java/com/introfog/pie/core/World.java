@@ -20,7 +20,9 @@ public class World {
     private List<Manifold> collisions;
 
     /**
-     * Instantiates a new {@link World} instance.
+     * Instantiates a new {@link World} instance based on {@link Context} instance.
+     *
+     * @param context the {@link Context} instance
      */
     public World(Context context) {
         this.context = new Context(context);
@@ -80,7 +82,9 @@ public class World {
      * @param shape the new shape
      */
     public void addShape(IShape shape) {
+        shape.computeAABB();
         shapes.add(shape);
+        context.getBroadPhase().addShape(shape);
     }
 
     /**

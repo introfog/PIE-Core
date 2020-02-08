@@ -12,5 +12,7 @@ public abstract class AbstractBroadPhase {
         this.shapes = shapes;
     }
 
+    public void addShape(IShape shape){}
+
     public abstract List<Pair<IShape, IShape>> findPossibleCollision();
 }
