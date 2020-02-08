@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BruteForceMethod extends AbstractBroadPhase {
-    public BruteForceMethod(List<IShape> shapes) {
-        super(shapes);
-    }
-
     @Override
     public List<Pair<IShape, IShape>> findPossibleCollision() {
         IShape a;

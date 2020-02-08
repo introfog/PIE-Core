@@ -1,5 +1,7 @@
 package com.introfog.pie.core;
 
+import com.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
+import com.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.introfog.pie.core.math.Vector2f;
 
 public class Context {
@@ -9,6 +11,7 @@ public class Context {
     private float correctPositionPercent;
     private float minBorderSlop;
     private Vector2f gravity;
+    private AbstractBroadPhase broadPhase;
 
     public Context() {
         fixedDeltaTime = 1f / 60f;
@@ -18,6 +21,7 @@ public class Context {
         minBorderSlop = 0.1f;
         // Earth value is (0f, 9.807f)
         gravity = new Vector2f(0f, 50f);
+        broadPhase = new BruteForceMethod();
     }
 
     public Context(Context other) {
@@ -26,7 +30,8 @@ public class Context {
         this.epsilon = other.epsilon;
         this.correctPositionPercent = other.correctPositionPercent;
         this.minBorderSlop = other.minBorderSlop;
-        this.gravity = new Vector2f(other.gravity);
+        this.gravity = other.gravity;
+        this.broadPhase = other.broadPhase;
     }
 
     public float getDeadLoopBorder() {
@@ -75,6 +80,14 @@ public class Context {
 
     public void setGravity(Vector2f gravity) {
         this.gravity = new Vector2f(gravity);
+    }
+
+    public AbstractBroadPhase getBroadPhase() {
+        return broadPhase;
+    }
+
+    public void setBroadPhase(AbstractBroadPhase broadPhase) {
+        this.broadPhase = broadPhase;
     }
 
     public float getResting() {
