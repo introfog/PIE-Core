@@ -5,6 +5,7 @@ import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.shape.IShape;
 import com.introfog.pie.core.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -13,21 +14,16 @@ import java.util.List;
 
 public class SpatialHashingMethod extends AbstractBroadPhase {
     private int cellSize;
-    private float averageMaxBodiesSize = 0f;
+    private float averageMaxBodiesSize;
     private HashMap<Integer, LinkedList<Body>> cells;
     private HashMap<Body, LinkedList<Integer>> objects;
     private LinkedHashSet<Pair<IShape, IShape>> collisionPairSet;
 
     public SpatialHashingMethod() {
+        averageMaxBodiesSize = 0f;
         cells = new HashMap<>();
         objects = new HashMap<>();
         collisionPairSet = new LinkedHashSet<>();
-    }
-
-    @Override
-    public void setShapes(List<IShape> shapes) {
-        super.setShapes(shapes);
-
     }
 
     @Override
