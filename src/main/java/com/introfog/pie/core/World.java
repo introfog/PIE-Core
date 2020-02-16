@@ -1,13 +1,11 @@
 package com.introfog.pie.core;
 
-import com.introfog.pie.core.collisionDetection.BroadPhase;
 import com.introfog.pie.core.collisions.Manifold;
 import com.introfog.pie.core.shape.IShape;
+import com.introfog.pie.core.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import javafx.util.Pair;
 
 /**
  * The World is the main class in PIE library.
@@ -17,21 +15,22 @@ public class World {
     private int collisionSolveIterations;
     private float accumulator;
     private Context context;
-    private BroadPhase broadPhase;
-    private List<Pair<Body, Body>> mayBeCollision;
-    private List<Body> bodies;
+    private List<Pair<IShape, IShape>> mayBeCollision;
+    private List<IShape> shapes;
     private List<Manifold> collisions;
 
     /**
-     * Instantiates a new {@link World} instance.
+     * Instantiates a new {@link World} instance based on {@link Context} instance.
+     *
+     * @param context the {@link Context} instance
      */
     public World(Context context) {
         this.context = new Context(context);
         collisionSolveIterations = 1;
-        bodies = new LinkedList<>();
+        shapes = new LinkedList<>();
         mayBeCollision = new LinkedList<>();
         collisions = new LinkedList<>();
-        broadPhase = new BroadPhase(bodies);
+        this.context.getBroadPhase().setShapes(shapes);
     }
 
     // TODO Create good JavaDoc
@@ -59,16 +58,6 @@ public class World {
     }
 
     /**
-     * Adds a new body to the world.
-     *
-     * @param shape the new shape
-     */
-    public void addShape(IShape shape) {
-        bodies.add(shape.body);
-        broadPhase.addBody(shape);
-    }
-
-    /**
      * Sets the number of collision solve iterations.
      *
      * @param collisionSolveIterations the number of iteration
@@ -88,19 +77,30 @@ public class World {
     }
 
     /**
-     * Gets the bodies in the world.
+     * Adds a new shape to the world.
      *
-     * @return the bodies
+     * @param shape the new shape
      */
-    public List<Body> getBodies() {
-        return bodies;
+    public void addShape(IShape shape) {
+        shape.computeAABB();
+        shapes.add(shape);
+        context.getBroadPhase().addShape(shape);
+    }
+
+    /**
+     * Gets the shapes in the world.
+     *
+     * @return the shapes
+     */
+    public List<IShape> getShapes() {
+        return shapes;
     }
 
     private void narrowPhase() {
         collisions.clear();
         mayBeCollision.forEach((collision) -> {
-            if (collision.getKey().invertMass != 0f || collision.getValue().invertMass != 0f) {
-                Manifold manifold = new Manifold(collision.getKey(), collision.getValue(), context);
+            if (collision.getFirst().body.invertMass != 0f || collision.getSecond().body.invertMass != 0f) {
+                Manifold manifold = new Manifold(collision.getFirst().body, collision.getSecond().body, context);
                 manifold.initializeCollision();
                 if (manifold.areBodiesCollision) {
                     collisions.add(manifold);
@@ -113,14 +113,11 @@ public class World {
 
     private void step() {
         // Broad phase
-        //broadPhase.bruteForce (mayBeCollision);
-        //broadPhase.sweepAndPruneMyRealisation (mayBeCollision);
-        //broadPhase.sweepAndPrune (mayBeCollision);
-        broadPhase.spatialHashing(mayBeCollision);
+        mayBeCollision = context.getBroadPhase().findPossibleCollision();
 
         // Integrate forces
         // Hanna modification Euler's method is used!
-        bodies.forEach(this::integrateForces);
+        shapes.forEach(this::integrateForces);
 
         // Narrow phase
         narrowPhase();
@@ -131,36 +128,38 @@ public class World {
         }
 
         // Integrate velocities
-        bodies.forEach(this::integrateVelocity);
+        shapes.forEach(this::integrateVelocity);
 
         // Integrate forces
         // Hanna modification Euler's method is used!
-        bodies.forEach(this::integrateForces);
+        shapes.forEach(this::integrateForces);
 
         // Correct positions
         collisions.forEach(Manifold::correctPosition);
 
         // Clear all forces
-        bodies.forEach((body) -> body.force.set(0f, 0f));
+        shapes.forEach((shape) -> shape.body.force.set(0f, 0f));
     }
 
-    private void integrateForces(Body b) {
-        if (b.invertMass == 0.0f) {
+    private void integrateForces(IShape shape) {
+        Body body = shape.body;
+        if (body.invertMass == 0.0f) {
             return;
         }
 
-        b.velocity.add(b.force, b.invertMass * context.getFixedDeltaTime() * 0.5f);
-        b.velocity.add(context.getGravity(), context.getFixedDeltaTime() * 0.5f);
-        b.angularVelocity += b.torque * b.invertInertia * context.getFixedDeltaTime() * 0.5f;
+        body.velocity.add(body.force, body.invertMass * context.getFixedDeltaTime() * 0.5f);
+        body.velocity.add(context.getGravity(), context.getFixedDeltaTime() * 0.5f);
+        body.angularVelocity += body.torque * body.invertInertia * context.getFixedDeltaTime() * 0.5f;
     }
 
-    private void integrateVelocity(Body b) {
-        if (b.invertMass == 0.0f) {
+    private void integrateVelocity(IShape shape) {
+        Body body = shape.body;
+        if (body.invertMass == 0.0f) {
             return;
         }
 
-        b.position.add(b.velocity, context.getFixedDeltaTime());
-        b.orientation += b.angularVelocity * context.getFixedDeltaTime();
-        b.setOrientation(b.orientation);
+        body.position.add(body.velocity, context.getFixedDeltaTime());
+        body.orientation += body.angularVelocity * context.getFixedDeltaTime();
+        body.setOrientation(body.orientation);
     }
 }
