@@ -5,6 +5,7 @@ import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.shape.IShape;
 import com.introfog.pie.core.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -13,12 +14,13 @@ import java.util.List;
 
 public class SpatialHashingMethod extends AbstractBroadPhase {
     private int cellSize;
-    private float averageMaxBodiesSize = 0f;
-    private HashMap<Integer, LinkedList<Body>> cells;
+    private float averageMaxBodiesSize;
+    private HashMap<Integer, LinkedList<IShape>> cells;
     private HashMap<Body, LinkedList<Integer>> objects;
     private LinkedHashSet<Pair<IShape, IShape>> collisionPairSet;
 
     public SpatialHashingMethod() {
+        averageMaxBodiesSize = 0f;
         cells = new HashMap<>();
         objects = new HashMap<>();
         collisionPairSet = new LinkedHashSet<>();
@@ -27,7 +29,9 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     @Override
     public void setShapes(List<IShape> shapes) {
         super.setShapes(shapes);
-
+        shapes.forEach((shape) ->
+                averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y));
+        averageMaxBodiesSize /= shapes.size();
     }
 
     @Override
@@ -46,7 +50,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         setCellSize((int) averageMaxBodiesSize * 2);
         clear();
 
-        shapes.forEach((shape) -> optimizedInsert(shape.body));
+        shapes.forEach((shape) -> optimizedInsert(shape));
 
         computeCollisions().forEach((pair) -> {
             if (AABB.isIntersected(pair.getFirst().aabb, pair.getSecond().aabb)) {
@@ -69,9 +73,10 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     // Медленый из-за округления и умножения лишнего
-    private void insert(Body body) {
-        body.shape.computeAABB();
-        AABB aabb = body.shape.aabb;
+    private void insert(IShape shape) {
+        Body body = shape.body;
+        shape.computeAABB();
+        AABB aabb = shape.aabb;
         int key;
         int cellX = MathPIE.fastFloor(aabb.max.x / cellSize) - MathPIE.fastFloor(aabb.min.x / cellSize);
         int cellY = MathPIE.fastFloor(aabb.max.y / cellSize) - MathPIE.fastFloor(aabb.min.y / cellSize);
@@ -80,10 +85,10 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
                 key = GenerateKey(aabb.min.x + i * cellSize, aabb.min.y + j * cellSize);
 
                 if (cells.containsKey(key)) {
-                    cells.get(key).add(body);
+                    cells.get(key).add(shape);
                 } else {
                     cells.put(key, new LinkedList<>());
-                    cells.get(key).add(body);
+                    cells.get(key).add(shape);
                 }
 
                 if (objects.containsKey(body)) {
@@ -96,12 +101,13 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         }
     }
 
-    private void optimizedInsert(Body body) {
+    private void optimizedInsert(IShape shape) {
         // Работает быстрее чем insert
         // Делим AABB на ячейки, пришлось увиличить размер AABB на целую клетку, что бы не проверять дополнительно
         // лежит ли остаток AABB в новой ячейке.
-        body.shape.computeAABB();
-        AABB aabb = body.shape.aabb;
+        Body body = shape.body;
+        shape.computeAABB();
+        AABB aabb = shape.aabb;
         float currX = aabb.min.x;
         float currY = aabb.min.y;
         int key;
@@ -110,10 +116,10 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
                 key = GenerateKey(currX, currY);
 
                 if (cells.containsKey(key)) {
-                    cells.get(key).add(body);
+                    cells.get(key).add(shape);
                 } else {
                     cells.put(key, new LinkedList<>());
-                    cells.get(key).add(body);
+                    cells.get(key).add(shape);
                 }
 
                 if (objects.containsKey(body)) {
@@ -142,7 +148,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         cells.forEach((cell, list) -> {
             for (int i = 0; i < list.size(); i++) {
                 for (int j = i + 1; j < list.size(); j++) {
-                    collisionPairSet.add(new Pair<>(list.get(i).shape, list.get(j).shape));
+                    collisionPairSet.add(new Pair<>(list.get(i), list.get(j)));
                 }
             }
         });

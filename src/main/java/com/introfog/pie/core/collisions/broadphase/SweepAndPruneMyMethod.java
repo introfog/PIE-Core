@@ -46,10 +46,10 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
             if (xAxisProjection.get(i).aabb.min.x <= currEnd) {
                 activeList.add(xAxisProjection.get(i));
             } else {
-                Body first = activeList.remove(0).body;
+                IShape first = activeList.remove(0);
                 activeList.forEach((shape) -> {
-                    if (AABB.isIntersected(first.shape.aabb, shape.aabb)) {
-                        possibleCollisionList.add(new Pair<>(first.shape, shape));
+                    if (AABB.isIntersected(first.aabb, shape.aabb)) {
+                        possibleCollisionList.add(new Pair<>(first, shape));
                     }
                 });
                 if (!activeList.isEmpty()) {
@@ -63,10 +63,10 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
         if (!activeList.isEmpty()) {
             int size = activeList.size();
             for (int i = 0; i < size; i++) {
-                Body first = activeList.remove(0).body;
+                IShape first = activeList.remove(0);
                 activeList.forEach((shape) -> {
-                    if (AABB.isIntersected(first.shape.aabb, shape.aabb)) {
-                        possibleCollisionList.add(new Pair<>(first.shape, shape));
+                    if (AABB.isIntersected(first.aabb, shape.aabb)) {
+                        possibleCollisionList.add(new Pair<>(first, shape));
                     }
                 });
             }
