@@ -100,7 +100,7 @@ public class World {
         collisions.clear();
         mayBeCollision.forEach((collision) -> {
             if (collision.getFirst().body.invertMass != 0f || collision.getSecond().body.invertMass != 0f) {
-                Manifold manifold = new Manifold(collision.getFirst().body, collision.getSecond().body, context);
+                Manifold manifold = new Manifold(collision.getFirst(), collision.getSecond(), context);
                 manifold.initializeCollision();
                 if (manifold.areBodiesCollision) {
                     collisions.add(manifold);
@@ -159,7 +159,7 @@ public class World {
         }
 
         body.position.add(body.velocity, context.getFixedDeltaTime());
-        body.orientation += body.angularVelocity * context.getFixedDeltaTime();
-        body.setOrientation(body.orientation);
+
+        shape.setOrientation(body.orientation + body.angularVelocity * context.getFixedDeltaTime());
     }
 }

@@ -14,7 +14,7 @@ public class Polygon extends IShape {
 
     // TODO поиск минимальной выпуклой оболочки (Джарвис) работает за O(n*h) где h-кол-во вершин в МВО
     public Polygon(float density, float restitution, float centreX, float centreY, Vector2f... vertices) {
-        body = new Body(this, centreX, centreY, density, restitution);
+        body = new Body(centreX, centreY, density, restitution);
 
         // Алгоритм Джарвиса построения минимальной выпуклой оболочки
         // находим самую нижнюю и правую координату, она станет стартовой точкой,

@@ -24,10 +24,14 @@ public class Manifold {
     public Circle circleB;
     public Body a;
     public Body b;
+    public IShape aShape;
+    public IShape bShape;
 
-    public Manifold(Body a, Body b, Context context) {
-        this.a = a;
-        this.b = b;
+    public Manifold(IShape aShape, IShape bShape, Context context) {
+        this.aShape = aShape;
+        this.bShape = bShape;
+        this.a = aShape.body;
+        this.b = bShape.body;
         this.context = new Context(context);
 
         areBodiesCollision = true;
@@ -43,21 +47,21 @@ public class Manifold {
             return;
         }
 
-        if (a.shape.type == IShape.Type.circle && b.shape.type == IShape.Type.circle) {
-            circleA = (Circle) a.shape;
-            circleB = (Circle) b.shape;
-        } else if (a.shape.type == IShape.Type.polygon && b.shape.type == IShape.Type.polygon) {
-            polygonA = (Polygon) a.shape;
-            polygonB = (Polygon) b.shape;
-        } else if (a.shape.type == IShape.Type.polygon && b.shape.type == IShape.Type.circle) {
-            polygonA = (Polygon) a.shape;
-            circleB = (Circle) b.shape;
-        } else if (a.shape.type == IShape.Type.circle && b.shape.type == IShape.Type.polygon) {
-            circleA = (Circle) a.shape;
-            polygonB = (Polygon) b.shape;
+        if (aShape.type == IShape.Type.circle && bShape.type == IShape.Type.circle) {
+            circleA = (Circle) aShape;
+            circleB = (Circle) bShape;
+        } else if (aShape.type == IShape.Type.polygon && bShape.type == IShape.Type.polygon) {
+            polygonA = (Polygon) aShape;
+            polygonB = (Polygon) bShape;
+        } else if (aShape.type == IShape.Type.polygon && bShape.type == IShape.Type.circle) {
+            polygonA = (Polygon) aShape;
+            circleB = (Circle) bShape;
+        } else if (aShape.type == IShape.Type.circle && bShape.type == IShape.Type.polygon) {
+            circleA = (Circle) aShape;
+            polygonB = (Polygon) bShape;
         }
 
-        Collisions.table[a.shape.type.ordinal()][b.shape.type.ordinal()].handleCollision(this);
+        Collisions.table[aShape.type.ordinal()][bShape.type.ordinal()].handleCollision(this);
 
         // Статическое трение - величина, показывающая сколько нужно приложить энергии что бы свдинуть тела, т.е. это
         // порог, если энергия ниже, то тела покоятся, если выше, то они сдвинулись
@@ -133,9 +137,9 @@ public class Manifold {
 
             // Прикладываем импульс силы
             Vector2f impulse = Vector2f.mul(normal, j);
-            b.applyImpulse(impulse, radB);
+            bShape.applyImpulse(impulse, radB);
             impulse.negative();
-            a.applyImpulse(impulse, radA);
+            aShape.applyImpulse(impulse, radA);
 
             //--------Работа с трением
 
@@ -169,9 +173,9 @@ public class Manifold {
             }
 
             // Пркладываем
-            b.applyImpulse(frictionImpulse, radB);
+            bShape.applyImpulse(frictionImpulse, radB);
             frictionImpulse.negative();
-            a.applyImpulse(frictionImpulse, radA);
+            aShape.applyImpulse(frictionImpulse, radA);
         }
     }
 
