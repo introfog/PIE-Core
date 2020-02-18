@@ -2,7 +2,7 @@ package com.introfog.pie.core;
 
 import com.introfog.pie.core.collisions.Manifold;
 import com.introfog.pie.core.shape.IShape;
-import com.introfog.pie.core.util.Pair;
+import com.introfog.pie.core.util.ShapePair;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class World {
     private int collisionSolveIterations;
     private float accumulator;
     private Context context;
-    private List<Pair<IShape, IShape>> mayBeCollision;
+    private List<ShapePair> mayBeCollision;
     private List<IShape> shapes;
     private List<Manifold> collisions;
 
@@ -99,8 +99,8 @@ public class World {
     private void narrowPhase() {
         collisions.clear();
         mayBeCollision.forEach((collision) -> {
-            if (collision.getFirst().body.invertMass != 0f || collision.getSecond().body.invertMass != 0f) {
-                Manifold manifold = new Manifold(collision.getFirst(), collision.getSecond(), context);
+            if (collision.first.body.invertMass != 0f || collision.second.body.invertMass != 0f) {
+                Manifold manifold = new Manifold(collision.first, collision.second, context);
                 manifold.initializeCollision();
                 if (manifold.areBodiesCollision) {
                     collisions.add(manifold);

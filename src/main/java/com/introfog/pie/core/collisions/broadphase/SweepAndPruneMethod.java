@@ -3,7 +3,7 @@ package com.introfog.pie.core.collisions.broadphase;
 import com.introfog.pie.core.math.Vector2f;
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.shape.IShape;
-import com.introfog.pie.core.util.Pair;
+import com.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +39,10 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public List<Pair<IShape, IShape>> findPossibleCollision() {
+    public List<ShapePair> findPossibleCollision() {
         // Лучший случай O(n*logn) или O(k*n), в худщем O(n^2), ищем возможные
         // пересечения по текущей оси, а потом bruteForce. Каждый раз через десперсию выбираем следующую ось
-        List<Pair<IShape, IShape>> possibleCollisionList = new ArrayList<>();
+        List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         shapes.forEach(IShape::computeAABB);
 
@@ -83,9 +83,9 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
 
 
                 if (CURRENT_AXIS == 0 && AABB.isIntersected(xAxisProjection.get(j).aabb, currAABB)) {
-                    possibleCollisionList.add(new Pair<>(xAxisProjection.get(j), xAxisProjection.get(i)));
+                    possibleCollisionList.add(new ShapePair(xAxisProjection.get(j), xAxisProjection.get(i)));
                 } else if (AABB.isIntersected(yAxisProjection.get(j).aabb, currAABB)) {
-                    possibleCollisionList.add(new Pair<>(yAxisProjection.get(j), yAxisProjection.get(i)));
+                    possibleCollisionList.add(new ShapePair(yAxisProjection.get(j), yAxisProjection.get(i)));
                 }
             }
         }

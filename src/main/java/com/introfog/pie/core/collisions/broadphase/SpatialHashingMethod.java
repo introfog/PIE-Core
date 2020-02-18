@@ -4,7 +4,7 @@ import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.shape.IShape;
-import com.introfog.pie.core.util.Pair;
+import com.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     private float averageMaxBodiesSize;
     private HashMap<Integer, LinkedList<IShape>> cells;
     private HashMap<Body, LinkedList<Integer>> objects;
-    private LinkedHashSet<Pair<IShape, IShape>> collisionPairSet;
+    private LinkedHashSet<ShapePair> collisionPairSet;
 
     public SpatialHashingMethod() {
         averageMaxBodiesSize = 0f;
@@ -42,10 +42,10 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public List<Pair<IShape, IShape>> findPossibleCollision() {
+    public List<ShapePair> findPossibleCollision() {
         // Сложность O(n) если минимальный и максимальный размер объектов не сильно отличаются, но если очень сильно,
         // то сложность близиться к O(n^2)
-        List<Pair<IShape, IShape>> possibleCollisionList = new ArrayList<>();
+        List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         setCellSize((int) averageMaxBodiesSize * 2);
         clear();
@@ -53,7 +53,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         shapes.forEach((shape) -> optimizedInsert(shape));
 
         computeCollisions().forEach((pair) -> {
-            if (AABB.isIntersected(pair.getFirst().aabb, pair.getSecond().aabb)) {
+            if (AABB.isIntersected(pair.first.aabb, pair.second.aabb)) {
                 possibleCollisionList.add(pair);
             }
         });
@@ -141,14 +141,14 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         objects.clear();
     }
 
-    private LinkedHashSet<Pair<IShape, IShape>> computeCollisions() {
+    private LinkedHashSet<ShapePair> computeCollisions() {
         // Использую LinkedHashSet что бы избежать повторяющихся пар, это не очень быстро
         // TODO возможно есть более легкий способ избежать повтора пар кроме как использовать LinkedHashSet (какое-нить лексикографическое сравнение)
         collisionPairSet.clear();
         cells.forEach((cell, list) -> {
             for (int i = 0; i < list.size(); i++) {
                 for (int j = i + 1; j < list.size(); j++) {
-                    collisionPairSet.add(new Pair<>(list.get(i), list.get(j)));
+                    collisionPairSet.add(new ShapePair(list.get(i), list.get(j)));
                 }
             }
         });
