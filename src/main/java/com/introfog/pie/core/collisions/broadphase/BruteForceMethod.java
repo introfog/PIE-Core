@@ -2,17 +2,17 @@ package com.introfog.pie.core.collisions.broadphase;
 
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.shape.IShape;
-import com.introfog.pie.core.util.Pair;
+import com.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BruteForceMethod extends AbstractBroadPhase {
     @Override
-    public List<Pair<IShape, IShape>> findPossibleCollision() {
+    public List<ShapePair> findPossibleCollision() {
         IShape a;
         IShape b;
-        List<Pair<IShape, IShape>> possibleCollisionList = new ArrayList<>();
+        List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         for (int i = 0; i < shapes.size(); i++) {
             for (int j = i + 1; j < shapes.size(); j++) {
@@ -23,7 +23,7 @@ public class BruteForceMethod extends AbstractBroadPhase {
                 b.computeAABB();
 
                 if (AABB.isIntersected(a.aabb, b.aabb)) {
-                    possibleCollisionList.add(new Pair<>(a, b));
+                    possibleCollisionList.add(new ShapePair(a, b));
                 }
             }
         }

@@ -1,7 +1,7 @@
 package com.introfog.pie.core.collisions.broadphase;
 
 import com.introfog.pie.core.shape.IShape;
-import com.introfog.pie.core.util.Pair;
+import com.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,5 +21,5 @@ public abstract class AbstractBroadPhase {
         shapes.add(shape);
     }
 
-    public abstract List<Pair<IShape, IShape>> findPossibleCollision();
+    public abstract List<ShapePair> findPossibleCollision();
 }

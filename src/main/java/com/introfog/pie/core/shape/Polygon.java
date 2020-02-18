@@ -1,16 +1,28 @@
 package com.introfog.pie.core.shape;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.math.Vector2f;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Polygon extends IShape {
+    @JsonProperty
     public int vertexCount;
+    @JsonProperty
     public Vector2f[] vertices = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT);
+    @JsonProperty
     public Vector2f[] normals = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT);
 
+    @JsonIgnore
     public Vector2f tmpV = new Vector2f();
+    @JsonIgnore
     public Vector2f tmpV2 = new Vector2f();
+
+    public Polygon() {
+        type = Type.polygon;
+    }
 
     // TODO поиск минимальной выпуклой оболочки (Джарвис) работает за O(n*h) где h-кол-во вершин в МВО
     public Polygon(float density, float restitution, float centreX, float centreY, Vector2f... vertices) {

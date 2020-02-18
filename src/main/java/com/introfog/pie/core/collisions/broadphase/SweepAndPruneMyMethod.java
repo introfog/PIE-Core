@@ -1,9 +1,8 @@
 package com.introfog.pie.core.collisions.broadphase;
 
-import com.introfog.pie.core.Body;
 import com.introfog.pie.core.shape.AABB;
 import com.introfog.pie.core.shape.IShape;
-import com.introfog.pie.core.util.Pair;
+import com.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +29,10 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public List<Pair<IShape, IShape>> findPossibleCollision() {
+    public List<ShapePair> findPossibleCollision() {
         // Лучший случай O(n*logn) или O(k*n), в худщем O(n^2), ищем
         // возможные пересечения по оси Х, а потом bruteForce
-        List<Pair<IShape, IShape>> possibleCollisionList = new ArrayList<>();
+        List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         shapes.forEach(IShape::computeAABB);
         xAxisProjection.sort((a, b) -> (int) (a.aabb.min.x - b.aabb.min.x));
@@ -49,7 +48,7 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
                 IShape first = activeList.remove(0);
                 activeList.forEach((shape) -> {
                     if (AABB.isIntersected(first.aabb, shape.aabb)) {
-                        possibleCollisionList.add(new Pair<>(first, shape));
+                        possibleCollisionList.add(new ShapePair(first, shape));
                     }
                 });
                 if (!activeList.isEmpty()) {
@@ -66,7 +65,7 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
                 IShape first = activeList.remove(0);
                 activeList.forEach((shape) -> {
                     if (AABB.isIntersected(first.aabb, shape.aabb)) {
-                        possibleCollisionList.add(new Pair<>(first, shape));
+                        possibleCollisionList.add(new ShapePair(first, shape));
                     }
                 });
             }
