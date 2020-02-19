@@ -35,7 +35,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public void addShape(IShape shape) {
+    public void processNewShape(IShape shape) {
         averageMaxBodiesSize *= (shapes.size() - 1);
         averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y);
         averageMaxBodiesSize /= shapes.size();

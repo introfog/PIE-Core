@@ -84,7 +84,7 @@ public class World {
     public void addShape(IShape shape) {
         shape.computeAABB();
         shapes.add(shape);
-        context.getBroadPhase().addShape(shape);
+        context.getBroadPhase().processNewShape(shape);
     }
 
     /**
@@ -94,6 +94,16 @@ public class World {
      */
     public List<IShape> getShapes() {
         return shapes;
+    }
+
+    /**
+     * Sets the new shapes in the world.
+     *
+     * @param shapes the new shapes
+     */
+    public void setShapes(List<IShape> shapes) {
+        this.shapes = shapes;
+        context.getBroadPhase().setShapes(shapes);
     }
 
     private void narrowPhase() {
