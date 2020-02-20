@@ -17,7 +17,7 @@ public abstract class AbstractBroadPhase {
         this.shapes = shapes;
     }
 
-    public void addShape(IShape shape){
+    public void processNewShape(IShape shape){
         shapes.add(shape);
     }
 

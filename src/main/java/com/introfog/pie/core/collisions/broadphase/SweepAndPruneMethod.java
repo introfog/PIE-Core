@@ -33,7 +33,7 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public void addShape(IShape shape) {
+    public void processNewShape(IShape shape) {
         xAxisProjection.add(shape);
         yAxisProjection.add(shape);
     }
