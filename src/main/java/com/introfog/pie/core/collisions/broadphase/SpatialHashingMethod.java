@@ -27,30 +27,25 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public void setShapes(List<IShape> shapes) {
-        super.setShapes(shapes);
-        shapes.forEach((shape) ->
-                averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y));
-        averageMaxBodiesSize /= shapes.size();
-    }
-
-    @Override
-    public void processNewShape(IShape shape) {
-        averageMaxBodiesSize *= (shapes.size() - 1);
-        averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y);
-        averageMaxBodiesSize /= shapes.size();
-    }
-
-    @Override
-    public List<ShapePair> findPossibleCollision() {
+    public List<ShapePair> insideCollisionCalculating() {
         // Сложность O(n) если минимальный и максимальный размер объектов не сильно отличаются, но если очень сильно,
         // то сложность близиться к O(n^2)
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
+        averageMaxBodiesSize = 0;
+        for (IShape shape : shapes) {
+            averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y);
+        }
+        averageMaxBodiesSize /= shapes.size();
+
         setCellSize((int) averageMaxBodiesSize * 2);
+        if (cellSize == 0) {
+            // TODO create PIE custom exception
+            throw new RuntimeException();
+        }
         clear();
 
-        shapes.forEach((shape) -> optimizedInsert(shape));
+        shapes.forEach(this::optimizedInsert);
 
         computeCollisions().forEach((pair) -> {
             if (AABB.isIntersected(pair.first.aabb, pair.second.aabb)) {

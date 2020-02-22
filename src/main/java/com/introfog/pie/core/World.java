@@ -84,7 +84,7 @@ public class World {
     public void addShape(IShape shape) {
         shape.computeAABB();
         shapes.add(shape);
-        context.getBroadPhase().processNewShape(shape);
+        context.getBroadPhase().addShape(shape);
     }
 
     /**
@@ -123,7 +123,7 @@ public class World {
 
     private void step() {
         // Broad phase
-        mayBeCollision = context.getBroadPhase().findPossibleCollision();
+        mayBeCollision = context.getBroadPhase().calculateAabbCollision();
 
         // Integrate forces
         // Hanna modification Euler's method is used!
