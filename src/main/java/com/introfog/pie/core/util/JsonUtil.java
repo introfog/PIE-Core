@@ -30,7 +30,7 @@ public class JsonUtil {
         StringWriter writer = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
 
-        mapper.writeValue(writer, object);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(writer, object);
         Files.write(Paths.get(path), writer.toString().getBytes());
     }
 
@@ -38,7 +38,7 @@ public class JsonUtil {
         StringWriter writer = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
 
-        mapper.writeValue(writer, list.toArray(arrayToSerialize));
+        mapper.writerWithDefaultPrettyPrinter().writeValue(writer, list.toArray(arrayToSerialize));
         Files.write(Paths.get(path), writer.toString().getBytes());
     }
 }

@@ -17,9 +17,14 @@ public abstract class AbstractBroadPhase {
         this.shapes = shapes;
     }
 
-    public void processNewShape(IShape shape){
+    public void addShape(IShape shape){
         shapes.add(shape);
     }
 
-    public abstract List<ShapePair> findPossibleCollision();
+    public final List<ShapePair> calculateAabbCollision() {
+        shapes.forEach(IShape::computeAABB);
+        return insideCollisionCalculating();
+    }
+
+    protected abstract List<ShapePair> insideCollisionCalculating();
 }

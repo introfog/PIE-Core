@@ -9,7 +9,7 @@ import java.util.List;
 
 public class BruteForceMethod extends AbstractBroadPhase {
     @Override
-    public List<ShapePair> findPossibleCollision() {
+    public List<ShapePair> insideCollisionCalculating() {
         IShape a;
         IShape b;
         List<ShapePair> possibleCollisionList = new ArrayList<>();
@@ -18,9 +18,6 @@ public class BruteForceMethod extends AbstractBroadPhase {
             for (int j = i + 1; j < shapes.size(); j++) {
                 a = shapes.get(i);
                 b = shapes.get(j);
-
-                a.computeAABB();
-                b.computeAABB();
 
                 if (AABB.isIntersected(a.aabb, b.aabb)) {
                     possibleCollisionList.add(new ShapePair(a, b));

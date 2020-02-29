@@ -33,18 +33,17 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public void processNewShape(IShape shape) {
+    public void addShape(IShape shape) {
+        super.addShape(shape);
         xAxisProjection.add(shape);
         yAxisProjection.add(shape);
     }
 
     @Override
-    public List<ShapePair> findPossibleCollision() {
+    public List<ShapePair> insideCollisionCalculating() {
         // Лучший случай O(n*logn) или O(k*n), в худщем O(n^2), ищем возможные
         // пересечения по текущей оси, а потом bruteForce. Каждый раз через десперсию выбираем следующую ось
         List<ShapePair> possibleCollisionList = new ArrayList<>();
-
-        shapes.forEach(IShape::computeAABB);
 
         if (CURRENT_AXIS == 0) {
             xAxisProjection.sort((a, b) -> (int) (a.aabb.min.x - b.aabb.min.x));
