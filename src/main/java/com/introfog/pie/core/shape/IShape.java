@@ -4,31 +4,15 @@ import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.Mat22;
 import com.introfog.pie.core.math.Vector2f;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property="type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = Circle.class, name="circle"),
-        @JsonSubTypes.Type(value = Polygon.class, name="polygon")
-})
 public abstract class IShape {
     public enum Type {
         circle, polygon
     }
 
-    @JsonProperty
-    public Body body;
-
-    @JsonIgnore
     public Type type;
-    @JsonIgnore
     public AABB aabb;
-    @JsonIgnore
+    public Body body;
     public Mat22 rotateMatrix;
-
 
     public IShape() {
         aabb = new AABB();
