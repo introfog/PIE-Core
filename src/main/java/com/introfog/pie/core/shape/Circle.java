@@ -2,15 +2,8 @@ package com.introfog.pie.core.shape;
 
 import com.introfog.pie.core.Body;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Circle extends IShape {
-    @JsonProperty
     public float radius;
-
-    public Circle() {
-        type = Type.circle;
-    }
 
     public Circle(float radius, float centreX, float centreY, float density, float restitution) {
         body = new Body(centreX, centreY, density, restitution);
