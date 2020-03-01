@@ -15,9 +15,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ShapeIOUtil {
+    public static boolean filesIdentical(String cmpPath, String outPath) throws IOException {
+        return Arrays.equals(Files.readAllBytes(Paths.get(cmpPath)), Files.readAllBytes(Paths.get(outPath)));
+    }
+
     public static List<IShape> readShapesFromFile(String path) throws IOException {
         String string = new String(Files.readAllBytes(Paths.get(path)));
         BufferedReader reader = new BufferedReader(new StringReader(string));
