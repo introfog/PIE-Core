@@ -76,14 +76,14 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
             for (int j = i + 1; j < shapes.size(); j++) {
                 if (CURRENT_AXIS == 0 && xAxisProjection.get(j).aabb.min.x > currAABB.max.x) {
                     break;
-                } else if (yAxisProjection.get(j).aabb.min.y > currAABB.max.y) {
+                } else if (CURRENT_AXIS == 1 && yAxisProjection.get(j).aabb.min.y > currAABB.max.y) {
                     break;
                 }
 
 
                 if (CURRENT_AXIS == 0 && AABB.isIntersected(xAxisProjection.get(j).aabb, currAABB)) {
                     possibleCollisionList.add(new ShapePair(xAxisProjection.get(j), xAxisProjection.get(i)));
-                } else if (AABB.isIntersected(yAxisProjection.get(j).aabb, currAABB)) {
+                } else if (CURRENT_AXIS == 1 && AABB.isIntersected(yAxisProjection.get(j).aabb, currAABB)) {
                     possibleCollisionList.add(new ShapePair(yAxisProjection.get(j), yAxisProjection.get(i)));
                 }
             }
