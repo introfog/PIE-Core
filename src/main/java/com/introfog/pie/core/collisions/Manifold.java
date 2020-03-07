@@ -7,6 +7,7 @@ import com.introfog.pie.core.math.Vector2f;
 import com.introfog.pie.core.shape.Circle;
 import com.introfog.pie.core.shape.Polygon;
 import com.introfog.pie.core.shape.IShape;
+import com.introfog.pie.core.shape.ShapeType;
 
 public class Manifold {
     public boolean areBodiesCollision;
@@ -47,16 +48,16 @@ public class Manifold {
             return;
         }
 
-        if (aShape.type == IShape.Type.circle && bShape.type == IShape.Type.circle) {
+        if (aShape.type == ShapeType.circle && bShape.type == ShapeType.circle) {
             circleA = (Circle) aShape;
             circleB = (Circle) bShape;
-        } else if (aShape.type == IShape.Type.polygon && bShape.type == IShape.Type.polygon) {
+        } else if (aShape.type == ShapeType.polygon && bShape.type == ShapeType.polygon) {
             polygonA = (Polygon) aShape;
             polygonB = (Polygon) bShape;
-        } else if (aShape.type == IShape.Type.polygon && bShape.type == IShape.Type.circle) {
+        } else if (aShape.type == ShapeType.polygon && bShape.type == ShapeType.circle) {
             polygonA = (Polygon) aShape;
             circleB = (Circle) bShape;
-        } else if (aShape.type == IShape.Type.circle && bShape.type == IShape.Type.polygon) {
+        } else if (aShape.type == ShapeType.circle && bShape.type == ShapeType.polygon) {
             circleA = (Circle) aShape;
             polygonB = (Polygon) bShape;
         }
