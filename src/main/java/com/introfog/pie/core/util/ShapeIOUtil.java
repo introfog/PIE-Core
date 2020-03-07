@@ -34,6 +34,19 @@ public class ShapeIOUtil {
         return shapes;
     }
 
+    public static List<ShapePair> readShapePairsFromFile(String path) throws IOException {
+        String string = new String(Files.readAllBytes(Paths.get(path)));
+        BufferedReader reader = new BufferedReader(new StringReader(string));
+        List<ShapePair> shapePairs = new ArrayList<>();
+        String line1;
+        String line2;
+        while (((line1 = reader.readLine()) != null) && ((line2 = reader.readLine()) != null)) {
+            ShapePair shapePair = new ShapePair(convertStringToShape(line1), convertStringToShape(line2));
+            shapePairs.add(shapePair);
+        }
+        return shapePairs;
+    }
+
     public static void writeShapesToFile(List<IShape> shapes, String path) throws IOException {
         StringWriter writer = new StringWriter();
         shapes.forEach(shape -> writer.write(convertShapeToString(shape)));
