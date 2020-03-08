@@ -11,7 +11,12 @@ import java.util.List;
 
 import org.junit.Assert;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class AbstractBroadPhaseResultTest {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractBroadPhaseResultTest.class);
+
     private List<AbstractBroadPhase> broadPhaseMethods;
     private String outPath;
     private String cmpPath;
@@ -35,7 +40,7 @@ public abstract class AbstractBroadPhaseResultTest {
             boolean result = results.get(i);
             if (!result) {
                 allTestsPassed = false;
-                System.out.println("Broad phase " + broadPhaseMethods.get(i).getClass().getSimpleName() + " returned incorrect result");
+                logger.error("Broad phase " + broadPhaseMethods.get(i).getClass().getSimpleName() + " returned incorrect result");
             }
         }
 
@@ -56,7 +61,7 @@ public abstract class AbstractBroadPhaseResultTest {
 
     private boolean runMethodAndCompareResult(AbstractBroadPhase method) throws IOException {
         List<ShapePair> outShapes = method.calculateAabbCollision();
-        System.out.println("Count collisions " + outShapes.size() + " for method " + method.getClass().getSimpleName());
+        logger.info("Count collisions " + outShapes.size() + " for method " + method.getClass().getSimpleName());
         ShapeIOUtil.writeShapePairsToFile(outShapes, outPath);
 
         if (ShapeIOUtil.filesIdentical(cmpPath, outPath)) {
