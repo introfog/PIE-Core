@@ -7,7 +7,9 @@ import com.introfog.pie.core.util.ShapePair;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 
@@ -61,14 +63,49 @@ public abstract class AbstractBroadPhaseResultTest {
 
     private boolean runMethodAndCompareResult(AbstractBroadPhase method) throws IOException {
         List<ShapePair> outShapes = method.calculateAabbCollision();
-        logger.info("Count collisions " + outShapes.size() + " for method " + method.getClass().getSimpleName());
-        ShapeIOUtil.writeShapePairsToFile(outShapes, outPath);
+        logger.info(outShapes.size() + " collisions returned by the " + method.getClass().getSimpleName());
 
+        ShapeIOUtil.writeShapePairsToFile(outShapes, outPath);
         if (ShapeIOUtil.filesIdentical(cmpPath, outPath)) {
             return true;
         }
 
+        return comparingByObjects(outShapes);
+    }
+
+    private boolean comparingByObjects(List<ShapePair> outShapes) throws IOException {
         List<ShapePair> cmpShapes = ShapeIOUtil.readShapePairsFromFile(cmpPath);
-        return cmpShapes.containsAll(outShapes);
+        if (cmpShapes.size() != outShapes.size()) {
+            logger.error("Different number of collisions: cmpCollisions size = " + cmpShapes.size() + ", outCollisions size = " + outShapes.size());
+            return false;
+        }
+
+        Map<Integer, List<ShapePair>> cmpMap = new HashMap<>(cmpShapes.size());
+        for (ShapePair pair : cmpShapes) {
+            int hashCode = pair.hashCode();
+            cmpMap.putIfAbsent(hashCode, new ArrayList<>());
+            cmpMap.get(hashCode).add(pair);
+        }
+
+        Map<Integer, List<ShapePair>> outMap = new HashMap<>(cmpShapes.size());
+        for (ShapePair pair : outShapes) {
+            int hashCode = pair.hashCode();
+            outMap.putIfAbsent(hashCode, new ArrayList<>());
+            outMap.get(hashCode).add(pair);
+        }
+
+        if (cmpMap.size() != outMap.size()) {
+            logger.error("Different size of maps: cmpMap size = " + cmpMap.size() + ", outMap size = " + outMap.size());
+            return false;
+        }
+
+        boolean comparingResult = true;
+        for (Integer hash : cmpMap.keySet()) {
+            if (!cmpMap.get(hash).containsAll(outMap.get(hash))) {
+                comparingResult = false;
+            }
+        }
+
+        return comparingResult;
     }
 }
