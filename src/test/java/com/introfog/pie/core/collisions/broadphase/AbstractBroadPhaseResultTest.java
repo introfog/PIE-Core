@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractBroadPhaseResultTest {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractBroadPhaseResultTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractBroadPhaseResultTest.class.getSimpleName());
 
     private List<AbstractBroadPhase> broadPhaseMethods;
     private String outPath;
@@ -36,7 +36,6 @@ public abstract class AbstractBroadPhaseResultTest {
             results.add(runMethodAndCompareResult(broadPhaseMethod));
         }
 
-        System.out.println();
         boolean allTestsPassed = true;
         for (int i = 0; i < results.size(); i++) {
             boolean result = results.get(i);
