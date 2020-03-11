@@ -8,22 +8,24 @@ import com.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SpatialHashingMethod extends AbstractBroadPhase {
     private int cellSize;
     private float averageMaxBodiesSize;
-    private HashMap<Integer, LinkedList<IShape>> cells;
-    private HashMap<Body, LinkedList<Integer>> objects;
-    private LinkedHashSet<ShapePair> collisionPairSet;
+    private Map<Integer, LinkedList<IShape>> cells;
+    private Map<Body, LinkedList<Integer>> objects;
+    private Set<ShapePair> collisionPairSet;
 
     public SpatialHashingMethod() {
         averageMaxBodiesSize = 0f;
         cells = new HashMap<>();
         objects = new HashMap<>();
-        collisionPairSet = new LinkedHashSet<>();
+        collisionPairSet = new HashSet<>();
     }
 
     @Override
@@ -47,7 +49,8 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
 
         shapes.forEach(this::optimizedInsert);
 
-        computeCollisions().forEach((pair) -> {
+        Set<ShapePair> possibleIntersect = computeCollisions();
+        possibleIntersect.forEach((pair) -> {
             if (AABB.isIntersected(pair.first.aabb, pair.second.aabb)) {
                 possibleCollisionList.add(pair);
             }
@@ -101,7 +104,6 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         // Делим AABB на ячейки, пришлось увиличить размер AABB на целую клетку, что бы не проверять дополнительно
         // лежит ли остаток AABB в новой ячейке.
         Body body = shape.body;
-        shape.computeAABB();
         AABB aabb = shape.aabb;
         float currX = aabb.min.x;
         float currY = aabb.min.y;
@@ -136,7 +138,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         objects.clear();
     }
 
-    private LinkedHashSet<ShapePair> computeCollisions() {
+    private Set<ShapePair> computeCollisions() {
         // Использую LinkedHashSet что бы избежать повторяющихся пар, это не очень быстро
         // TODO возможно есть более легкий способ избежать повтора пар кроме как использовать LinkedHashSet (какое-нить лексикографическое сравнение)
         collisionPairSet.clear();

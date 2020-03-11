@@ -2,6 +2,8 @@ package com.introfog.pie.core;
 
 import com.introfog.pie.core.math.Vector2f;
 
+import java.util.Objects;
+
 public class Body {
     public float density;
     public float restitution;
@@ -28,5 +30,24 @@ public class Body {
         force = new Vector2f(0f, 0f);
         velocity = new Vector2f(0f, 0f);
         position = new Vector2f(positionX, positionY);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Body body = (Body) o;
+        return Float.compare(body.density, density) == 0 &&
+                Float.compare(body.restitution, restitution) == 0 &&
+                position.equals(body.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(density, restitution, position);
     }
 }

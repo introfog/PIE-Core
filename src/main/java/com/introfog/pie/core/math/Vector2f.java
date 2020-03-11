@@ -1,8 +1,55 @@
 package com.introfog.pie.core.math;
 
+import java.util.Objects;
+
 public class Vector2f {
     public float x;
     public float y;
+
+    public static Vector2f mul(Vector2f a, float s) {
+        return new Vector2f(a.x * s, a.y * s);
+    }
+
+    public static Vector2f mul(Vector2f a, Vector2f b) {
+        return new Vector2f(a.x * b.x, a.y * b.y);
+    }
+
+    public static Vector2f sub(Vector2f a, Vector2f b) {
+        return new Vector2f(a.x - b.x, a.y - b.y);
+    }
+
+    public static Vector2f sub(Vector2f a, float bX, float bY) {
+        return new Vector2f(a.x - bX, a.y - bY);
+    }
+
+    public static float distanceWithoutSqrt(Vector2f a, Vector2f b) {
+        return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+    }
+
+    public static float dotProduct(Vector2f a, Vector2f b) {
+        return a.x * b.x + a.y * b.y;
+    }
+
+    public static float crossProduct(Vector2f a, Vector2f b) {
+        return a.x * b.y - a.y * b.x;
+    }
+
+    public static Vector2f crossProduct(float a, Vector2f v) {
+        Vector2f result = new Vector2f();
+        result.x = v.y * -a;
+        result.y = v.x * a;
+        return result;
+    }
+
+    public static Vector2f[] arrayOf(int length) {
+        Vector2f[] array = new Vector2f[length];
+
+        for (int i = 0; i < length; i++) {
+            array[i] = new Vector2f();
+        }
+
+        return array;
+    }
 
     public Vector2f() {
         this(0f, 0f);
@@ -18,12 +65,21 @@ public class Vector2f {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Vector2f) {
-            Vector2f vec2f = (Vector2f) obj;
-            return (vec2f.x == x) && (vec2f.y == y);
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Vector2f vector2f = (Vector2f) o;
+        return Float.compare(vector2f.x, x) == 0 &&
+                Float.compare(vector2f.y, y) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 
     @Override
@@ -90,50 +146,5 @@ public class Vector2f {
     public void negative() {
         x = -x;
         y = -y;
-    }
-
-    public static Vector2f mul(Vector2f a, float s) {
-        return new Vector2f(a.x * s, a.y * s);
-    }
-
-    public static Vector2f mul(Vector2f a, Vector2f b) {
-        return new Vector2f(a.x * b.x, a.y * b.y);
-    }
-
-    public static Vector2f sub(Vector2f a, Vector2f b) {
-        return new Vector2f(a.x - b.x, a.y - b.y);
-    }
-
-    public static Vector2f sub(Vector2f a, float bX, float bY) {
-        return new Vector2f(a.x - bX, a.y - bY);
-    }
-
-    public static float distanceWithoutSqrt(Vector2f a, Vector2f b) {
-        return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
-    }
-
-    public static float dotProduct(Vector2f a, Vector2f b) {
-        return a.x * b.x + a.y * b.y;
-    }
-
-    public static float crossProduct(Vector2f a, Vector2f b) {
-        return a.x * b.y - a.y * b.x;
-    }
-
-    public static Vector2f crossProduct(float a, Vector2f v) {
-        Vector2f result = new Vector2f();
-        result.x = v.y * -a;
-        result.y = v.x * a;
-        return result;
-    }
-
-    public static Vector2f[] arrayOf(int length) {
-        Vector2f[] array = new Vector2f[length];
-
-        for (int i = 0; i < length; i++) {
-            array[i] = new Vector2f();
-        }
-
-        return array;
     }
 }

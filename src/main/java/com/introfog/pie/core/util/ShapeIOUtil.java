@@ -3,8 +3,8 @@ package com.introfog.pie.core.util;
 import com.introfog.pie.core.math.Vector2f;
 import com.introfog.pie.core.shape.Circle;
 import com.introfog.pie.core.shape.IShape;
-import com.introfog.pie.core.shape.IShape.Type;
 import com.introfog.pie.core.shape.Polygon;
+import com.introfog.pie.core.shape.ShapeType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,9 +15,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ShapeIOUtil {
+    public static boolean filesIdentical(String cmpPath, String outPath) throws IOException {
+        return Arrays.equals(Files.readAllBytes(Paths.get(cmpPath)), Files.readAllBytes(Paths.get(outPath)));
+    }
+
     public static List<IShape> readShapesFromFile(String path) throws IOException {
         String string = new String(Files.readAllBytes(Paths.get(path)));
         BufferedReader reader = new BufferedReader(new StringReader(string));
@@ -27,6 +32,19 @@ public class ShapeIOUtil {
             shapes.add(convertStringToShape(line));
         }
         return shapes;
+    }
+
+    public static List<ShapePair> readShapePairsFromFile(String path) throws IOException {
+        String string = new String(Files.readAllBytes(Paths.get(path)));
+        BufferedReader reader = new BufferedReader(new StringReader(string));
+        List<ShapePair> shapePairs = new ArrayList<>();
+        String line1;
+        String line2;
+        while (((line1 = reader.readLine()) != null) && ((line2 = reader.readLine()) != null)) {
+            ShapePair shapePair = new ShapePair(convertStringToShape(line1), convertStringToShape(line2));
+            shapePairs.add(shapePair);
+        }
+        return shapePairs;
     }
 
     public static void writeShapesToFile(List<IShape> shapes, String path) throws IOException {
@@ -61,10 +79,10 @@ public class ShapeIOUtil {
         float centerY = Float.parseFloat(strings[size - 3]);
         float centerX = Float.parseFloat(strings[size - 4]);
 
-        if (strings[0].equals(Type.circle.toString())) {
+        if (strings[0].equals(ShapeType.circle.toString())) {
             float radius = Float.parseFloat(strings[1]);
             shape = new Circle(radius, centerX, centerY, density, restitution);
-        } else if (strings[0].equals(Type.polygon.toString())) {
+        } else if (strings[0].equals(ShapeType.polygon.toString())) {
             int vertexCount = Integer.parseInt(strings[1]);
             Vector2f[] vertices = new Vector2f[vertexCount];
             for (int i = 0; i < vertexCount; i++) {

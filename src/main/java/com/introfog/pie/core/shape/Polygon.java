@@ -4,12 +4,25 @@ import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.MathPIE;
 import com.introfog.pie.core.math.Vector2f;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Polygon extends IShape {
     public int vertexCount;
     public Vector2f tmpV = new Vector2f();
     public Vector2f tmpV2 = new Vector2f();
     public Vector2f[] vertices = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT);
     public Vector2f[] normals = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT);
+
+    public static Polygon generateRectangle(float centerX, float centerY, float width, float height, float density,
+            float restitution) {
+        Vector2f[] vertices = new Vector2f[4];
+        vertices[0] = new Vector2f(-width / 2f, -height / 2f);
+        vertices[1] = new Vector2f(width / 2f, -height / 2f);
+        vertices[2] = new Vector2f(width / 2f, height / 2f);
+        vertices[3] = new Vector2f(-width / 2f, height / 2f);
+        return new Polygon(density, restitution, centerX, centerY, vertices);
+    }
 
     // TODO поиск минимальной выпуклой оболочки (Джарвис) работает за O(n*h) где h-кол-во вершин в МВО
     public Polygon(float density, float restitution, float centreX, float centreY, Vector2f... vertices) {
@@ -89,35 +102,30 @@ public class Polygon extends IShape {
         computeMass();
         computeAABB();
 
-        type = Type.polygon;
+        type = ShapeType.polygon;
     }
 
-    public static Polygon generateRectangle(float centerX, float centerY, float width, float height, float density,
-            float restitution) {
-        Vector2f[] vertices = new Vector2f[4];
-        vertices[0] = new Vector2f(-width / 2f, -height / 2f);
-        vertices[1] = new Vector2f(width / 2f, -height / 2f);
-        vertices[2] = new Vector2f(width / 2f, height / 2f);
-        vertices[3] = new Vector2f(-width / 2f, height / 2f);
-        return new Polygon(density, restitution, centerX, centerY, vertices);
-    }
-
-    public Vector2f getSupport(Vector2f dir) {
-        // Ищем самую удаленную точку в заданном направлении
-        float bestProjection = -Float.MAX_VALUE;
-        Vector2f bestVertex = new Vector2f();
-
-        for (int i = 0; i < vertexCount; ++i) {
-            Vector2f v = vertices[i];
-            float projection = Vector2f.dotProduct(v, dir);
-
-            if (projection > bestProjection) {
-                bestVertex.set(v);
-                bestProjection = projection;
-            }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Polygon polygon = (Polygon) o;
+        return vertexCount == polygon.vertexCount &&
+                Arrays.equals(vertices, polygon.vertices) && super.equals(polygon);
+    }
 
-        return bestVertex;
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(super.hashCode(), vertexCount, super.hashCode());
+        result = 31 * result + Arrays.hashCode(vertices);
+        return result;
     }
 
     @Override
@@ -146,6 +154,24 @@ public class Polygon extends IShape {
 
         aabb.min.add(body.position);
         aabb.max.add(body.position);
+    }
+
+    public Vector2f getSupport(Vector2f dir) {
+        // Ищем самую удаленную точку в заданном направлении
+        float bestProjection = -Float.MAX_VALUE;
+        Vector2f bestVertex = new Vector2f();
+
+        for (int i = 0; i < vertexCount; ++i) {
+            Vector2f v = vertices[i];
+            float projection = Vector2f.dotProduct(v, dir);
+
+            if (projection > bestProjection) {
+                bestVertex.set(v);
+                bestProjection = projection;
+            }
+        }
+
+        return bestVertex;
     }
 
     @Override

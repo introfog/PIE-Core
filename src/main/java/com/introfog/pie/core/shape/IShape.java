@@ -4,12 +4,10 @@ import com.introfog.pie.core.Body;
 import com.introfog.pie.core.math.Mat22;
 import com.introfog.pie.core.math.Vector2f;
 
-public abstract class IShape {
-    public enum Type {
-        circle, polygon
-    }
+import java.util.Objects;
 
-    public Type type;
+public abstract class IShape {
+    public ShapeType type;
     public AABB aabb;
     public Body body;
     public Mat22 rotateMatrix;
@@ -31,6 +29,24 @@ public abstract class IShape {
     }
 
     public abstract void computeAABB();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        IShape shape = (IShape) o;
+        return type == shape.type &&
+                body.equals(shape.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, body);
+    }
 
     protected abstract void computeMass();
 }

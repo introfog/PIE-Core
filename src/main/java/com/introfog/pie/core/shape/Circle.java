@@ -2,6 +2,8 @@ package com.introfog.pie.core.shape;
 
 import com.introfog.pie.core.Body;
 
+import java.util.Objects;
+
 public class Circle extends IShape {
     public float radius;
 
@@ -12,13 +14,30 @@ public class Circle extends IShape {
         computeMass();
         computeAABB();
 
-        type = Type.circle;
+        type = ShapeType.circle;
     }
 
     @Override
     public void computeAABB() {
         aabb.min.set(body.position.x - radius, body.position.y - radius);
         aabb.max.set(body.position.x + radius, body.position.y + radius);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Circle circle = (Circle) o;
+        return Float.compare(circle.radius, radius) == 0 && super.equals(circle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(radius, super.hashCode());
     }
 
     @Override
