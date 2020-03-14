@@ -113,19 +113,13 @@ public class Polygon extends IShape {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o)) {
-            return false;
-        }
         Polygon polygon = (Polygon) o;
-        return vertexCount == polygon.vertexCount &&
-                Arrays.equals(vertices, polygon.vertices) && super.equals(polygon);
+        return vertexCount == polygon.vertexCount && Arrays.equals(vertices, polygon.vertices) && super.equals(polygon);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), vertexCount, super.hashCode());
-        result = 31 * result + Arrays.hashCode(vertices);
-        return result;
+        return Objects.hash(vertexCount, Arrays.hashCode(vertices), super.hashCode());
     }
 
     @Override
