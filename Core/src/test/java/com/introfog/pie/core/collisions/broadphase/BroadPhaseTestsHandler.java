@@ -38,8 +38,8 @@ public abstract class BroadPhaseTestsHandler {
     private String sourcePath;
     private AbstractBroadPhase broadPhaseMethod;
 
-    private final static String PATH_TO_SOURCE_FOLDER = ".\\src\\test\\resources\\com\\introfog\\pie\\core\\collisions\\broadphase\\";
-    private final static String PATH_TO_TARGET_FOLDER = ".\\target\\test\\com\\introfog\\pie\\core\\collisions\\broadphase\\";
+    private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/introfog/pie/core/collisions/broadphase/";
+    private final static String PATH_TO_TARGET_FOLDER = "./target/test/com/introfog/pie/core/collisions/broadphase/";
 
     @Before
     public void before() {
@@ -48,52 +48,52 @@ public abstract class BroadPhaseTestsHandler {
 
     @Test
     public void simpleColumnsTest() throws IOException {
-        runBroadPhaseResultTest("Line\\5x500line_8487collision");
+        runBroadPhaseResultTest("Line/5x500line_8487collision");
     }
 
     @Test
     public void mediumColumnsTest() throws IOException {
-        runBroadPhaseResultTest("Line\\5x500line_22443collision");
+        runBroadPhaseResultTest("Line/5x500line_22443collision");
     }
 
     @Test
     public void simpleRowsTest() throws IOException {
-        runBroadPhaseResultTest("Line\\500x5line_8487collision");
+        runBroadPhaseResultTest("Line/500x5line_8487collision");
     }
 
     @Test
     public void mediumRowsTest() throws IOException {
-        runBroadPhaseResultTest("Line\\500x5line_22443collision");
+        runBroadPhaseResultTest("Line/500x5line_22443collision");
     }
 
     @Test
     public void hardRowsTest() throws IOException {
-        runBroadPhaseResultTest("Line\\3000x2line+diffSize_20491collision");
+        runBroadPhaseResultTest("Line/3000x2line+diffSize_20491collision");
     }
 
     @Test
     public void simpleSquareTest() throws IOException {
-        runBroadPhaseResultTest("Square\\50x50square_9702collision");
+        runBroadPhaseResultTest("Square/50x50square_9702collision");
     }
 
     @Test
     public void mediumSquareTest() throws IOException {
-        runBroadPhaseResultTest("Square\\50x50square_28518collision");
+        runBroadPhaseResultTest("Square/50x50square_28518collision");
     }
 
     @Test
     public void mediumSquareWithDiffSizeTest() throws IOException {
-        runBroadPhaseResultTest("Square\\70x70square+diffSize_17320collision");
+        runBroadPhaseResultTest("Square/70x70square+diffSize_17320collision");
     }
 
     @Test
     public void simpleSquareScatteredWithDiffSizeTest() throws IOException {
-        runBroadPhaseResultTest("Square\\100x100square+scattered+diffSize_14344collision");
+        runBroadPhaseResultTest("Square/100x100square+scattered+diffSize_14344collision");
     }
 
     @Test
     public void simpleSquareScatteredTest() throws IOException {
-        runBroadPhaseResultTest("Square\\100x100square+scattered_14602collision");
+        runBroadPhaseResultTest("Square/100x100square+scattered_14602collision");
     }
 
     @Test
