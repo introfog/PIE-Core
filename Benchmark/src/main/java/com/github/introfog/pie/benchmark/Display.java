@@ -43,7 +43,7 @@ import static com.github.introfog.pie.benchmark.Main.SHAPES_OFFSET_Y;
 import static com.github.introfog.pie.benchmark.Main.world;
 
 public class Display extends JPanel implements ActionListener {
-    private static final String sourceFolder = ".\\PIE\\Benchmark\\src\\test\\resources\\com\\introfog\\pie\\benchmark\\collisions\\broadphase\\";
+    private static final String sourceFolder = "./PIE/Benchmark/src/test/resources/com/github/introfog/pie/benchmark/collisions/broadphase/";
 
     private boolean viewExitingJson;
     private boolean saveJson;
@@ -58,7 +58,7 @@ public class Display extends JPanel implements ActionListener {
         viewExitingJson = true;
         saveJson = false;
 
-        fileName = "Line\\5x500line_8487collision";
+        fileName = "Line/5x500line_8487collision";
         if (viewExitingJson) {
             downloadExitingShapes();
         } else {

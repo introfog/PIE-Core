@@ -35,9 +35,10 @@ public class World {
     private List<Manifold> collisions;
 
     /**
-     * Instantiates a new {@link World} instance based on {@link Context} instance.
+     * Instantiates a new {@link com.github.introfog.pie.core.World} instance based on
+     * {@link com.github.introfog.pie.core.Context} instance.
      *
-     * @param context the {@link Context} instance
+     * @param context the {@link com.github.introfog.pie.core.Context} instance
      */
     public World(Context context) {
         this.context = new Context(context);
@@ -52,7 +53,8 @@ public class World {
     /**
      * Updating the physical condition of all bodies in the world.
      *
-     * The world will be updated after an equal period of time equal to the {@link Context#getFixedDeltaTime()} value.
+     * The world will be updated after an equal period of time equal to the
+     * {@link com.github.introfog.pie.core.Context#getFixedDeltaTime()} value.
      *
      * @param deltaTime the time elapsed since the last method call
      */

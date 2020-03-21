@@ -34,7 +34,8 @@ public class ShapePair {
     public IShape second;
 
     /**
-     * Instantiates a new {@link ShapePair} instance based on two {@link IShape} objects.
+     * Instantiates a new {@link com.github.introfog.pie.core.util.ShapePair} instance based
+     * on two {@link com.github.introfog.pie.core.shape.IShape} objects.
      *
      * The {@link #first} variable always stores a shape with a smaller hash code, this is necessary for
      * the comparison of a pair of shapes and calculation of the hash code of the pair independent
