@@ -18,7 +18,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.introfog.pie</groupId>
+            <groupId>com.github.introfog.pie</groupId>
             <artifactId>core</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

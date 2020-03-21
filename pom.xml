@@ -45,6 +45,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+        <javadoc-additionalOptions/>
+        <javadoc-link>https://docs.oracle.com/javase/8/docs/api/</javadoc-link>
+        <javadoc.version>3.1.1</javadoc.version>
     </properties>
 
     <build>
@@ -76,7 +79,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${javadoc.version}</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -86,6 +89,15 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <source>8</source>
+                    <detectLinks>true</detectLinks>
+                    <additionalOptions>${javadoc-additionalOptions}</additionalOptions>
+                    <links>
+                        <link>${javadoc-link}</link>
+                    </links>
+                </configuration>
             </plugin>
 
             <plugin>

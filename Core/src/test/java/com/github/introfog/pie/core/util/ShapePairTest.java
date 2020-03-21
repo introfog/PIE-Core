@@ -1,0 +1,46 @@
+/*
+   Copyright 2020 Dmitry Chubrick
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+package com.github.introfog.pie.core.util;
+
+import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.shape.Circle;
+import com.github.introfog.pie.core.shape.IShape;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+public class ShapePairTest {
+    @Test
+    public void fieldStoringTest() {
+        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+
+        ShapePair shapePair = new ShapePair(c1, c2);
+        boolean c1First = c1.hashCode() < c2.hashCode();
+
+        Assert.assertTrue("First shape in pair should be have smaller hash code",
+                c1First ? shapePair.first == c1 : shapePair.first == c2);
+
+        shapePair = new ShapePair(c2, c1);
+        Assert.assertTrue("First shape in pair should be have smaller hash code",
+                c1First ? shapePair.first == c1 : shapePair.first == c2);
+    }
+
+    @Test
+    public void hashCodeTest() {
+
+    }
+}
