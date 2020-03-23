@@ -1,4 +1,8 @@
-# PIE
+PIE
+=========
+
+[![GitHub](https://img.shields.io/github/license/introfog/PIE2-Core?logo=Apache-2.0)](https://github.com/introfog/PIE2-Core/blob/develop/LICENSE.txt)
+
 ### Main
 This project is a second iteration of physics rigid-body engine on Java8.
 
