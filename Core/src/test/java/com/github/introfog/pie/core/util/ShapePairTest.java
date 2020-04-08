@@ -18,11 +18,15 @@ package com.github.introfog.pie.core.util;
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
+import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-public class ShapePairTest {
+@Category(UnitTest.class)
+public class ShapePairTest extends PIETest {
     @Test
     public void fieldStoringTest() {
         IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);

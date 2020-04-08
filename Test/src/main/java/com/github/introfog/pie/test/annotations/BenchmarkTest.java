@@ -13,16 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package com.github.introfog.pie.core.collisions.broadphase;
+package com.github.introfog.pie.test.annotations;
 
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
-
-import org.junit.experimental.categories.Category;
-
-@Category(AlgorithmicTest.class)
-public class SweepAndPruneMyMethodTest extends BroadPhaseTestsHandler {
-    @Override
-    protected AbstractBroadPhase getBroadPhaseMethod() {
-        return new SweepAndPruneMyMethod();
-    }
+/**
+ * Benchmark tests are used to measure the performance of a system or part of it in
+ * various states. Verification occurs in a complex, affecting many functionality at once.
+ */
+public interface BenchmarkTest extends SlowTest {
 }

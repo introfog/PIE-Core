@@ -13,16 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package com.github.introfog.pie.core.collisions.broadphase;
+package com.github.introfog.pie.test.annotations;
 
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
-
-import org.junit.experimental.categories.Category;
-
-@Category(AlgorithmicTest.class)
-public class SweepAndPruneMyMethodTest extends BroadPhaseTestsHandler {
-    @Override
-    protected AbstractBroadPhase getBroadPhaseMethod() {
-        return new SweepAndPruneMyMethod();
-    }
+/**
+ * Unit tests are used to directly test small sections of code.
+ * Most often these are small and quick tests.
+ */
+public interface UnitTest {
 }

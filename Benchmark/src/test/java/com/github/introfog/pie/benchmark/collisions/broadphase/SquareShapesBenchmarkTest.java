@@ -15,11 +15,15 @@
  */
 package com.github.introfog.pie.benchmark.collisions.broadphase;
 
+import com.github.introfog.pie.test.annotations.BenchmarkTest;
+
 import java.io.IOException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-public class SquareShapesBenchmarkTest extends AbstractBroadPhaseBenchmark {
+@Category(BenchmarkTest.class)
+public class SquareShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkTest {
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/benchmark/collisions/broadphase/Square/";
 
     @Test

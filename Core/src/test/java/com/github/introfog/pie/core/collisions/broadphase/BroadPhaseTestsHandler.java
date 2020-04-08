@@ -20,6 +20,8 @@ import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
 import com.github.introfog.pie.core.util.ShapePair;
+import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 
 import java.io.IOException;
 
@@ -30,9 +32,12 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-public abstract class BroadPhaseTestsHandler {
+@Category(AlgorithmicTest.class)
+public abstract class BroadPhaseTestsHandler extends PIETest {
     private String outPath;
     private String cmpPath;
     private String sourcePath;
@@ -40,6 +45,12 @@ public abstract class BroadPhaseTestsHandler {
 
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/core/collisions/broadphase/";
     private final static String PATH_TO_TARGET_FOLDER = "./target/test/com/github/introfog/pie/core/collisions/broadphase/";
+
+    @BeforeClass
+    public static void beforeClass() {
+        createDestinationFolder(PATH_TO_TARGET_FOLDER + "Line/");
+        createDestinationFolder(PATH_TO_TARGET_FOLDER + "Square/");
+    }
 
     @Before
     public void before() {

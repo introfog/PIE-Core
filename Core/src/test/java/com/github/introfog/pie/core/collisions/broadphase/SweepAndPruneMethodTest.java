@@ -15,6 +15,11 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
+import com.github.introfog.pie.test.annotations.AlgorithmicTest;
+
+import org.junit.experimental.categories.Category;
+
+@Category(AlgorithmicTest.class)
 public class SweepAndPruneMethodTest extends BroadPhaseTestsHandler {
     @Override
     protected AbstractBroadPhase getBroadPhaseMethod() {

@@ -13,16 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package com.github.introfog.pie.core.collisions.broadphase;
+package com.github.introfog.pie.test.annotations;
 
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
-
-import org.junit.experimental.categories.Category;
-
-@Category(AlgorithmicTest.class)
-public class SweepAndPruneMyMethodTest extends BroadPhaseTestsHandler {
-    @Override
-    protected AbstractBroadPhase getBroadPhaseMethod() {
-        return new SweepAndPruneMyMethod();
-    }
+/**
+ * Algorithmic tests are used to verify the correctness of various algorithms involved in
+ * the project. Most often, the results of the algorithm are compared with the correct result.
+ */
+public interface AlgorithmicTest extends SlowTest {
 }

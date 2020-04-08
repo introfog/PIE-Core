@@ -13,16 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package com.github.introfog.pie.core.collisions.broadphase;
+package com.github.introfog.pie.test.annotations;
 
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
-
-import org.junit.experimental.categories.Category;
-
-@Category(AlgorithmicTest.class)
-public class SweepAndPruneMyMethodTest extends BroadPhaseTestsHandler {
-    @Override
-    protected AbstractBroadPhase getBroadPhaseMethod() {
-        return new SweepAndPruneMyMethod();
-    }
+/**
+ * Slow tests take a long time (more than a few seconds) to complete.
+ */
+public interface SlowTest {
 }

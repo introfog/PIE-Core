@@ -22,6 +22,7 @@ import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMyMethod;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
+import com.github.introfog.pie.test.PIETest;
 
 import java.io.IOException;
 
@@ -38,14 +39,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 
-public abstract class AbstractBroadPhaseBenchmark {
+public abstract class AbstractBroadPhaseBenchmarkTest extends PIETest {
     private final static int DEFAULT_WARM_VALUE = 5;
     private final static int DEFAULT_MEASURE_VALUE = 10;
     private final static TimeUnit DEFAULT_TIME_UNIT = TimeUnit.MICROSECONDS;
 
     private List<AbstractBroadPhase> broadPhaseMethods;
-    String fileName;
-    String sourceFolder;
+    private String fileName;
+    private String sourceFolder;
     private TimeUnit timeUnit;
     private int warm;
     private int measure;

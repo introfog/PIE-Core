@@ -13,16 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package com.github.introfog.pie.core.collisions.broadphase;
+package com.github.introfog.pie.test;
 
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
+import java.io.File;
 
-import org.junit.experimental.categories.Category;
-
-@Category(AlgorithmicTest.class)
-public class SweepAndPruneMyMethodTest extends BroadPhaseTestsHandler {
-    @Override
-    protected AbstractBroadPhase getBroadPhaseMethod() {
-        return new SweepAndPruneMyMethod();
+/**
+ * This is a generic class for testing. The class contains
+ * general methods that may be needed during testing.
+ */
+public class PIETest {
+    /**
+     * Creates a folder with a given path, including all necessary nonexistent parent directories.
+     * If a folder is already present, no action is performed.
+     * @param path the path of the folder to create
+     */
+    public static void createDestinationFolder(String path) {
+        File filePath = new File(path);
+        filePath.mkdirs();
     }
 }
