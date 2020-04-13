@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>core</artifactId>
+    <packaging>jar</packaging>
 
     <properties>
         <junit.version>4.13</junit.version>
