@@ -1,7 +1,7 @@
 # IntelliJ
 **/out/
 **/.idea/
-target/
+**/target/
 *.iml
 
 # Compiled class file
@@ -12,3 +12,6 @@ target/
 
 #Package Files #
 *.jar
+
+#Util classes for creating .PIE files
+/Benchmark/src/main/java/com/github/introfog/pie/benchmark/
