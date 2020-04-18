@@ -117,7 +117,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     private void optimizedInsert(IShape shape) {
         // Работает быстрее чем insert
         // Делим AABB на ячейки, пришлось увиличить размер AABB на целую клетку, что бы не проверять дополнительно
-        // лежит ли остаток AABB в новой ячейке.
+        //  лежит ли остаток AABB в новой ячейке.
         Body body = shape.body;
         AABB aabb = shape.aabb;
         float currX = aabb.min.x;

@@ -127,6 +127,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M4</version>
+                <configuration>
+                    <excludes>
+                        <exclude>com.github.introfog.pie.benchmark.collisions.broadphase.*.*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <plugin>
