@@ -1,8 +1,9 @@
 PIE
 =========
 
-[![GitHub](https://img.shields.io/github/license/introfog/PIE2-Core?logo=Apache-2.0)](https://github.com/introfog/PIE2-Core/blob/develop/LICENSE.txt)
-[![Build](https://github.com/introfog/PIE2-Core/workflows/Test%20action/badge.svg?branch=develop)](https://github.com/introfog/PIE2-Core/actions?query=workflow%3A%22Test+action%22)
+[![License](https://img.shields.io/github/license/introfog/PIE2-Core?logo=Apache-2.0)](https://github.com/introfog/PIE2-Core/blob/develop/LICENSE.txt)
+[![Test action](https://github.com/introfog/PIE2-Core/workflows/Test%20action/badge.svg?branch=develop)](https://github.com/introfog/PIE2-Core/actions?query=workflow%3A%22Test+action%22)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.introfog.pie/root/badge.svg)](https://mvnrepository.com/artifact/com.github.introfog.pie)
 
 ### Main
 This project is a second iteration of physics rigid-body engine on Java8.
