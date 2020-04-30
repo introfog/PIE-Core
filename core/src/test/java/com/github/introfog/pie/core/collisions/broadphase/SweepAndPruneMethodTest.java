@@ -20,7 +20,7 @@ import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 import org.junit.experimental.categories.Category;
 
 @Category(AlgorithmicTest.class)
-public class SweepAndPruneMethodTest extends BroadPhaseTestsHandler {
+public class SweepAndPruneMethodTest extends AbstractBroadPhaseTest {
     @Override
     protected AbstractBroadPhase getBroadPhaseMethod() {
         return new SweepAndPruneMethod();

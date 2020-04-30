@@ -19,5 +19,5 @@ package com.github.introfog.pie.test.annotations;
  * Unit tests are used to directly test small sections of code.
  * Most often these are small and quick tests.
  */
-public interface UnitTest {
+public interface UnitTest extends IntegrationTest {
 }

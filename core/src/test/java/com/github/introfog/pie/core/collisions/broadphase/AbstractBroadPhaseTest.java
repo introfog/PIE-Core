@@ -15,6 +15,7 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
+import com.github.introfog.pie.core.TestUtil;
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
@@ -26,18 +27,15 @@ import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(AlgorithmicTest.class)
-public abstract class BroadPhaseTestsHandler extends PIETest {
+public abstract class AbstractBroadPhaseTest extends PIETest {
     private String outPath;
     private String cmpPath;
     private String sourcePath;
@@ -119,15 +117,14 @@ public abstract class BroadPhaseTestsHandler extends PIETest {
         List<ShapePair> cmpShapePairs = new ArrayList<>(3);
 
         cmpShapePairs.add(new ShapePair(c1, c2));
-        comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
+        TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
 
         IShape c3 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
         broadPhaseMethod.addShape(c3);
         cmpShapePairs.add(new ShapePair(c1, c3));
         cmpShapePairs.add(new ShapePair(c2, c3));
-        comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
+        TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
     }
-
 
     protected abstract AbstractBroadPhase getBroadPhaseMethod();
 
@@ -155,39 +152,7 @@ public abstract class BroadPhaseTestsHandler extends PIETest {
 
         System.out.println("Run shape object comparing...");
         List<ShapePair> cmpShapes = ShapeIOUtil.readShapePairsFromFile(cmpPath);
-        comparingShapePairsList(cmpShapes, outShapes);
+        TestUtil.comparingShapePairsList(cmpShapes, outShapes);
         System.out.println("Result: true");
-    }
-
-    private void comparingShapePairsList(List<ShapePair> cmpShapes, List<ShapePair> outShapes) {
-        if (cmpShapes.size() != outShapes.size()) {
-            Assert.assertEquals("Different number of shape collisions", cmpShapes.size(), outShapes.size());
-        }
-
-        Map<Integer, List<ShapePair>> cmpMap = new HashMap<>(cmpShapes.size());
-        for (ShapePair pair : cmpShapes) {
-            int hashCode = pair.hashCode();
-            cmpMap.putIfAbsent(hashCode, new ArrayList<>());
-            cmpMap.get(hashCode).add(pair);
-        }
-
-        Map<Integer, List<ShapePair>> outMap = new HashMap<>(cmpShapes.size());
-        for (ShapePair pair : outShapes) {
-            int hashCode = pair.hashCode();
-            outMap.putIfAbsent(hashCode, new ArrayList<>());
-            outMap.get(hashCode).add(pair);
-        }
-
-        if (cmpMap.size() != outMap.size()) {
-            Assert.assertEquals("Different size of maps", cmpMap.size(), outMap.size());
-        }
-
-        for (Integer hash : cmpMap.keySet()) {
-            List<ShapePair> cmpList = cmpMap.get(hash);
-            List<ShapePair> outList = outMap.get(hash);
-
-            Assert.assertNotNull("Out map does not contain hash " + hash + " from cmp map", outList);
-            Assert.assertTrue("Values cmp and out map for hash " + hash + " are different", cmpList.containsAll(outList));
-        }
     }
 }

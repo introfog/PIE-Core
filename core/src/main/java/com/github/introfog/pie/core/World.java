@@ -26,7 +26,7 @@ import java.util.List;
  * The World is the main class in PIE library.
  * It controls the interaction and updating of the states of all bodies entering the world.
  */
-public class World {
+public final class World {
     private int collisionSolveIterations;
     private float accumulator;
     private Context context;
@@ -101,7 +101,6 @@ public class World {
     public void addShape(IShape shape) {
         shape.computeAABB();
         shapes.add(shape);
-        context.getBroadPhase().addShape(shape);
     }
 
     /**

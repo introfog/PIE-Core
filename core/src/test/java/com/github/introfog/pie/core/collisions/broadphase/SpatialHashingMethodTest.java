@@ -20,7 +20,7 @@ import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 import org.junit.experimental.categories.Category;
 
 @Category(AlgorithmicTest.class)
-public class SpatialHashingMethodTest extends BroadPhaseTestsHandler {
+public class SpatialHashingMethodTest extends AbstractBroadPhaseTest {
     @Override
     protected AbstractBroadPhase getBroadPhaseMethod() {
         return new SpatialHashingMethod();

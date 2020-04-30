@@ -20,7 +20,7 @@ import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 import org.junit.experimental.categories.Category;
 
 @Category(AlgorithmicTest.class)
-public class BruteForceMethodTest extends BroadPhaseTestsHandler {
+public class BruteForceMethodTest extends AbstractBroadPhaseTest {
     @Override
     protected AbstractBroadPhase getBroadPhaseMethod() {
         return new BruteForceMethod();
