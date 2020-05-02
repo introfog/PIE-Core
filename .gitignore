@@ -14,4 +14,4 @@
 *.jar
 
 #Util classes for creating .PIE files
-/Benchmark/src/main/java/com/github/introfog/pie/benchmark/
+/benchmark/src/main/java/com/github/introfog/pie/benchmark/
