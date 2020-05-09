@@ -45,8 +45,8 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
 
     @Override
     public List<ShapePair> insideCollisionCalculating() {
-        // Сложность O(n) если минимальный и максимальный размер объектов не сильно отличаются, но если очень сильно,
-        // то сложность близиться к O(n^2)
+        // The complexity is O(n), if the minimum and maximum size of the objects are not very different,
+        // but if very different, then the complexity tends to O(n^2)
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         averageMaxBodiesSize = 0;
@@ -85,7 +85,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         this.cellSize = cellSize;
     }
 
-    // Медленый из-за округления и умножения лишнего
+    // Slow due to rounding and multiplication
     private void insert(IShape shape) {
         Body body = shape.body;
         shape.computeAABB();
@@ -114,10 +114,10 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         }
     }
 
+    // Faster than insert method
     private void optimizedInsert(IShape shape) {
-        // Работает быстрее чем insert
-        // Делим AABB на ячейки, пришлось увиличить размер AABB на целую клетку, что бы не проверять дополнительно
-        //  лежит ли остаток AABB в новой ячейке.
+        // Divide the AABB into cells, so I had to enlarge the size of the AABB by a whole cell,
+        // so as not to check whether the rest of the AABB lies in the new cell
         Body body = shape.body;
         AABB aabb = shape.aabb;
         float currX = aabb.min.x;
@@ -154,8 +154,8 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     private Set<ShapePair> computeCollisions() {
-        // Использую LinkedHashSet что бы избежать повторяющихся пар, это не очень быстро
-        // TODO возможно есть более легкий способ избежать повтора пар кроме как использовать LinkedHashSet (какое-нить лексикографическое сравнение)
+        // LinkedHashSet is used to avoid repeating pairs, it is not very fast
+        // TODO maybe there’s an easier way to avoid repeating pairs other than using LinkedHashSet (for example some lexicographic comparison)
         collisionPairSet.clear();
         cells.forEach((cell, list) -> {
             for (int i = 0; i < list.size(); i++) {

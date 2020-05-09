@@ -39,13 +39,13 @@ public class Polygon extends IShape {
         return new Polygon(density, restitution, centerX, centerY, vertices);
     }
 
-    // TODO поиск минимальной выпуклой оболочки (Джарвис) работает за O(n*h) где h-кол-во вершин в МВО
+    // TODO Search for the minimum convex hull (Jarvis algorithm) works for O(n*h) where h is the number of vertices in the MCH
     public Polygon(float density, float restitution, float centreX, float centreY, Vector2f... vertices) {
         body = new Body(centreX, centreY, density, restitution);
 
-        // Алгоритм Джарвиса построения минимальной выпуклой оболочки
-        // находим самую нижнюю и правую координату, она станет стартовой точкой,
-        // и точно принадлежит МВО (мин. выпукл. оболочке)
+        // Jarvis's algorithm for constructing a minimal convex hull.
+        // Find the lowest and rightmost coordinate, it will become the
+        // starting point, and exactly belongs to the MCH (min. convex hull)
         tmpV.set(vertices[0]);
         int rightMost = -1;
         for (int i = 0; i < vertices.length; i++) {
@@ -65,16 +65,16 @@ public class Polygon extends IShape {
         for (; ; ) {
             hull[outCount] = indexHull;
 
-            // Ищем вершину, с самым большим углом против часовой стрелки, от текущей
-            // (считаем угол через векторное произведение)
+            // Looking for the vertex with the largest angle counterclockwise from the current vertex
+            // (Calculate the angle through the vector product)
             int nextHullIndex = 0;
             for (int i = 1; i < vertices.length; ++i) {
-                // Пропускаем одинаковые вершины, т.к. нам нужны уникальные вершины в треугольнике
+                // Skip the same vertices, because we need unique vertices in the triangle
                 if (nextHullIndex == indexHull) {
                     nextHullIndex = i;
                     continue;
                 }
-                // Перебираем все треугольника, ища самую крайнюю вершину
+                // Sort through all the triangles, looking for the most extreme vertex
                 tmpV.set(vertices[nextHullIndex]);
                 tmpV.sub(vertices[hull[outCount]]);
 
@@ -84,8 +84,8 @@ public class Polygon extends IShape {
                 if (c < 0.0f) {
                     nextHullIndex = i;
                 }
-                // Если векторное произведение равно 0, то они лежат на одной прямой, и нам нужна вершина
-                // самая удаленная от заданой
+                // If the vector product is 0, then they lie on one straight line,
+                // and we need the vertex farthest from the given vertex
                 if (c == 0.0f && tmpV2.lengthWithoutSqrt() > tmpV.lengthWithoutSqrt()) {
                     nextHullIndex = i;
                 }
@@ -94,7 +94,7 @@ public class Polygon extends IShape {
             outCount++;
             indexHull = nextHullIndex;
 
-            // Когда дошли до стартойо вершины, алгоритм Джарвиса закончен
+            // When reached the starting vertex, the Jarvis algorithm is complete
             if (nextHullIndex == rightMost) {
                 vertexCount = outCount;
                 break;
@@ -109,7 +109,7 @@ public class Polygon extends IShape {
             tmpV.set(this.vertices[(i + 1) % vertexCount]);
             tmpV.sub(this.vertices[i]);
 
-            // Берем правую нормаль
+            // Take the right normal
             normals[i].set(tmpV.y, -tmpV.x);
             normals[i].normalize();
         }
@@ -166,7 +166,7 @@ public class Polygon extends IShape {
     }
 
     public Vector2f getSupport(Vector2f dir) {
-        // Ищем самую удаленную точку в заданном направлении
+        // Looking for the most distant vertex in a given direction
         float bestProjection = -Float.MAX_VALUE;
         Vector2f bestVertex = new Vector2f();
 
@@ -190,7 +190,7 @@ public class Polygon extends IShape {
         final float k_inv3 = 1f / 3f;
 
         for (int i = 0; i < vertexCount; ++i) {
-            // Разбиваем выпуклый многоугольник на треугольники, у которых одна из точек (0, 0)
+            // Split the convex polygon into triangles for which one of the points (0, 0)
             Vector2f p1 = vertices[i];
             Vector2f p2 = vertices[(i + 1) % vertexCount];
 

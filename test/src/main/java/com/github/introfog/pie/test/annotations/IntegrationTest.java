@@ -16,8 +16,8 @@
 package com.github.introfog.pie.test.annotations;
 
 /**
- *  Integration tests are used to validate large, interconnected sections of code.
- *  Most often these are quick tests.
+ * Integration tests are used to validate large, interconnected sections of code.
+ * Most often these are quick tests.
  */
 public interface IntegrationTest extends QuickTest {
 }

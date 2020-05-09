@@ -79,16 +79,16 @@ public class Manifold {
 
         Collisions.table[aShape.type.ordinal()][bShape.type.ordinal()].handleCollision(this);
 
-        // Статическое трение - величина, показывающая сколько нужно приложить энергии что бы свдинуть тела, т.е. это
-        // порог, если энергия ниже, то тела покоятся, если выше, то они сдвинулись
-        // Динамическое трение - трение в обычном понимании, когда тела труться друг об друга, они теряют часть своей
-        // энергии друг об друга
+        // Static friction - is a value that shows how much energy need to apply to moving the body,
+        // i.e. this is the threshold, if the energy is lower, then the body is at rest, if higher, then the body moves
+        // Dynamic friction - friction in the usual sense, when bodies rub against each other,
+        // they lose part of their energy against each other
         staticFriction = (float) StrictMath.sqrt(
                 a.staticFriction * a.staticFriction + b.staticFriction * b.staticFriction);
         dynamicFriction = (float) StrictMath.sqrt(
                 a.dynamicFriction * a.dynamicFriction + b.dynamicFriction * b.dynamicFriction);
 
-        // Вычисляем упругость
+        // Calculate the elasticity
         e = Math.min(a.restitution, b.restitution);
 
         for (int i = 0; i < contactCount; ++i) {
@@ -100,16 +100,17 @@ public class Manifold {
 
             // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
             // A->velocity - Cross( A->angularVelocity, ra );
-            // Вычисляем относительную скорость
+            // Calculate the relative speed
             // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
             // A->velocity - Cross( A->angularVelocity, ra );
-            Vector2f rv = Vector2f.sub(b.velocity, a.velocity); //relativeVelocity
+            //relativeVelocity
+            Vector2f rv = Vector2f.sub(b.velocity, a.velocity);
             rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
             rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
 
-            // Определяем, следует ли нам выполнять столкновение с остановкой или нет
-            // Идея заключается в том, что единственное, что движет этим объектом, - это гравитация,
-            // то столкновение должно выполняться без какой-либо реституции
+            // Determine whether we should perform a collision with a stop or not.
+            // The idea is that the only thing that moves this object is gravity,
+            // then the collision should be carried out without any restitution
             // if(rv.LenSqr( ) < (dt * gravity).LenSqr( ) + EPSILON)
             if (rv.lengthWithoutSqrt() < context.getResting()) {
                 e = 0.0f;
@@ -121,11 +122,11 @@ public class Manifold {
         normal.normalize();
 
         for (int i = 0; i < contactCount; i++) {
-            // Вычисляем точки контанка относителньо центров
+            // Calculate the contact points regarding centers
             Vector2f radA = Vector2f.sub(contacts[i], a.position);
             Vector2f radB = Vector2f.sub(contacts[i], b.position);
 
-            // Вычисляем относительную скорость
+            // Calculate the relative velocity
             // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
             // A->velocity - Cross( A->angularVelocity, ra );
             // relativeVelocity
@@ -133,10 +134,10 @@ public class Manifold {
             rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
             rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
 
-            // Вычисляем относительную скорость относительно направления нормали
+            // Calculate the relative velocity relative to the normal direction
             float velAlongNormal = Vector2f.dotProduct(rv, normal);
 
-            // Не выполняем вычислений, если скорости разделены
+            // Do not perform calculations if the velocities are divided
             if (velAlongNormal > 0) {
                 return;
             }
@@ -146,49 +147,49 @@ public class Manifold {
             float invertMassSum = a.invertMass + b.invertMass + (raCrossN * raCrossN) * a.invertInertia
                     + (rbCrossN * rbCrossN) * b.invertInertia;
 
-            // Вычисляем скаляр импульса силы
+            // Calculate the scalar of the force impulse
             float j = -(1.0f + e) * velAlongNormal;
             j /= invertMassSum;
             j /= contactCount;
 
-            // Прикладываем импульс силы
+            // Applying a force impulse
             Vector2f impulse = Vector2f.mul(normal, j);
             bShape.applyImpulse(impulse, radB);
             impulse.negative();
             aShape.applyImpulse(impulse, radA);
 
-            //--------Работа с трением
+            // Friction work
 
-            // Перерасчет относительной скорости, после приложения нормального импульса
+            // Recalculation relative speed after application of a normal impulse
             rv = Vector2f.sub(b.velocity, a.velocity); //relativeVelocity
             rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
             rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
 
-            // Вычисялем касательный вектор: tangent = rb - dotProduct (rv, normal) * normal
+            // Calculate the tangent vector: tangent = rb - dotProduct (rv, normal) * normal
             // Vec2 t = rv - (normal * Dot( rv, normal ));
             // t.Normalize( );
             Vector2f t = Vector2f.sub(rv, Vector2f.mul(normal, Vector2f.dotProduct(rv, normal)));
             t.normalize();
 
-            // Вычисляем величину, прилагаемую вдоль вектора трения
+            // Calculate the value applied along the friction vector
             float jt = -Vector2f.dotProduct(rv, t);
             jt /= invertMassSum;
             jt /= contactCount;
 
-            // Если jt очень маленько то не применять и делать return
+            // If jt is very small then do not apply and do return
             if (MathPIE.equal(jt, 0f)) {
                 return;
             }
 
             Vector2f frictionImpulse;
             if (Math.abs(jt) < j * staticFriction) {
-                // Закон Амонтона — Кулона (если велечина j слишком маленькая, то тела должны покояться)
+                // Amonton-Coulomb Law (if j value is too small, then bodies should rest)
                 frictionImpulse = Vector2f.mul(t, jt);
             } else {
                 frictionImpulse = Vector2f.mul(t, -j * dynamicFriction);
             }
 
-            // Пркладываем
+            // Apply impulse
             bShape.applyImpulse(frictionImpulse, radB);
             frictionImpulse.negative();
             aShape.applyImpulse(frictionImpulse, radA);

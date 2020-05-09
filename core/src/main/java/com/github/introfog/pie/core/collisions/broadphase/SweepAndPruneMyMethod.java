@@ -46,12 +46,12 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
 
     @Override
     public List<ShapePair> insideCollisionCalculating() {
-        // Лучший случай O(n*logn) или O(k*n), в худщем O(n^2), ищем
-        // возможные пересечения по оси Х, а потом bruteForce
+        // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
+        // Looking for possible intersections along the X axis, and then use brute force algorithm
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         xAxisProjection.sort((a, b) -> (int) (a.aabb.min.x - b.aabb.min.x));
-        // TODO использовать сортировку вставкой (эффективна когда почти отсортирован список)
+        // TODO use insertion sorting (effective when the list is almost sorted)
 
         activeList.add(xAxisProjection.get(0));
         float currEnd = xAxisProjection.get(0).aabb.max.x;

@@ -56,8 +56,9 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
 
     @Override
     public List<ShapePair> insideCollisionCalculating() {
-        // Лучший случай O(n*logn) или O(k*n), в худщем O(n^2), ищем возможные
-        // пересечения по текущей оси, а потом bruteForce. Каждый раз через десперсию выбираем следующую ось
+        // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
+        // Looking for possible intersections along the current axis, and then use brute force algorithm
+        // Each time using dispersion we select the next axis
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         if (CURRENT_AXIS == 0) {
@@ -65,7 +66,7 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
         } else {
             yAxisProjection.sort((a, b) -> (int) (a.aabb.min.y - b.aabb.min.y));
         }
-        // TODO использовать сортировку вставкой (эффективна когда почти отсортирован список)
+        // TODO use insertion sorting (effective when the list is almost sorted)
 
         p.set(0f, 0f);
         s.set(0f, 0f);
@@ -104,8 +105,8 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
             }
         }
 
-        // С помощью дисперсии выбираем следуюущую ось (ищем ось, по которой координаты объектов больше всего различаются)
-        // что бы меньше проверок делать и сводить алогритм к  O(k*n)
+        // With the help of dispersion, we select the next axis (we look for the axis along which the coordinates
+        // of the objects are most different) to make fewer checks and reduce the algorithm complexity to O(k*n)
         s.x *= s.x;
         s.y *= s.y;
         s2.sub(s);

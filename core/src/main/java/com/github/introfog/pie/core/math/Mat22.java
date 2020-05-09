@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core.math;
 
-// Матрица поворота размера 2 х 2
+// 2x2 rotation matrix
 public class Mat22 {
     private float m00, m01;
     private float m10, m11;

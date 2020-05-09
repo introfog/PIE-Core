@@ -29,12 +29,11 @@ public class AABB {
     }
 
     public static boolean isIntersected(AABB a, AABB b) {
-        // Выходим без пересечения, потому что найдена разделяющая ось
+        // Exit without intersection because a dividing axis is found
         if (a.max.x < b.min.x || a.min.x > b.max.x) {
             return false;
         }
+        // No separation axis found, therefore at least one intersecting axis exists
         return !(a.max.y < b.min.y) && !(a.min.y > b.max.y);
-
-        // Разделяющая ось не найдена, поэтому существует по крайней мере одна пересекающая ось
     }
 }
