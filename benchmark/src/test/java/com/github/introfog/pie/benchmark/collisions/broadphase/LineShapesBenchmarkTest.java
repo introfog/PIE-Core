@@ -29,26 +29,26 @@ public class LineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkTest {
 
     @Test
     public void simpleColumns() throws IOException {
-        super.runBenchmarkTest("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.95, 0.055, 0.43});
+        super.runBenchmarkTest("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.25, 0.055, 0.43});
     }
 
     @Test
     public void mediumColumns() throws IOException {
-        super.runBenchmarkTest("5x500line_22443collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 2.8, 0.11, 0.66});
+        super.runBenchmarkTest("5x500line_22443collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.75, 0.11, 0.66});
     }
 
     @Test
     public void simpleRows() throws IOException {
-        super.runBenchmarkTest("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 1.0, 0.055, 0.055});
+        super.runBenchmarkTest("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.32, 0.055, 0.055});
     }
 
     @Test
     public void mediumRows() throws IOException {
-        super.runBenchmarkTest("500x5line_22443collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 3.0, 0.12, 0.12});
+        super.runBenchmarkTest("500x5line_22443collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.8, 0.12, 0.12});
     }
 
     @Test
     public void hardRows() throws IOException {
-        super.runBenchmarkTest("3000x2line+diffSize_20491collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.9, 0.019, 0.019});
+        super.runBenchmarkTest("3000x2line+diffSize_20491collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.3, 0.019, 0.019});
     }
 }

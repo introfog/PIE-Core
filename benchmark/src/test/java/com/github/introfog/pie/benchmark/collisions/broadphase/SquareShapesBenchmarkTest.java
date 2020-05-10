@@ -29,26 +29,26 @@ public class SquareShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkTest {
 
     @Test
     public void simpleSquare() throws IOException {
-        super.runBenchmarkTest("50x50square_9702collision.pie", PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 1.3, 0.12, 0.09});
+        super.runBenchmarkTest("50x50square_9702collision.pie", PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.4, 0.12, 0.09});
     }
 
     @Test
     public void mediumSquare() throws IOException {
-        super.runBenchmarkTest("50x50square_28518collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 7.0, 0.25, 0.22});
+        super.runBenchmarkTest("50x50square_28518collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 1.5, 0.25, 0.22});
     }
 
     @Test
     public void mediumSquareWithDiffSize() throws IOException {
-        super.runBenchmarkTest("70x70square+diffSize_17320collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 8, 0.055, 0.06});
+        super.runBenchmarkTest("70x70square+diffSize_17320collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.75, 0.055, 0.06});
     }
 
     @Test
     public void simpleSquareScatteredWithDiffSize() throws IOException {
-        super.runBenchmarkTest("100x100square+scattered+diffSize_14344collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 1.1, 0.011, 0.015});
+        super.runBenchmarkTest("100x100square+scattered+diffSize_14344collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.15, 0.011, 0.015});
     }
 
     @Test
     public void simpleSquareScattered() throws IOException {
-        super.runBenchmarkTest("100x100square+scattered_14602collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.06, 0.025, 0.018});
+        super.runBenchmarkTest("100x100square+scattered_14602collision.pie", PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.03, 0.025, 0.018});
     }
 }

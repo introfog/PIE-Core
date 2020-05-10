@@ -19,7 +19,7 @@ import com.github.introfog.pie.core.collisions.Manifold;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,9 +43,9 @@ public final class World {
     public World(Context context) {
         this.context = new Context(context);
         collisionSolveIterations = 1;
-        shapes = new LinkedList<>();
-        mayBeCollision = new LinkedList<>();
-        collisions = new LinkedList<>();
+        shapes = new ArrayList<>();
+        mayBeCollision = new ArrayList<>();
+        collisions = new ArrayList<>();
         this.context.getBroadPhase().setShapes(shapes);
     }
 
