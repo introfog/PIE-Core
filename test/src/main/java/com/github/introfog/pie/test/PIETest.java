@@ -22,9 +22,6 @@ import java.io.File;
  * general methods that may be needed during testing.
  */
 public class PIETest {
-    /** The constant for comparing double variables for equality. */
-    public static final double DOUBLE_EPSILON_COMPARISON = 1E-12;
-
     /** The constant for comparing float variables for equality. */
     public static final float FLOAT_EPSILON_COMPARISON = 1E-6f;
 

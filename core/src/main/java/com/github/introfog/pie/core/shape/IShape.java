@@ -16,7 +16,7 @@
 package com.github.introfog.pie.core.shape;
 
 import com.github.introfog.pie.core.Body;
-import com.github.introfog.pie.core.math.Mat22;
+import com.github.introfog.pie.core.math.RotationMatrix2x2;
 import com.github.introfog.pie.core.math.Vector2f;
 
 import java.util.Objects;
@@ -25,11 +25,11 @@ public abstract class IShape {
     public ShapeType type;
     public AABB aabb;
     public Body body;
-    public Mat22 rotateMatrix;
+    public RotationMatrix2x2 rotateMatrix;
 
     public IShape() {
         aabb = new AABB();
-        rotateMatrix = new Mat22();
+        rotateMatrix = new RotationMatrix2x2();
         rotateMatrix.setAngle(0f);
     }
 
