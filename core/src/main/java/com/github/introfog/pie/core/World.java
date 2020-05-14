@@ -46,7 +46,7 @@ public final class World {
         shapes = new ArrayList<>();
         mayBeCollision = new ArrayList<>();
         collisions = new ArrayList<>();
-        this.context.getBroadPhase().setShapes(shapes);
+        this.context.getBroadPhaseMethod().setShapes(shapes);
     }
 
     // TODO Create good JavaDoc
@@ -119,7 +119,7 @@ public final class World {
      */
     public void setShapes(List<IShape> shapes) {
         this.shapes = shapes;
-        context.getBroadPhase().setShapes(shapes);
+        context.getBroadPhaseMethod().setShapes(shapes);
     }
 
     private void narrowPhase() {
@@ -139,7 +139,7 @@ public final class World {
 
     private void step() {
         // Broad phase
-        mayBeCollision = context.getBroadPhase().calculateAabbCollision();
+        mayBeCollision = context.getBroadPhaseMethod().calculateAabbCollision();
 
         // Integrate forces
         // Hanna modification Euler's method is used!
