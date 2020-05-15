@@ -22,7 +22,6 @@ public class AABB {
     public Vector2f min;
     public Vector2f max;
 
-
     public AABB() {
         min = new Vector2f();
         max = new Vector2f();

@@ -13,4 +13,17 @@
     <artifactId>test</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <junit.version>4.13</junit.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
 </project>

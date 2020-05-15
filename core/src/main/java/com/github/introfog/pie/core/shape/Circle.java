@@ -26,7 +26,7 @@ public class Circle extends IShape {
         body = new Body(centreX, centreY, density, restitution);
         this.radius = radius;
 
-        computeMass();
+        computeMassAndInertia();
         computeAABB();
 
         type = ShapeType.circle;
@@ -56,7 +56,7 @@ public class Circle extends IShape {
     }
 
     @Override
-    protected void computeMass() {
+    protected void computeMassAndInertia() {
         float mass = (float) Math.PI * radius * radius * body.density;
         body.invertMass = (mass == 0f) ? 0f : 1f / mass;
 

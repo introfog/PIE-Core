@@ -19,7 +19,9 @@ import com.github.introfog.pie.core.Body;
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.math.Vector2f;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Polygon extends IShape {
@@ -47,7 +49,7 @@ public class Polygon extends IShape {
         // Find the lowest and rightmost coordinate, it will become the
         // starting point, and exactly belongs to the MCH (min. convex hull)
         tmpV.set(vertices[0]);
-        int rightMost = -1;
+        int rightMost = 0;
         for (int i = 0; i < vertices.length; i++) {
             if (vertices[i].x > tmpV.x) {
                 tmpV.set(vertices[i]);
@@ -58,12 +60,15 @@ public class Polygon extends IShape {
             }
         }
 
-        int[] hull = new int[MathPIE.MAX_POLY_VERTEX_COUNT];
+        List<Integer> hull = new ArrayList<>();
+        for (int i = 0; i < vertices.length + 1; i++) {
+            hull.add(0);
+        }
         int outCount = 0;
         int indexHull = rightMost;
 
         while (true){
-            hull[outCount] = indexHull;
+            hull.set(outCount, indexHull);
 
             // Looking for the vertex with the largest angle counterclockwise from the current vertex
             // (Calculate the angle through the vector product)
@@ -76,10 +81,10 @@ public class Polygon extends IShape {
                 }
                 // Sort through all the triangles, looking for the most extreme vertex
                 tmpV.set(vertices[nextHullIndex]);
-                tmpV.sub(vertices[hull[outCount]]);
+                tmpV.sub(vertices[hull.get(outCount)]);
 
                 tmpV2.set(vertices[i]);
-                tmpV2.sub(vertices[hull[outCount]]);
+                tmpV2.sub(vertices[hull.get(outCount)]);
                 float c = Vector2f.crossProduct(tmpV, tmpV2);
                 if (c < 0.0f) {
                     nextHullIndex = i;
@@ -103,14 +108,14 @@ public class Polygon extends IShape {
 
         if (vertexCount > MathPIE.MAX_POLY_VERTEX_COUNT) {
             // TODO create PIE custom exception
-            throw new RuntimeException();
+            throw new RuntimeException("Error. Too many vertices in polygon.");
         }
 
         this.vertices = Vector2f.arrayOf(vertexCount);
         this.normals = Vector2f.arrayOf(vertexCount);
 
         for (int i = 0; i < vertexCount; i++) {
-            this.vertices[i].set(vertices[hull[i]]);
+            this.vertices[i].set(vertices[hull.get(i)]);
         }
 
         for (int i = 0; i < vertexCount; i++) {
@@ -122,7 +127,7 @@ public class Polygon extends IShape {
             normals[i].normalize();
         }
 
-        computeMass();
+        computeMassAndInertia();
         computeAABB();
 
         type = ShapeType.polygon;
@@ -175,26 +180,8 @@ public class Polygon extends IShape {
         aabb.max.add(body.position);
     }
 
-    public Vector2f getSupport(Vector2f dir) {
-        // Looking for the most distant vertex in a given direction
-        float bestProjection = -Float.MAX_VALUE;
-        Vector2f bestVertex = new Vector2f();
-
-        for (int i = 0; i < vertexCount; ++i) {
-            Vector2f v = vertices[i];
-            float projection = Vector2f.dotProduct(v, dir);
-
-            if (projection > bestProjection) {
-                bestVertex.set(v);
-                bestProjection = projection;
-            }
-        }
-
-        return bestVertex;
-    }
-
     @Override
-    protected void computeMass() {
+    protected void computeMassAndInertia() {
         float area = 0f;
         float I = 0f;
         final float k_inv3 = 1f / 3f;
@@ -218,5 +205,23 @@ public class Polygon extends IShape {
         body.invertMass = (mass != 0f) ? 1f / mass : 0f;
         float inertia = I * body.density;
         body.invertInertia = (inertia != 0f) ? 1f / inertia : 0f;
+    }
+
+    public Vector2f getSupport(Vector2f dir) {
+        // Looking for the most distant vertex in a given direction
+        float bestProjection = -Float.MAX_VALUE;
+        Vector2f bestVertex = new Vector2f();
+
+        for (int i = 0; i < vertexCount; ++i) {
+            Vector2f v = vertices[i];
+            float projection = Vector2f.dotProduct(v, dir);
+
+            if (projection > bestProjection) {
+                bestVertex.set(v);
+                bestProjection = projection;
+            }
+        }
+
+        return bestVertex;
     }
 }

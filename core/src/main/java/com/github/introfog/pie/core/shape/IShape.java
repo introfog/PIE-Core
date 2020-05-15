@@ -63,5 +63,5 @@ public abstract class IShape {
         return Objects.hash(type, body);
     }
 
-    protected abstract void computeMass();
+    protected abstract void computeMassAndInertia();
 }

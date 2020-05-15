@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
-public class Vector2fTest {
+public class Vector2fTest extends PIETest {
     @Test
     public void defaultConstructorTest() {
         Vector2f vec = new Vector2f();
@@ -59,19 +59,17 @@ public class Vector2fTest {
         Vector2f first = new Vector2f(0.1f, 0.2f);
         Vector2f second = new Vector2f(0.1f, 0.2f);
 
-        Assert.assertTrue(first.equals(second));
-        Assert.assertTrue(second.equals(first));
-        Assert.assertEquals(first.hashCode(), second.hashCode());
+        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
     }
 
     @Test
     public void equalsAndHashCodeToAnotherNotEqualBodyTest() {
         Vector2f first = new Vector2f(0.1f, 0.2f);
-        Vector2f second = new Vector2f(0.1f, 1.3f);
+        Vector2f second = new Vector2f(0.2f, 0.2f);
+        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
 
-        Assert.assertFalse(first.equals(second));
-        Assert.assertFalse(second.equals(first));
-        Assert.assertNotEquals(first.hashCode(), second.hashCode());
+        second = new Vector2f(0.1f, 0.3f);
+        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 
     @Test

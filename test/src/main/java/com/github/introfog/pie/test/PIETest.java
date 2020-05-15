@@ -17,6 +17,8 @@ package com.github.introfog.pie.test;
 
 import java.io.File;
 
+import org.junit.Assert;
+
 /**
  * This is a generic class for testing. The class contains
  * general methods that may be needed during testing.
@@ -28,10 +30,32 @@ public class PIETest {
     /**
      * Creates a folder with a given path, including all necessary nonexistent parent directories.
      * If a folder is already present, no action is performed.
+     *
      * @param path the path of the folder to create
      */
     public static void createDestinationFolder(String path) {
         File filePath = new File(path);
         filePath.mkdirs();
+    }
+
+    /**
+     * If checkEqual is true, then the method checks that the objects are symmetrically equal and
+     * their hash codes are equal, otherwise it checks that the objects are symmetrically not
+     * equal and their hash codes are not equal.
+     *
+     * @param a the first object
+     * @param b the second object
+     * @param checkEqual the boolean flag
+     */
+    public static void checkEqualsAndHashCodeMethods(Object a, Object b, boolean checkEqual) {
+        if (checkEqual) {
+            Assert.assertTrue(a.equals(b));
+            Assert.assertTrue(b.equals(a));
+            Assert.assertEquals(a.hashCode(), b.hashCode());
+        } else {
+            Assert.assertFalse(a.equals(b));
+            Assert.assertFalse(b.equals(a));
+            Assert.assertNotEquals(a.hashCode(), b.hashCode());
+        }
     }
 }
