@@ -24,10 +24,8 @@ import java.util.Objects;
 
 public class Polygon extends IShape {
     public int vertexCount;
-    public Vector2f tmpV = new Vector2f();
-    public Vector2f tmpV2 = new Vector2f();
-    public Vector2f[] vertices = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT);
-    public Vector2f[] normals = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT);
+    public Vector2f[] vertices;
+    public Vector2f[] normals;
 
     public static Polygon generateRectangle(float centerX, float centerY, float width, float height, float density,
             float restitution) {
@@ -42,6 +40,8 @@ public class Polygon extends IShape {
     // TODO Search for the minimum convex hull (Jarvis algorithm) works for O(n*h) where h is the number of vertices in the MCH
     public Polygon(float density, float restitution, float centreX, float centreY, Vector2f... vertices) {
         body = new Body(centreX, centreY, density, restitution);
+        Vector2f tmpV = new Vector2f();
+        Vector2f tmpV2 = new Vector2f();
 
         // Jarvis's algorithm for constructing a minimal convex hull.
         // Find the lowest and rightmost coordinate, it will become the
@@ -62,7 +62,7 @@ public class Polygon extends IShape {
         int outCount = 0;
         int indexHull = rightMost;
 
-        for (; ; ) {
+        while (true){
             hull[outCount] = indexHull;
 
             // Looking for the vertex with the largest angle counterclockwise from the current vertex
@@ -100,6 +100,14 @@ public class Polygon extends IShape {
                 break;
             }
         }
+
+        if (vertexCount > MathPIE.MAX_POLY_VERTEX_COUNT) {
+            // TODO create PIE custom exception
+            throw new RuntimeException();
+        }
+
+        this.vertices = Vector2f.arrayOf(vertexCount);
+        this.normals = Vector2f.arrayOf(vertexCount);
 
         for (int i = 0; i < vertexCount; i++) {
             this.vertices[i].set(vertices[hull[i]]);
@@ -144,6 +152,8 @@ public class Polygon extends IShape {
 
         aabb.max.x = -Float.MAX_VALUE;
         aabb.max.y = -Float.MAX_VALUE;
+
+        Vector2f tmpV = new Vector2f();
         for (int i = 0; i < vertexCount; i++) {
             tmpV.set(vertices[i]);
             rotateMatrix.mul(tmpV, tmpV);
