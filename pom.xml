@@ -129,7 +129,8 @@
                 <version>3.0.0-M4</version>
                 <configuration>
                     <excludes>
-                        <exclude>com.github.introfog.pie.benchmark.collisions.broadphase.*.*</exclude>
+                        <exclude>com.github.introfog.pie.benchmark.collisions.broadphase.statical.*.*</exclude>
+                        <exclude>com.github.introfog.pie.benchmark.collisions.broadphase.dynamical.*.*</exclude>
                     </excludes>
                 </configuration>
             </plugin>

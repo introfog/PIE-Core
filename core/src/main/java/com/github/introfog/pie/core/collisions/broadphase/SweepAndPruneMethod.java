@@ -62,9 +62,9 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         if (CURRENT_AXIS == 0) {
-            xAxisProjection.sort((a, b) -> (int) (a.aabb.min.x - b.aabb.min.x));
+            xAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.x, b.aabb.min.x));
         } else {
-            yAxisProjection.sort((a, b) -> (int) (a.aabb.min.y - b.aabb.min.y));
+            yAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.y, b.aabb.min.y));
         }
         // TODO use insertion sorting (effective when the list is almost sorted)
 

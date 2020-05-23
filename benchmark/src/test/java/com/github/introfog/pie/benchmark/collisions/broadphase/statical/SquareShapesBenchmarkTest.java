@@ -13,8 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.benchmark.collisions.broadphase;
+package com.github.introfog.pie.benchmark.collisions.broadphase.statical;
 
+import com.github.introfog.pie.benchmark.collisions.broadphase.AbstractBroadPhaseBenchmarkTest;
 import com.github.introfog.pie.test.annotations.BenchmarkTest;
 
 import java.io.IOException;

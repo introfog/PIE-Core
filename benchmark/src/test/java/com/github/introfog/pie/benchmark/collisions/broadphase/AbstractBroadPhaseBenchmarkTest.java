@@ -15,6 +15,7 @@
  */
 package com.github.introfog.pie.benchmark.collisions.broadphase;
 
+import com.github.introfog.pie.benchmark.collisions.broadphase.dynamical.DefaultActionApplier;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
@@ -45,6 +46,8 @@ public abstract class AbstractBroadPhaseBenchmarkTest extends PIETest {
     private final static String DEFAULT_COMPARATIVE_METHOD = BruteForceMethod.class.getSimpleName();
 
     private List<AbstractBroadPhase> broadPhaseMethods;
+    private List<IShape> methodShapes;
+    private IActionApplier applier;
     private String fileName;
     private String sourceFolder;
     private TimeUnit timeUnit;
@@ -54,20 +57,29 @@ public abstract class AbstractBroadPhaseBenchmarkTest extends PIETest {
     private double comparativeTime;
 
     public void runBenchmarkTest(String fileName, String sourceFolder, double[] coefficients) throws IOException {
-        runBenchmarkTest(fileName, sourceFolder, DEFAULT_TIME_UNIT, DEFAULT_WARM_VALUE, DEFAULT_MEASURE_VALUE, coefficients, DEFAULT_WORKING_TIME_DIFFERENCE_PERCENT);
+        runBenchmarkTest(fileName, sourceFolder, DEFAULT_TIME_UNIT, DEFAULT_WARM_VALUE, DEFAULT_MEASURE_VALUE, coefficients, DEFAULT_WORKING_TIME_DIFFERENCE_PERCENT, new DefaultActionApplier());
     }
 
     public void runBenchmarkTest(String fileName, String sourceFolder, int warm, double[] coefficients) throws IOException {
-        runBenchmarkTest(fileName, sourceFolder, DEFAULT_TIME_UNIT, warm, DEFAULT_MEASURE_VALUE, coefficients, DEFAULT_WORKING_TIME_DIFFERENCE_PERCENT);
+        runBenchmarkTest(fileName, sourceFolder, DEFAULT_TIME_UNIT, warm, DEFAULT_MEASURE_VALUE, coefficients, DEFAULT_WORKING_TIME_DIFFERENCE_PERCENT, new DefaultActionApplier());
     }
 
-    public void runBenchmarkTest(String fileName, String sourceFolder, TimeUnit timeUnit, int warm, int measure, double[] coefficients, double workingTimeDifferencePercent) throws IOException {
+    public void runBenchmarkTest(String fileName, String sourceFolder, double[] coefficients, IActionApplier applier) throws IOException {
+        runBenchmarkTest(fileName, sourceFolder, DEFAULT_TIME_UNIT, DEFAULT_WARM_VALUE, DEFAULT_MEASURE_VALUE, coefficients, DEFAULT_WORKING_TIME_DIFFERENCE_PERCENT, applier);
+    }
+
+    public void runBenchmarkTest(String fileName, String sourceFolder, int warm, int measure, double[] coefficients, IActionApplier applier) throws IOException {
+        runBenchmarkTest(fileName, sourceFolder, DEFAULT_TIME_UNIT, warm, measure, coefficients, DEFAULT_WORKING_TIME_DIFFERENCE_PERCENT, applier);
+    }
+
+    public void runBenchmarkTest(String fileName, String sourceFolder, TimeUnit timeUnit, int warm, int measure, double[] coefficients, double workingTimeDifferencePercent, IActionApplier applier) throws IOException {
         this.fileName = fileName;
         this.sourceFolder = sourceFolder;
         this.timeUnit = timeUnit;
         this.warm = warm;
         this.measure = measure;
         this.workingTimeDifferencePercent = workingTimeDifferencePercent;
+        this.applier = applier;
 
         initializeTestMethods();
 
@@ -96,14 +108,14 @@ public abstract class AbstractBroadPhaseBenchmarkTest extends PIETest {
 
     private void initializeTestMethods() throws IOException {
         Assert.assertTrue("Use .pie file", fileName.matches(".*\\.pie"));
-        List<IShape> shapes = ShapeIOUtil.readShapesFromFile(sourceFolder + fileName);
+        methodShapes = ShapeIOUtil.readShapesFromFile(sourceFolder + fileName);
 
         broadPhaseMethods = new ArrayList<>();
         broadPhaseMethods.add(new BruteForceMethod());
         broadPhaseMethods.add(new SpatialHashingMethod());
         broadPhaseMethods.add(new SweepAndPruneMethod());
         broadPhaseMethods.add(new SweepAndPruneMyMethod());
-        broadPhaseMethods.forEach(method -> method.setShapes(shapes));
+        broadPhaseMethods.forEach(method -> method.setShapes(methodShapes));
     }
 
     // TODO Make the method universal using reflection
@@ -119,6 +131,7 @@ public abstract class AbstractBroadPhaseBenchmarkTest extends PIETest {
                 methods.get(j).calculateAabbCollision();
                 averageNanoTime[j] += System.nanoTime() - previously;
             }
+            applier.applyAction(methods, methodShapes);
         }
 
         for (int i = 0; i < measure / 2; i++) {
@@ -127,6 +140,7 @@ public abstract class AbstractBroadPhaseBenchmarkTest extends PIETest {
                 methods.get(j).calculateAabbCollision();
                 averageNanoTime[j] += System.nanoTime() - previously;
             }
+            applier.applyAction(methods, methodShapes);
         }
 
         double[] results = new double[methods.size()];

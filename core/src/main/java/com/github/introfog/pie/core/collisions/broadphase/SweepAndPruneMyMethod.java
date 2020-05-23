@@ -49,7 +49,7 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
         // Looking for possible intersections along the X axis, and then use brute force algorithm
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
-        xAxisProjection.sort((a, b) -> (int) (a.aabb.min.x - b.aabb.min.x));
+        xAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.x, b.aabb.min.x));
         // TODO use insertion sorting (effective when the list is almost sorted)
 
         activeList.clear();
