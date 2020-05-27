@@ -113,6 +113,11 @@ public class Vector2f {
         y *= value;
     }
 
+    public void mul(Vector2f vec) {
+        x *= vec.x;
+        y *= vec.y;
+    }
+
     public void sub(Vector2f vec) {
         x -= vec.x;
         y -= vec.y;

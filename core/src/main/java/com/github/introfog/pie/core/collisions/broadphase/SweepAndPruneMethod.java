@@ -81,12 +81,10 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
                 currAABB = yAxisProjection.get(i).aabb;
             }
 
-            p.x = (currAABB.min.x / 2f + currAABB.max.x / 2f) / numBodies;
-            p.y = (currAABB.min.y / 2f + currAABB.max.y / 2f) / numBodies;
-
+            p.set(currAABB.min.x + currAABB.max.x, currAABB.min.y + currAABB.max.y);
+            p.mul(1.0f / 2);
             s.add(p);
-            p.x *= p.x * numBodies;
-            p.y *= p.y * numBodies;
+            p.mul(p);
             s2.add(p);
 
             for (int j = i + 1; j < shapes.size(); j++) {
@@ -107,11 +105,13 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
 
         // With the help of dispersion, we select the next axis (we look for the axis along which the coordinates
         // of the objects are most different) to make fewer checks and reduce the algorithm complexity to O(k*n)
-        s.x *= s.x;
-        s.y *= s.y;
-        s2.sub(s);
+        s.mul(1.0f / numBodies);
+        s.mul(s);
+        s2.mul(1.0f / numBodies);
+        Vector2f dispersion = s2;
+        dispersion.sub(s);
         CURRENT_AXIS = 0;
-        if (s.y > s.x) {
+        if (dispersion.y > dispersion.x) {
             CURRENT_AXIS = 1;
         }
 

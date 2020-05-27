@@ -117,6 +117,15 @@ public class Vector2fTest extends PIETest {
     }
 
     @Test
+    public void mulByVector2fTest() {
+        Vector2f vec = new Vector2f(0.1f, 0.2f);
+        Vector2f temp = new Vector2f(10f, 20f);
+        vec.mul(temp);
+        Assert.assertEquals(1, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(4, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+    }
+
+    @Test
     public void subByVector2fTest() {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         Vector2f temp = new Vector2f(0.3f, 0.5f);
