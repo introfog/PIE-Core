@@ -109,10 +109,8 @@ public abstract class AbstractBroadPhaseTest extends PIETest {
     public void addShapeMethodTest() {
         IShape c1 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
         IShape c2 = new Circle(10, 15, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        List<IShape> shapes = new ArrayList<>(2);
-        shapes.add(c1);
-        shapes.add(c2);
-        broadPhaseMethod.setShapes(shapes);
+        broadPhaseMethod.addShape(c1);
+        broadPhaseMethod.addShape(c2);
 
         List<ShapePair> cmpShapePairs = new ArrayList<>(3);
 
@@ -121,6 +119,35 @@ public abstract class AbstractBroadPhaseTest extends PIETest {
 
         IShape c3 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
         broadPhaseMethod.addShape(c3);
+        cmpShapePairs.add(new ShapePair(c1, c3));
+        cmpShapePairs.add(new ShapePair(c2, c3));
+        TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
+    }
+
+    @Test
+    public void setShapesMethodTest() {
+        IShape c1 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 15, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        List<IShape> shapes = new ArrayList<>(2);
+        shapes.add(c1);
+        shapes.add(c2);
+        broadPhaseMethod.setShapes(shapes);
+        // Verify that the list of shapes was copied in method setShapes
+        shapes.clear();
+
+        List<ShapePair> cmpShapePairs = new ArrayList<>(1);
+
+        cmpShapePairs.add(new ShapePair(c1, c2));
+        TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
+
+        IShape c3 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        shapes.add(c1);
+        shapes.add(c2);
+        shapes.add(c3);
+        broadPhaseMethod.setShapes(shapes);
+        // Verify that the list of shapes was copied in method setShapes
+        shapes.clear();
+
         cmpShapePairs.add(new ShapePair(c1, c3));
         cmpShapePairs.add(new ShapePair(c2, c3));
         TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());

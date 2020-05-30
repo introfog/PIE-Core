@@ -35,7 +35,6 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
     public void setShapes(List<IShape> shapes) {
         super.setShapes(shapes);
         xAxisProjection = new ArrayList<>(shapes);
-        activeList = new ArrayList<>();
     }
 
     @Override
@@ -53,6 +52,7 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
         xAxisProjection.sort((a, b) -> (int) (a.aabb.min.x - b.aabb.min.x));
         // TODO use insertion sorting (effective when the list is almost sorted)
 
+        activeList.clear();
         activeList.add(xAxisProjection.get(0));
         float currEnd = xAxisProjection.get(0).aabb.max.x;
 
@@ -86,7 +86,6 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
             }
         }
 
-        activeList.clear();
         return possibleCollisionList;
     }
 }

@@ -20,6 +20,7 @@ import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,8 +100,8 @@ public final class World {
      * @param shape the new shape
      */
     public void addShape(IShape shape) {
-        shape.computeAABB();
         shapes.add(shape);
+        context.getBroadPhaseMethod().addShape(shape);
     }
 
     /**
@@ -108,8 +109,8 @@ public final class World {
      *
      * @return the shapes
      */
-    public List<IShape> getShapes() {
-        return shapes;
+    public List<IShape> getUnmodifiableShapes() {
+        return Collections.unmodifiableList(shapes);
     }
 
     /**
@@ -118,7 +119,7 @@ public final class World {
      * @param shapes the new shapes
      */
     public void setShapes(List<IShape> shapes) {
-        this.shapes = shapes;
+        this.shapes = new ArrayList<>(shapes);
         context.getBroadPhaseMethod().setShapes(shapes);
     }
 

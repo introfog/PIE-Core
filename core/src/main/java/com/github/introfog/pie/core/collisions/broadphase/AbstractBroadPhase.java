@@ -29,7 +29,7 @@ public abstract class AbstractBroadPhase {
     }
 
     public void setShapes(List<IShape> shapes) {
-        this.shapes = shapes;
+        this.shapes = new ArrayList<>(shapes);
     }
 
     public void addShape(IShape shape){

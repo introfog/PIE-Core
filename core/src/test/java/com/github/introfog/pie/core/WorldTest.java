@@ -27,11 +27,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ExpectedException;
 
 @Category(IntegrationTest.class)
 public class WorldTest extends PIETest {
+    @Rule
+    public ExpectedException junitExpectedException = ExpectedException.none();
+
     @Test
     public void deadLoopBorderTest() {
         Context context = new Context().setFixedDeltaTime(2f).setDeadLoopBorder(3f);
@@ -96,7 +101,7 @@ public class WorldTest extends PIETest {
     }
 
     @Test
-    public void getShapeTest() {
+    public void getUnmodifiableShapesMethodTest() {
         Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
         World world = new World(context);
 
@@ -114,7 +119,64 @@ public class WorldTest extends PIETest {
         shapes.add(c2);
         shapes.add(c3);
 
-        Assert.assertEquals(shapes, world.getShapes());
+        List<IShape> worldShapes = world.getUnmodifiableShapes();
+        Assert.assertEquals(shapes, worldShapes);
+
+        junitExpectedException.expect(UnsupportedOperationException.class);
+        worldShapes.add(c2);
+    }
+
+    @Test
+    public void setShapesMethodTest() {
+        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(context);
+
+        IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
+        IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
+        List<IShape> shapes = new ArrayList<>(2);
+        shapes.add(c1);
+        shapes.add(c2);
+        world.setShapes(shapes);
+        shapes.clear();
+
+        world.update(1.5f);
+        List<ShapePair> collisions = world.getCollisions().stream().map(m -> new ShapePair(m.aShape, m.bShape)).
+                collect(Collectors.toList());
+        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        cmpShapePairs.add(new ShapePair(c1, c2));
+        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+
+        IShape c3 = new Circle(10, 7, 25, 1f, 0.2f);
+        shapes.add(c1);
+        shapes.add(c2);
+        shapes.add(c3);
+        world.setShapes(shapes);
+        world.update(0.6f);
+        collisions = world.getCollisions().stream().map(m -> new ShapePair(m.aShape, m.bShape)).
+                collect(Collectors.toList());
+        cmpShapePairs.clear();
+        cmpShapePairs.add(new ShapePair(c1, c2));
+        cmpShapePairs.add(new ShapePair(c1, c3));
+        cmpShapePairs.add(new ShapePair(c2, c3));
+        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+    }
+
+    @Test
+    public void addShapeMethodTest() {
+        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(context);
+
+        IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
+        IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
+        world.addShape(c1);
+        world.addShape(c2);
+
+        world.update(1.5f);
+        List<ShapePair> collisions = world.getCollisions().stream().map(m -> new ShapePair(m.aShape, m.bShape)).
+                collect(Collectors.toList());
+        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        cmpShapePairs.add(new ShapePair(c1, c2));
+        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
     }
 
     // TODO add test for collisionSolveIterations
