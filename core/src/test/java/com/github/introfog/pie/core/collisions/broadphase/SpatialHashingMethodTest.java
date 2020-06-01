@@ -25,6 +25,7 @@ import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -53,6 +54,27 @@ public class SpatialHashingMethodTest extends AbstractBroadPhaseTest {
         List<ShapePair> cmpShapePairs = new ArrayList<>(1);
 
         cmpShapePairs.add(new ShapePair(r1, r2));
+        TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
+    }
+
+    @Test
+    public void collisionShapesWithZeroSizeTest() {
+        // This test checks how the SpatialHashingMethod works if the cell size is zero
+        IShape c1 = new Circle(0f, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0f);
+        IShape c2 = new Circle(0f, 11, 11, MathPIE.STATIC_BODY_DENSITY, 0f);
+        IShape c3 = new Circle(0f, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0f);
+        IShape c4 = new Circle(0f, 10.00001f, 10, MathPIE.STATIC_BODY_DENSITY, 0f);
+        List<IShape> shapes = new ArrayList<>(3);
+        shapes.add(c1);
+        shapes.add(c2);
+        shapes.add(c3);
+        shapes.add(c4);
+        AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
+        broadPhaseMethod.setShapes(shapes);
+
+        List<ShapePair> cmpShapePairs = new ArrayList<>(1);
+
+        cmpShapePairs.add(new ShapePair(c1, c3));
         TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
     }
 }

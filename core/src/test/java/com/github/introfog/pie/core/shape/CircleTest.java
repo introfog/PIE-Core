@@ -20,11 +20,22 @@ import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
 public class CircleTest extends PIETest {
+    @Rule
+    public ExpectedException junitExpectedException = ExpectedException.none();
+
+    @Test
+    public void paramConstructorWithNegativeRadiusTest() {
+        junitExpectedException.expect(RuntimeException.class);
+        Circle circle = new Circle(-0.01f, 1, 3, 0.1f, 0.2f);
+    }
+
     @Test
     public void paramConstructorTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);

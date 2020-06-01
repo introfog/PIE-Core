@@ -24,7 +24,7 @@ import java.util.List;
 
 public class BruteForceMethod extends AbstractBroadPhase {
     @Override
-    public List<ShapePair> insideCollisionCalculating() {
+    public List<ShapePair> domesticAabbCollisionCalculating() {
         IShape a;
         IShape b;
         List<ShapePair> possibleCollisionList = new ArrayList<>();

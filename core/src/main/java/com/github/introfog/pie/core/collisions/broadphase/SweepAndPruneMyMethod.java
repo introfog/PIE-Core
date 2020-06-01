@@ -25,32 +25,28 @@ import java.util.List;
 public class SweepAndPruneMyMethod extends AbstractBroadPhase {
     private List<IShape> xAxisProjection;
     private List<IShape> activeList;
+    private BruteForceMethod bruteForceMethod;
 
     public SweepAndPruneMyMethod() {
-        xAxisProjection = new ArrayList<>();
+        xAxisProjection = this.shapes;
         activeList = new ArrayList<>();
+        bruteForceMethod = new BruteForceMethod();
     }
 
     @Override
     public void setShapes(List<IShape> shapes) {
         super.setShapes(shapes);
-        xAxisProjection = new ArrayList<>(shapes);
+        xAxisProjection = this.shapes;
     }
 
     @Override
-    public void addShape(IShape shape) {
-        super.addShape(shape);
-        xAxisProjection.add(shape);
-    }
-
-    @Override
-    public List<ShapePair> insideCollisionCalculating() {
+    public List<ShapePair> domesticAabbCollisionCalculating() {
         // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
         // Looking for possible intersections along the X axis, and then use brute force algorithm
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
-        xAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.x, b.aabb.min.x));
         // TODO use insertion sorting (effective when the list is almost sorted)
+        xAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.x, b.aabb.min.x));
 
         activeList.clear();
         activeList.add(xAxisProjection.get(0));
@@ -75,15 +71,8 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
             }
         }
         if (!activeList.isEmpty()) {
-            int size = activeList.size();
-            for (int i = 0; i < size; i++) {
-                IShape first = activeList.remove(0);
-                activeList.forEach((shape) -> {
-                    if (AABB.isIntersected(first.aabb, shape.aabb)) {
-                        possibleCollisionList.add(new ShapePair(first, shape));
-                    }
-                });
-            }
+            bruteForceMethod.setShapes(activeList);
+            possibleCollisionList.addAll(bruteForceMethod.domesticAabbCollisionCalculating());
         }
 
         return possibleCollisionList;

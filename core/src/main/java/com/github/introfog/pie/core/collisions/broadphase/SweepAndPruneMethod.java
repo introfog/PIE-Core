@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SweepAndPruneMethod extends AbstractBroadPhase {
-    private int CURRENT_AXIS;
+    private int currentSweepAndPruneAxis;
     private Vector2f p;
     private Vector2f s;
     private Vector2f s2;
@@ -32,50 +32,48 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     private List<IShape> yAxisProjection;
 
     public SweepAndPruneMethod() {
-        CURRENT_AXIS = 0;
+        currentSweepAndPruneAxis = 0;
         p = new Vector2f();
         s = new Vector2f();
         s2 = new Vector2f();
-        xAxisProjection = new ArrayList<>();
+        xAxisProjection = this.shapes;
         yAxisProjection = new ArrayList<>();
     }
 
     @Override
     public void setShapes(List<IShape> shapes) {
         super.setShapes(shapes);
-        xAxisProjection = new ArrayList<>(shapes);
+        xAxisProjection = this.shapes;
         yAxisProjection = new ArrayList<>(shapes);
     }
 
     @Override
     public void addShape(IShape shape) {
         super.addShape(shape);
-        xAxisProjection.add(shape);
         yAxisProjection.add(shape);
     }
 
     @Override
-    public List<ShapePair> insideCollisionCalculating() {
+    public List<ShapePair> domesticAabbCollisionCalculating() {
         // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
         // Looking for possible intersections along the current axis, and then use brute force algorithm
         // Each time using dispersion we select the next axis
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
-        if (CURRENT_AXIS == 0) {
+        // TODO use insertion sorting (effective when the list is almost sorted)
+        if (currentSweepAndPruneAxis == 0) {
             xAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.x, b.aabb.min.x));
         } else {
             yAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.y, b.aabb.min.y));
         }
-        // TODO use insertion sorting (effective when the list is almost sorted)
 
         p.set(0f, 0f);
         s.set(0f, 0f);
         s2.set(0f, 0f);
-        float numBodies = shapes.size();
 
         AABB currAABB;
         for (int i = 0; i < shapes.size(); i++) {
-            if (CURRENT_AXIS == 0) {
+            if (currentSweepAndPruneAxis == 0) {
                 currAABB = xAxisProjection.get(i).aabb;
             } else {
                 currAABB = yAxisProjection.get(i).aabb;
@@ -88,16 +86,16 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
             s2.add(p);
 
             for (int j = i + 1; j < shapes.size(); j++) {
-                if (CURRENT_AXIS == 0 && xAxisProjection.get(j).aabb.min.x > currAABB.max.x) {
+                if (currentSweepAndPruneAxis == 0 && xAxisProjection.get(j).aabb.min.x > currAABB.max.x) {
                     break;
-                } else if (CURRENT_AXIS == 1 && yAxisProjection.get(j).aabb.min.y > currAABB.max.y) {
+                } else if (currentSweepAndPruneAxis == 1 && yAxisProjection.get(j).aabb.min.y > currAABB.max.y) {
                     break;
                 }
 
 
-                if (CURRENT_AXIS == 0 && AABB.isIntersected(xAxisProjection.get(j).aabb, currAABB)) {
+                if (currentSweepAndPruneAxis == 0 && AABB.isIntersected(xAxisProjection.get(j).aabb, currAABB)) {
                     possibleCollisionList.add(new ShapePair(xAxisProjection.get(j), xAxisProjection.get(i)));
-                } else if (CURRENT_AXIS == 1 && AABB.isIntersected(yAxisProjection.get(j).aabb, currAABB)) {
+                } else if (currentSweepAndPruneAxis == 1 && AABB.isIntersected(yAxisProjection.get(j).aabb, currAABB)) {
                     possibleCollisionList.add(new ShapePair(yAxisProjection.get(j), yAxisProjection.get(i)));
                 }
             }
@@ -105,14 +103,14 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
 
         // With the help of dispersion, we select the next axis (we look for the axis along which the coordinates
         // of the objects are most different) to make fewer checks and reduce the algorithm complexity to O(k*n)
-        s.mul(1.0f / numBodies);
+        s.mul(1.0f / shapes.size());
         s.mul(s);
-        s2.mul(1.0f / numBodies);
+        s2.mul(1.0f / shapes.size());
         Vector2f dispersion = s2;
         dispersion.sub(s);
-        CURRENT_AXIS = 0;
+        currentSweepAndPruneAxis = 0;
         if (dispersion.y > dispersion.x) {
-            CURRENT_AXIS = 1;
+            currentSweepAndPruneAxis = 1;
         }
 
         return possibleCollisionList;

@@ -24,6 +24,10 @@ public class Circle extends IShape {
 
     public Circle(float radius, float centreX, float centreY, float density, float restitution) {
         body = new Body(centreX, centreY, density, restitution);
+        if (radius < 0) {
+            // TODO Create custom PIE exception
+            throw new RuntimeException();
+        }
         this.radius = radius;
 
         computeMassAndInertia();
