@@ -16,6 +16,8 @@
 package com.github.introfog.pie.benchmark.collisions.broadphase.dynamical;
 
 import com.github.introfog.pie.benchmark.collisions.broadphase.AbstractBroadPhaseBenchmarkTest;
+import com.github.introfog.pie.benchmark.collisions.broadphase.BenchmarkTestConfig;
+import com.github.introfog.pie.benchmark.collisions.broadphase.DefaultActionApplier;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.IShape;
@@ -29,14 +31,16 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+// Run test methods only for the entire test class, otherwise the tests may not pass due to a different performance difference
 @Category(BenchmarkTest.class)
-public class DynamicSquareShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkTest {
+public class DynamicShapesInSquareBenchmarkTest extends AbstractBroadPhaseBenchmarkTest {
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/benchmark/collisions/broadphase/Square/";
 
     @Test
     public void mediumSquareSlowMovingTest() throws IOException {
-        super.runBenchmarkTest("50x50square_28518collision.pie", PATH_TO_SOURCE_FOLDER,
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_28518collision.pie", PATH_TO_SOURCE_FOLDER,
                 10, 100, new double[]{1.0, 1.27, 0.18, 0.14}, new SlowToPointMover());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class SlowToPointMover extends DefaultActionApplier {
@@ -69,8 +73,9 @@ public class DynamicSquareShapesBenchmarkTest extends AbstractBroadPhaseBenchmar
 
     @Test
     public void mediumSquareQuickMovingTest() throws IOException {
-        super.runBenchmarkTest("50x50square_28518collision.pie", PATH_TO_SOURCE_FOLDER,
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_28518collision.pie", PATH_TO_SOURCE_FOLDER,
                 10, 100, new double[]{1.0, 0.68, 0.11, 0.09}, new QuickToPointMover());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class QuickToPointMover extends DefaultActionApplier {

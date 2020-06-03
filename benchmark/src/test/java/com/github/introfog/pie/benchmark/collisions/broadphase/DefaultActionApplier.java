@@ -13,9 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.benchmark.collisions.broadphase.dynamical;
+package com.github.introfog.pie.benchmark.collisions.broadphase;
 
-import com.github.introfog.pie.benchmark.collisions.broadphase.IActionApplier;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.shape.IShape;
 
@@ -34,5 +33,5 @@ public class DefaultActionApplier implements IActionApplier {
     }
 
     protected void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
-    };
+    }
 }

@@ -16,6 +16,8 @@
 package com.github.introfog.pie.benchmark.collisions.broadphase.dynamical;
 
 import com.github.introfog.pie.benchmark.collisions.broadphase.AbstractBroadPhaseBenchmarkTest;
+import com.github.introfog.pie.benchmark.collisions.broadphase.BenchmarkTestConfig;
+import com.github.introfog.pie.benchmark.collisions.broadphase.DefaultActionApplier;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.math.Vector2f;
@@ -31,14 +33,16 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+// Run test methods only for the entire test class, otherwise the tests may not pass due to a different performance difference
 @Category(BenchmarkTest.class)
-public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkTest {
+public class DynamicShapesInLineBenchmarkTest extends AbstractBroadPhaseBenchmarkTest {
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/benchmark/collisions/broadphase/Line/";
 
     @Test
-    public void simpleColumnsSlowMovingTest() throws IOException {
-        super.runBenchmarkTest("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.27, 0.035, 0.28}, new SlowHorizontallyMover());
+    public void vertical5x500ShapesWith8487CollisionsSlowMovingTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+                20, 100, new double[]{1.0, 0.27, 0.035, 0.3}, new SlowHorizontallyMover());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class SlowHorizontallyMover extends DefaultActionApplier {
@@ -57,9 +61,10 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
     }
 
     @Test
-    public void simpleRowsSlowMovingTest() throws IOException {
-        super.runBenchmarkTest("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+    public void horizontal500x5ShapesWith8487CollisionsSlowMovingTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
                 20, 100, new double[]{1.0, 0.25, 0.045, 0.04}, new SlowVerticallyMover());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class SlowVerticallyMover extends DefaultActionApplier {
@@ -79,9 +84,10 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
     }
 
     @Test
-    public void simpleColumnsQuickMovingTest() throws IOException {
-        super.runBenchmarkTest("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+    public void vertical5x500ShapesWith8487CollisionsQuickMovingTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
                 20, 100, new double[]{1.0, 0.2, 0.03, 0.28}, new QuickHorizontallyMover());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class QuickHorizontallyMover extends DefaultActionApplier {
@@ -99,9 +105,10 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
     }
 
     @Test
-    public void simpleRowsQuickMovingTest() throws IOException {
-        super.runBenchmarkTest("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+    public void horizontal500x5ShapesWith8487CollisionsQuickMovingTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
                 20, 100, new double[]{1.0, 0.28, 0.04, 0.04}, new QuickVerticallyMover());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class QuickVerticallyMover extends DefaultActionApplier {
@@ -120,9 +127,10 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
     }
 
     @Test
-    public void simpleRowsSlowAddingNewShapesTest() throws IOException {
-        super.runBenchmarkTest("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+    public void horizontal500x5ShapesWith8487CollisionsSlowAddingNewShapesTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
                 20, 100, new double[]{1.0, 0.3, 0.06, 0.055}, new NewSlowVerticalShapeAdder());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class NewSlowVerticalShapeAdder extends DefaultActionApplier {
@@ -132,16 +140,18 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
             Vector2f center = methodShapes.get(0).body.position;
 
             for (int i = 0; i < 10; i++) {
-                Circle circle = new Circle(diameter / 2, center.x + i * (diameter - 1), center.y + callCounter * diameter / 2, MathPIE.STATIC_BODY_DENSITY, 0f);
+                Circle circle = new Circle(diameter / 2, center.x + i * (diameter - 1),
+                        center.y + callCounter * diameter / 2, MathPIE.STATIC_BODY_DENSITY, 0f);
                 methods.forEach(method -> method.addShape(circle));
             }
         }
     }
 
     @Test
-    public void simpleRowsQuickAddingNewShapesTest() throws IOException {
-        super.runBenchmarkTest("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+    public void horizontal500x5ShapesWith8487CollisionsQuickAddingNewShapesTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
                 20, 100, new double[]{1.0, 0.42, 0.065, 0.065}, new NewQuickVerticalShapeAdder());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class NewQuickVerticalShapeAdder extends DefaultActionApplier {
@@ -151,7 +161,8 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
             Vector2f center = methodShapes.get(0).body.position;
 
             for (int i = 0; i < 10; i++) {
-                Circle circle = new Circle(diameter / 2, center.x + i * (diameter - 1), center.y + callCounter * diameter / 5, MathPIE.STATIC_BODY_DENSITY, 0f);
+                Circle circle = new Circle(diameter / 2, center.x + i * (diameter - 1),
+                        center.y + callCounter * diameter / 5, MathPIE.STATIC_BODY_DENSITY, 0f);
                 methods.forEach(method -> method.addShape(circle));
                 methodShapes.add(circle);
             }
@@ -159,9 +170,10 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
     }
 
     @Test
-    public void simpleColumnsSlowAddingNewShapesTest() throws IOException {
-        super.runBenchmarkTest("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+    public void vertical5x500ShapesWith8487CollisionsSlowAddingNewShapesTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
                 20, 100, new double[]{1.0, 0.27, 0.055, 0.3}, new NewSlowHorizontalShapeAdder());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class NewSlowHorizontalShapeAdder extends DefaultActionApplier {
@@ -171,16 +183,18 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
             Vector2f center = methodShapes.get(2000).body.position;
 
             for (int i = 0; i < 10; i++) {
-                Circle circle = new Circle(diameter / 2, center.x - callCounter * diameter / 2, center.y + i * (diameter - 1), MathPIE.STATIC_BODY_DENSITY, 0f);
+                Circle circle = new Circle(diameter / 2, center.x - callCounter * diameter / 2,
+                        center.y + i * (diameter - 1), MathPIE.STATIC_BODY_DENSITY, 0f);
                 methods.forEach(method -> method.addShape(circle));
             }
         }
     }
 
     @Test
-    public void simpleColumnsQuickAddingNewShapesTest() throws IOException {
-        super.runBenchmarkTest("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
+    public void vertical5x500ShapesWith8487CollisionsQuickAddingNewShapesTest() throws IOException {
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
                 20, 100, new double[]{1.0, 0.39, 0.065, 0.34}, new NewQuickHorizontalShapeAdder());
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class NewQuickHorizontalShapeAdder extends DefaultActionApplier {
@@ -190,7 +204,8 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
             Vector2f center = methodShapes.get(2000).body.position;
 
             for (int i = 0; i < 10; i++) {
-                Circle circle = new Circle(diameter / 2, center.x-+ callCounter * diameter / 5, center.y + i * (diameter - 1), MathPIE.STATIC_BODY_DENSITY, 0f);
+                Circle circle = new Circle(diameter / 2, center.x-+ callCounter * diameter / 5,
+                        center.y + i * (diameter - 1), MathPIE.STATIC_BODY_DENSITY, 0f);
                 methods.forEach(method -> method.addShape(circle));
                 methodShapes.add(circle);
             }
@@ -199,38 +214,41 @@ public class DynamicLineShapesBenchmarkTest extends AbstractBroadPhaseBenchmarkT
 
     @Test
     // This test shows how the SweepAndPrune method can analyze which axis is best used to determine possible intersections.
-    public void hardRowsAndColumnsChangesTest() throws IOException {
+    public void horizontal500x5With8487CollisionsAnd5x500With22443ChangesTest() throws IOException {
         List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_8487collision.pie");
         DefaultActionApplier applier = new ShapesChanger(firstShapes, secondShapes);
-        super.runBenchmarkTest("500x5line_8487collision.pie", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.55, 0.16, 0.46}, applier);
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision.pie",
+                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.55, 0.16, 0.46}, applier);
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
 
     @Test
     // This test shows how the SweepAndPrune method can analyze which axis is best used to determine possible intersections.
-    public void hardColumnsAndRowsChangesTest() throws IOException {
-        List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_8487collision.pie");
-        List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
+    public void horizontal500x5With22443CollisionsAnd5x500With8487ChangesTest() throws IOException {
+        List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_8487collision.pie");
+        List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
         DefaultActionApplier applier = new ShapesChanger(firstShapes, secondShapes);
-        super.runBenchmarkTest("5x500line_22443collision.pie", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.59, 0.16, 0.38}, applier);
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_22443collision.pie",
+                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.59, 0.16, 0.38}, applier);
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     // This test shows how the SweepAndPrune method can analyze which axis is best used to determine possible intersections.
-    public void hardColumnsAndHardRowsChangesTest() throws IOException {
+    public void horizontal500x5With22443CollisionsAnd5x500With22443ChangesTest() throws IOException {
         List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
         DefaultActionApplier applier = new ShapesChanger(firstShapes, secondShapes);
-        super.runBenchmarkTest("500x5line_22443collision.pie", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.9, 0.22, 0.4}, applier);
+        BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_22443collision.pie",
+                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.9, 0.22, 0.4}, applier);
+        super.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     private static class ShapesChanger extends DefaultActionApplier {
-        private List<IShape> firstShapes;
-        private List<IShape> secondShapes;
+        private final List<IShape> firstShapes;
+        private final List<IShape> secondShapes;
 
         public ShapesChanger(List<IShape> firstShapes, List<IShape> secondShapes) {
             this.firstShapes = firstShapes;
