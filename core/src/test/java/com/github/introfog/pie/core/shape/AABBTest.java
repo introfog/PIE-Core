@@ -35,6 +35,14 @@ public class AABBTest extends PIETest {
     }
 
     @Test
+    public void constructorWithParamTest() {
+        AABB aabb = new AABB(new Vector2f(-1, -2), new Vector2f(2, 3));
+
+        Assert.assertEquals(new Vector2f(-1, -2), aabb.min);
+        Assert.assertEquals(new Vector2f(2, 3), aabb.max);
+    }
+
+    @Test
     public void isIntersectedTest() {
         AABB a = new AABB();
         AABB b = new AABB();
