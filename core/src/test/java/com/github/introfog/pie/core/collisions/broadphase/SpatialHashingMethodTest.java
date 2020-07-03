@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
-import com.github.introfog.pie.core.TestUtil;
+import com.github.introfog.pie.core.util.TestUtil;
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
@@ -54,7 +54,7 @@ public class SpatialHashingMethodTest extends AbstractBroadPhaseTest {
         List<ShapePair> cmpShapePairs = new ArrayList<>(1);
 
         cmpShapePairs.add(new ShapePair(r1, r2));
-        TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
     }
 
     @Test
@@ -75,6 +75,6 @@ public class SpatialHashingMethodTest extends AbstractBroadPhaseTest {
         List<ShapePair> cmpShapePairs = new ArrayList<>(1);
 
         cmpShapePairs.add(new ShapePair(c1, c3));
-        TestUtil.comparingShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollision());
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
     }
 }

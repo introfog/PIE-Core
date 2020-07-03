@@ -13,9 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.core;
-
-import com.github.introfog.pie.core.util.ShapePair;
+package com.github.introfog.pie.core.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +26,9 @@ public final class TestUtil {
     private TestUtil() {
     }
 
-    public static void comparingShapePairsList(List<ShapePair> cmpShapes, List<ShapePair> outShapes) {
+    public static void assertEqualsShapePairsList(List<ShapePair> cmpShapes, List<ShapePair> outShapes, String messagePrefix) {
         if (cmpShapes.size() != outShapes.size()) {
-            Assert.assertEquals("Different number of shape collisions", cmpShapes.size(), outShapes.size());
+            Assert.assertEquals(messagePrefix + "Different number of shape collisions", cmpShapes.size(), outShapes.size());
         }
 
         Map<Integer, List<ShapePair>> cmpMap = new HashMap<>(cmpShapes.size());
@@ -48,15 +46,19 @@ public final class TestUtil {
         }
 
         if (cmpMap.size() != outMap.size()) {
-            Assert.assertEquals("Different size of maps", cmpMap.size(), outMap.size());
+            Assert.assertEquals(messagePrefix + "Different size of maps", cmpMap.size(), outMap.size());
         }
 
         for (Integer hash : cmpMap.keySet()) {
             List<ShapePair> cmpList = cmpMap.get(hash);
             List<ShapePair> outList = outMap.get(hash);
 
-            Assert.assertNotNull("Out map does not contain hash " + hash + " from cmp map", outList);
-            Assert.assertTrue("Values cmp and out map for hash " + hash + " are different", cmpList.containsAll(outList));
+            Assert.assertNotNull(messagePrefix + "Out map does not contain hash " + hash + " from cmp map", outList);
+            Assert.assertTrue(messagePrefix + "Values cmp and out map for hash " + hash + " are different", cmpList.containsAll(outList));
         }
+    }
+
+    public static void assertEqualsShapePairsList(List<ShapePair> cmpShapes, List<ShapePair> outShapes) {
+        TestUtil.assertEqualsShapePairsList(cmpShapes, outShapes, "");
     }
 }

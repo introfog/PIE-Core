@@ -13,13 +13,25 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.benchmark.collisions.broadphase;
+package com.github.introfog.pie.benchmark.collisions.broadphase.applier;
 
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
 
-public interface IActionApplier {
-    void applyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes);
+public class DefaultActionApplier implements IActionApplier {
+    protected long callCounter;
+
+    public DefaultActionApplier() {
+        callCounter = 0;
+    }
+
+    public void applyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
+        domesticApplyAction(methods, methodShapes);
+        callCounter++;
+    }
+
+    protected void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
+    }
 }

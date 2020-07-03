@@ -25,12 +25,10 @@ import java.util.List;
 public class SweepAndPruneMyMethod extends AbstractBroadPhase {
     private List<IShape> xAxisProjection;
     private List<IShape> activeList;
-    private BruteForceMethod bruteForceMethod;
 
     public SweepAndPruneMyMethod() {
         xAxisProjection = this.shapes;
         activeList = new ArrayList<>();
-        bruteForceMethod = new BruteForceMethod();
     }
 
     @Override
@@ -40,7 +38,7 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public List<ShapePair> domesticAabbCollisionCalculating() {
+    public List<ShapePair> domesticCalculateAabbCollisions() {
         // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
         // Looking for possible intersections along the X axis, and then use brute force algorithm
         List<ShapePair> possibleCollisionList = new ArrayList<>();
@@ -71,8 +69,7 @@ public class SweepAndPruneMyMethod extends AbstractBroadPhase {
             }
         }
         if (!activeList.isEmpty()) {
-            bruteForceMethod.setShapes(activeList);
-            possibleCollisionList.addAll(bruteForceMethod.domesticAabbCollisionCalculating());
+            possibleCollisionList.addAll(BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(activeList));
         }
 
         return possibleCollisionList;

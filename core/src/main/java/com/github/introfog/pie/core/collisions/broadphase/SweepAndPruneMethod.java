@@ -54,7 +54,7 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public List<ShapePair> domesticAabbCollisionCalculating() {
+    public List<ShapePair> domesticCalculateAabbCollisions() {
         // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
         // Looking for possible intersections along the current axis, and then use brute force algorithm
         // Each time using dispersion we select the next axis

@@ -15,6 +15,8 @@
  */
 package com.github.introfog.pie.benchmark.collisions.broadphase;
 
+import com.github.introfog.pie.benchmark.collisions.broadphase.applier.DefaultActionApplier;
+import com.github.introfog.pie.benchmark.collisions.broadphase.applier.IActionApplier;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 
 import java.text.NumberFormat;
@@ -23,8 +25,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import org.junit.Assert;
 
 public class BenchmarkTestConfig {
     public final static int DEFAULT_WARM_VALUE = 45;
@@ -61,7 +61,6 @@ public class BenchmarkTestConfig {
 
     public BenchmarkTestConfig(String fileName, String sourceFolder, TimeUnit timeUnit, int warm, int measure,
             double[] expectedCoefficients, double allowedWorkingTimeDifference, IActionApplier applier, String comparativeMethodName) {
-        Assert.assertTrue("Use .pie source file", fileName.matches(".*\\.pie"));
         this.fileName = fileName;
         this.sourceFolder = sourceFolder;
         this.timeUnit = timeUnit;

@@ -36,10 +36,10 @@ public abstract class AbstractBroadPhase {
         shapes.add(shape);
     }
 
-    public final List<ShapePair> calculateAabbCollision() {
+    public final List<ShapePair> calculateAabbCollisions() {
         shapes.forEach(IShape::computeAABB);
-        return domesticAabbCollisionCalculating();
+        return domesticCalculateAabbCollisions();
     }
 
-    protected abstract List<ShapePair> domesticAabbCollisionCalculating();
+    protected abstract List<ShapePair> domesticCalculateAabbCollisions();
 }

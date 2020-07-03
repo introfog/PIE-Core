@@ -140,7 +140,7 @@ public final class World {
 
     private void step() {
         // Broad phase
-        mayBeCollision = context.getBroadPhaseMethod().calculateAabbCollision();
+        mayBeCollision = context.getBroadPhaseMethod().calculateAabbCollisions();
 
         // Integrate forces
         // Hanna modification Euler's method is used!

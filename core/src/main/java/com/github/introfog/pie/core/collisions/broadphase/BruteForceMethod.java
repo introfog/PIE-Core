@@ -24,10 +24,14 @@ import java.util.List;
 
 public class BruteForceMethod extends AbstractBroadPhase {
     @Override
-    public List<ShapePair> domesticAabbCollisionCalculating() {
+    public List<ShapePair> domesticCalculateAabbCollisions() {
+        return BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(shapes);
+    }
+
+    public static List<ShapePair> calculateAabbCollisionsWithoutAabbUpdating(List<IShape> shapes) {
         IShape a;
         IShape b;
-        List<ShapePair> possibleCollisionList = new ArrayList<>();
+        List<ShapePair> collisionsList = new ArrayList<>();
 
         for (int i = 0; i < shapes.size(); i++) {
             for (int j = i + 1; j < shapes.size(); j++) {
@@ -35,11 +39,11 @@ public class BruteForceMethod extends AbstractBroadPhase {
                 b = shapes.get(j);
 
                 if (AABB.isIntersected(a.aabb, b.aabb)) {
-                    possibleCollisionList.add(new ShapePair(a, b));
+                    collisionsList.add(new ShapePair(a, b));
                 }
             }
         }
 
-        return possibleCollisionList;
+        return collisionsList;
     }
 }

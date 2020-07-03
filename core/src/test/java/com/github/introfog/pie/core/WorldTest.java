@@ -19,6 +19,7 @@ import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
+import com.github.introfog.pie.core.util.TestUtil;
 import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.IntegrationTest;
 
@@ -54,7 +55,7 @@ public class WorldTest extends PIETest {
                 collect(Collectors.toList());
         List<ShapePair> cmpShapePairs = new ArrayList<>(3);
         cmpShapePairs.add(new ShapePair(c1, c2));
-        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, collisions);
 
         IShape c3 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
         world.addShape(c3);
@@ -64,7 +65,7 @@ public class WorldTest extends PIETest {
         // Collisions have not changed, because in the first update method call, the deltaTime was transferred larger
         // than the deadLoopBorder, and the accumulator became equal to the deadLoopBorder, and one iteration was
         // performed, and the second call to the update method will not be enough for one iteration
-        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, collisions);
     }
 
     @Test
@@ -84,7 +85,7 @@ public class WorldTest extends PIETest {
                 collect(Collectors.toList());
         List<ShapePair> cmpShapePairs = new ArrayList<>(3);
         cmpShapePairs.add(new ShapePair(c1, c2));
-        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, collisions);
 
         IShape c3 = new Circle(10, 7, 25, 1f, 0.2f);
         world.addShape(c3);
@@ -97,7 +98,7 @@ public class WorldTest extends PIETest {
         cmpShapePairs.add(new ShapePair(c2, c3));
         // Here it is checked that the accumulator accumulates deltaTime, and when it is larger than the fixedDeltaTime,
         // an iteration of collision resolution occurs
-        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, collisions);
     }
 
     @Test
@@ -144,7 +145,7 @@ public class WorldTest extends PIETest {
                 collect(Collectors.toList());
         List<ShapePair> cmpShapePairs = new ArrayList<>(3);
         cmpShapePairs.add(new ShapePair(c1, c2));
-        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, collisions);
 
         IShape c3 = new Circle(10, 7, 25, 1f, 0.2f);
         shapes.add(c1);
@@ -158,7 +159,7 @@ public class WorldTest extends PIETest {
         cmpShapePairs.add(new ShapePair(c1, c2));
         cmpShapePairs.add(new ShapePair(c1, c3));
         cmpShapePairs.add(new ShapePair(c2, c3));
-        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, collisions);
     }
 
     @Test
@@ -176,7 +177,7 @@ public class WorldTest extends PIETest {
                 collect(Collectors.toList());
         List<ShapePair> cmpShapePairs = new ArrayList<>(3);
         cmpShapePairs.add(new ShapePair(c1, c2));
-        TestUtil.comparingShapePairsList(cmpShapePairs, collisions);
+        TestUtil.assertEqualsShapePairsList(cmpShapePairs, collisions);
     }
 
     // TODO add test for collisionSolveIterations
