@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -59,6 +60,32 @@ public class DynamicShapesInLineAlgorithmicTest extends PIETest {
     public void horizontal500x5ShapesWith8487CollisionsQuickMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
                 PATH_TO_SOURCE_FOLDER,10, new MoveActionApplier(5, 20, false));
+    }
+
+    @Test
+    @Ignore("TODO #65 There is problem with SpatialHashingMethod")
+    public void vertical5x500ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
+        BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
+                PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, true, 7));
+    }
+
+    @Test
+    @Ignore("TODO #65 There is problem with SpatialHashingMethod")
+    public void horizontal500x5ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
+        BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
+                PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, false, 7));
+    }
+
+    @Test
+    public void vertical5x500ShapesWith8487CollisionsSomeBodiesQuickMovingTest() throws IOException {
+        BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
+                PATH_TO_SOURCE_FOLDER,10, new MoveActionApplier(5, 20, true, 7));
+    }
+
+    @Test
+    public void horizontal500x5ShapesWith8487CollisionsSomeBodiesQuickMovingTest() throws IOException {
+        BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
+                PATH_TO_SOURCE_FOLDER,10, new MoveActionApplier(5, 20, false, 7));
     }
 
     @Test

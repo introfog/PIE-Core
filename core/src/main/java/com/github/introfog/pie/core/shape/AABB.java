@@ -27,6 +27,26 @@ public class AABB {
         max = new Vector2f();
     }
 
+    public float surfaceArea() {
+        return (max.x - min.x) * (max.y - min.y);
+    }
+
+    public float deltaSurfaceArea(AABB aabb) {
+        return  (Math.max(this.max.x, aabb.max.x) - Math.min(this.min.x, aabb.min.x)) *
+                (Math.max(this.max.y, aabb.max.y) - Math.min(this.min.y, aabb.min.y)) - surfaceArea();
+    }
+
+    public static AABB union(AABB a, AABB b) {
+        AABB result = new AABB();
+        result.min.x = Math.min(a.min.x, b.min.x);
+        result.min.y = Math.min(a.min.y, b.min.y);
+
+        result.max.x = Math.max(a.max.x, b.max.x);
+        result.max.y = Math.max(a.max.y, b.max.y);
+
+        return result;
+    }
+
     public static boolean isIntersected(AABB a, AABB b) {
         // Exit without intersection because a dividing axis is found
         if (a.max.x < b.min.x || a.min.x > b.max.x) {
@@ -34,5 +54,21 @@ public class AABB {
         }
         // No separation axis found, therefore at least one intersecting axis exists
         return !(a.max.y < b.min.y) && !(a.min.y > b.max.y);
+    }
+
+    public static boolean isContained(AABB container, AABB content) {
+        if (container == content) {
+            return true;
+        }
+
+        if (content.min.x < container.min.x || content.max.x > container.max.x) {
+            return false;
+        }
+
+        if (content.min.y < container.min.y || content.max.y > container.max.y) {
+            return false;
+        }
+
+        return true;
     }
 }

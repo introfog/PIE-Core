@@ -33,35 +33,35 @@ public class ShapesInLineBenchmarkTest extends PIETest {
     @Test
     public void vertical5x500ShapesWith8487CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.25, 0.055, 0.43});
+                PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.25, 0.055, 0.47, 0.07});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void vertical5x500ShapesWith22443CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_22443collision",
-                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.75, 0.11, 0.66});
+                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.75, 0.11, 0.7, 0.11});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.32, 0.055, 0.055});
+                PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.32, 0.055, 0.055, 0.075});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith22443CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_22443collision",
-                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.8, 0.12, 0.12});
+                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.8, 0.12, 0.12, 0.14});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal3000x2ShapesWithDifferentSizeAnd20491CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("3000x2line+diffSize_20491collision",
-                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.32, 0.02, 0.02});
+                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.32, 0.02, 0.02, 0.03});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 }

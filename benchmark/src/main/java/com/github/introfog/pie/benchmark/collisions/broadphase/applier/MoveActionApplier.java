@@ -25,11 +25,18 @@ public class MoveActionApplier extends DefaultActionApplier {
     private final int iterationOneWay;
     private final float offsetValue;
     private final boolean isHorizontalMover;
+    private final int oneMovingBodyOfBodies;
 
     public MoveActionApplier(int iterationOneWay, float offsetValue, boolean isHorizontalMover) {
+        this(iterationOneWay, offsetValue, isHorizontalMover, 1);
+    }
+
+    public MoveActionApplier(int iterationOneWay, float offsetValue, boolean isHorizontalMover,
+            int oneMovingBodyOfBodies) {
         this.iterationOneWay = iterationOneWay;
         this.offsetValue = offsetValue;
         this.isHorizontalMover = isHorizontalMover;
+        this.oneMovingBodyOfBodies = oneMovingBodyOfBodies;
     }
 
     @Override
@@ -44,7 +51,7 @@ public class MoveActionApplier extends DefaultActionApplier {
         } else {
             offset = new Vector2f(0, callCounter >= 0 ? offsetValue : -offsetValue);
         }
-        for (int i = 0; i < methodShapes.size(); i++) {
+        for (int i = 0; i < methodShapes.size(); i += oneMovingBodyOfBodies) {
             methodShapes.get(i).body.position.add(offset, i % 2 == 0 ? -1 : 1);
         }
     }

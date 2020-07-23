@@ -71,4 +71,105 @@ public class AABBTest extends PIETest {
         // Y axis separation case
         Assert.assertFalse(AABB.isIntersected(a, b));
     }
+
+    @Test
+    public void isContainedTest() {
+        AABB a = new AABB();
+        AABB b = new AABB();
+
+        Assert.assertTrue(AABB.isContained(a, a));
+
+        a.min.set(0, 0);
+        a.max.set(7, 10);
+        b.min.set(6, 5);
+        b.max.set(10, 15);
+        // AABBs are intersect
+        Assert.assertFalse(AABB.isContained(a, b));
+
+        a.min.set(0, 0);
+        a.max.set(7, 10);
+        b.min.set(2, -1);
+        b.max.set(5, 8);
+        // AABBs are intersect
+        Assert.assertFalse(AABB.isContained(a, b));
+
+        a.min.set(0, 0);
+        a.max.set(10, 10);
+        b.min.set(1, 1);
+        b.max.set(2, 2);
+        // a contain b
+        Assert.assertTrue(AABB.isContained(a, b));
+
+        a.min.set(1, 1);
+        a.max.set(2, 2);
+        b.min.set(0, 0);
+        b.max.set(10, 10);
+        // b contain a
+        Assert.assertFalse(AABB.isContained(a, b));
+    }
+
+    @Test
+    public void unionTest() {
+        AABB a = new AABB();
+        AABB b = new AABB();
+
+        a.min.set(0, 0);
+        a.max.set(7, 10);
+        b.min.set(6, 5);
+        b.max.set(10, 15);
+        // AABBs are intersect
+        AABB result = AABB.union(a, b);
+        Assert.assertEquals(new Vector2f(0, 0), result.min);
+        Assert.assertEquals(new Vector2f(10, 15), result.max);
+
+        a.min.set(0, 0);
+        a.max.set(10, 10);
+        b.min.set(1, 1);
+        b.max.set(2, 2);
+        // a contain b
+        result = AABB.union(a, b);
+        Assert.assertEquals(a.min, result.min);
+        Assert.assertEquals(a.max, result.max);
+
+        a.min.set(1, 1);
+        a.max.set(2, 2);
+        b.min.set(0, 0);
+        b.max.set(10, 10);
+        // b contain a
+        result = AABB.union(a, b);
+        Assert.assertEquals(b.min, result.min);
+        Assert.assertEquals(b.max, result.max);
+    }
+
+    @Test
+    public void surfaceAreaTest() {
+        AABB a = new AABB();
+        a.min.set(-1, 4);
+        a.max.set(7, 10);
+        Assert.assertEquals(48, a.surfaceArea(), PIETest.FLOAT_EPSILON_COMPARISON);
+    }
+
+    @Test
+    public void deltaSurfaceAreaTest() {
+        AABB a = new AABB();
+        AABB b = new AABB();
+
+        // AABBs are intersect
+        a.min.set(0, 0);
+        a.max.set(7, 10);
+        b.min.set(6, 5);
+        b.max.set(10, 15);
+        Assert.assertEquals(80, a.deltaSurfaceArea(b), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(110, b.deltaSurfaceArea(a), PIETest.FLOAT_EPSILON_COMPARISON);
+
+        Assert.assertEquals(0, a.deltaSurfaceArea(a), PIETest.FLOAT_EPSILON_COMPARISON);
+
+        // a contain b
+        a.min.set(0, 0);
+        a.max.set(10, 8);
+        b.min.set(1, 1);
+        b.max.set(2, 3);
+        Assert.assertEquals(0, a.deltaSurfaceArea(b), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(78, b.deltaSurfaceArea(a), PIETest.FLOAT_EPSILON_COMPARISON);
+    }
 }
