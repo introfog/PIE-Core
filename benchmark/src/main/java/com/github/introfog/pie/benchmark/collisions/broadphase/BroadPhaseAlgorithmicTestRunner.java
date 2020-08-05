@@ -20,7 +20,6 @@ import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
-import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMyMethod;
 import com.github.introfog.pie.core.collisions.broadphase.aabbtree.AABBTreeMethod;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
@@ -65,7 +64,6 @@ public class BroadPhaseAlgorithmicTestRunner {
         methods.add(new BruteForceMethod());
         methods.add(new SpatialHashingMethod());
         methods.add(new SweepAndPruneMethod());
-        methods.add(new SweepAndPruneMyMethod());
         methods.add(new AABBTreeMethod());
         methods.forEach(method -> method.setShapes(shapes));
         return methods;
