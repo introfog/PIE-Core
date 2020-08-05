@@ -36,14 +36,14 @@ public class DynamicShapesInSquareBenchmarkTest extends PIETest {
     @Test
     public void mediumSquareSlowMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_28518collision", PATH_TO_SOURCE_FOLDER,
-                10, 100, new double[]{1.0, 1.27, 0.2, 0.17, 0.44}, new MoveToPointActionApplier(30, 2));
+                10, 100, new double[]{1.0, 1.27, 0.2, 0.44}, new MoveToPointActionApplier(30, 2));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void mediumSquareQuickMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_28518collision", PATH_TO_SOURCE_FOLDER,
-                10, 100, new double[]{1.0, 0.73, 0.13, 0.11, 0.75}, new MoveToPointActionApplier(30, 20));
+                10, 100, new double[]{1.0, 0.73, 0.13, 0.75}, new MoveToPointActionApplier(30, 20));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 }
