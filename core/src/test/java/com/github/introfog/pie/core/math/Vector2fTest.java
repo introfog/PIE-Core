@@ -82,7 +82,7 @@ public class Vector2fTest extends PIETest {
     @Test
     public void toStringTest() {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
-        Assert.assertEquals("Vector2f [0.1][0.2]", vec.toString());
+        Assert.assertEquals("{0.1; 0.2}", vec.toString());
     }
 
     @Test

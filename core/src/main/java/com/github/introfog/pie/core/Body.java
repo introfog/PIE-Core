@@ -18,6 +18,7 @@ package com.github.introfog.pie.core;
 import com.github.introfog.pie.core.math.Vector2f;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class Body {
     public float density;
@@ -63,5 +64,14 @@ public class Body {
     @Override
     public int hashCode() {
         return Objects.hash(density, restitution, position);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner("; ", "{", "}")
+                .add("position=" + position)
+                .add("density=" + density)
+                .add("restitution=" + restitution)
+                .toString();
     }
 }

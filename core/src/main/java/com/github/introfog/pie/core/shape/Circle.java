@@ -18,6 +18,7 @@ package com.github.introfog.pie.core.shape;
 import com.github.introfog.pie.core.Body;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class Circle extends IShape {
     public float radius;
@@ -57,6 +58,14 @@ public class Circle extends IShape {
     @Override
     public int hashCode() {
         return Objects.hash(radius, super.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner("; ", "{", "}")
+                .add("center=" + body.position)
+                .add("radius=" + radius)
+                .toString();
     }
 
     @Override
