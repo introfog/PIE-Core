@@ -172,4 +172,12 @@ public class AABBTest extends PIETest {
         Assert.assertEquals(0, a.deltaSurfaceArea(b), PIETest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(78, b.deltaSurfaceArea(a), PIETest.FLOAT_EPSILON_COMPARISON);
     }
+
+    @Test
+    public void toStringTest() {
+        AABB aabb = new AABB();
+        aabb.min.set(1.23f, 0.12f);
+        aabb.max.set(17.223434f, 123.45645f);
+        Assert.assertEquals("{min={1.23; 0.12}; max={17.223434; 123.45645}}", aabb.toString());
+    }
 }

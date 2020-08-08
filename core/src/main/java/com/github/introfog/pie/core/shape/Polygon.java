@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class Polygon extends IShape {
     public int vertexCount;
@@ -181,6 +182,32 @@ public class Polygon extends IShape {
     }
 
     @Override
+    public String toString() {
+        return new StringJoiner("; ", "{", "}")
+                .add("center=" + body.position)
+                .add("vertices=" + Arrays.toString(vertices))
+                .toString();
+    }
+
+    public Vector2f getSupport(Vector2f dir) {
+        // Looking for the most distant vertex in a given direction
+        float bestProjection = -Float.MAX_VALUE;
+        Vector2f bestVertex = new Vector2f();
+
+        for (int i = 0; i < vertexCount; ++i) {
+            Vector2f v = vertices[i];
+            float projection = Vector2f.dotProduct(v, dir);
+
+            if (projection > bestProjection) {
+                bestVertex.set(v);
+                bestProjection = projection;
+            }
+        }
+
+        return bestVertex;
+    }
+
+    @Override
     protected void computeMassAndInertia() {
         float area = 0f;
         float I = 0f;
@@ -207,21 +234,4 @@ public class Polygon extends IShape {
         body.invertInertia = (inertia != 0f) ? 1f / inertia : 0f;
     }
 
-    public Vector2f getSupport(Vector2f dir) {
-        // Looking for the most distant vertex in a given direction
-        float bestProjection = -Float.MAX_VALUE;
-        Vector2f bestVertex = new Vector2f();
-
-        for (int i = 0; i < vertexCount; ++i) {
-            Vector2f v = vertices[i];
-            float projection = Vector2f.dotProduct(v, dir);
-
-            if (projection > bestProjection) {
-                bestVertex.set(v);
-                bestProjection = projection;
-            }
-        }
-
-        return bestVertex;
-    }
 }

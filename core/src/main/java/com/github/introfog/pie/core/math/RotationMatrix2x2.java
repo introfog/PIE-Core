@@ -15,9 +15,11 @@
  */
 package com.github.introfog.pie.core.math;
 
+import java.util.StringJoiner;
+
 public class RotationMatrix2x2 {
-    private float m00, m01;
-    private float m10, m11;
+    public float m00, m01;
+    public float m10, m11;
 
     public void setAngle(float radian) {
         float cos = (float) Math.cos(radian);
@@ -45,5 +47,19 @@ public class RotationMatrix2x2 {
     public void transposeMul(float x, float y, Vector2f out) {
         out.x = m00 * x + m10 * y;
         out.y = m01 * x + m11 * y;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner("; ", "{", "}")
+                .add(new StringJoiner("; ", "{", "}")
+                        .add("m00=" + m00)
+                        .add("m01=" + m01)
+                        .toString())
+                .add(new StringJoiner("; ", "{", "}")
+                        .add("m10=" + m10)
+                        .add("m11=" + m11)
+                        .toString())
+                .toString();
     }
 }

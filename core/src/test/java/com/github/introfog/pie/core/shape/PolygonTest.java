@@ -21,6 +21,7 @@ import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -103,22 +104,22 @@ public class PolygonTest extends PIETest {
         vec.set(7.5f, 5.0f);
         Assert.assertEquals(vec, polygon.aabb.max);
     }
+    
+    @Test
+    @Ignore("TODO #69 IndexOutOfBoundsException is thrown")
+    public void verticesInCircleTest() {
+        float radius = 10;
+        Vector2f[] vertices = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT + 2);
+        for (int i = 0; i < MathPIE.MAX_POLY_VERTEX_COUNT + 1; i++) {
+            float cos = (float) Math.cos(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
+            float sin = (float) Math.sin(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
 
-    // TODO review this test
-//    @Test
-//    public void problemInMCHTest() {
-//        float radius = 10;
-//        Vector2f[] vertices = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT + 2);
-//        for (int i = 0; i < MathPIE.MAX_POLY_VERTEX_COUNT + 1; i++) {
-//            float cos = (float) Math.cos(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
-//            float sin = (float) Math.sin(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
-//
-//            vertices[i].set(cos * radius, sin * radius);
-//        }
-//        vertices[MathPIE.MAX_POLY_VERTEX_COUNT + 1].set(0, 0);
-//
-//        Polygon polygon = new Polygon(0.1f, 0.2f, 0, 0, vertices);
-//    }
+            vertices[i].set(cos * radius, sin * radius);
+        }
+        vertices[MathPIE.MAX_POLY_VERTEX_COUNT + 1].set(0, 0);
+
+        new Polygon(0.1f, 0.2f, 0, 0, vertices);
+    }
 
     @Test
     public void aLotOfVerticesExceptionTest() {
@@ -143,7 +144,7 @@ public class PolygonTest extends PIETest {
     public void equalsAndHashCodeItselfTest() {
         Polygon polygon = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
 
-        Assert.assertTrue(polygon.equals(polygon));
+        Assert.assertEquals(polygon, polygon);
         Assert.assertEquals(polygon.hashCode(), polygon.hashCode());
     }
 
@@ -189,8 +190,8 @@ public class PolygonTest extends PIETest {
         Vector2f temp = new Vector2f(second.vertices[3]);
         second.vertices[3].set(second.vertices[1]);
         second.vertices[1].set(temp);
-        Assert.assertFalse(first.equals(second));
-        Assert.assertFalse(second.equals(first));
+        Assert.assertNotEquals(first, second);
+        Assert.assertNotEquals(second, first);
         // It is not clear why the hash codes for the objects are the same, they
         // must be different, so the standard hash code generator is not ideal.
         Assert.assertEquals(first.hashCode(), second.hashCode());
@@ -204,7 +205,7 @@ public class PolygonTest extends PIETest {
     public void equalsToNullTest() {
         Polygon polygon = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
 
-        Assert.assertFalse(polygon.equals(null));
+        Assert.assertNotEquals(null, polygon);
     }
 
     @Test
@@ -221,5 +222,12 @@ public class PolygonTest extends PIETest {
 
         Assert.assertEquals(new Vector2f(5, 10), polygon.getSupport(new Vector2f(100, 0.1f)));
         Assert.assertEquals(new Vector2f(5, -10), polygon.getSupport(new Vector2f(100, -0.1f)));
+    }
+
+    @Test
+    public void toStringTest() {
+        Polygon polygon = Polygon.generateRectangle(0.23412f, 1.3f, 2.5f, 6.3f, 2.3f, 0.2f);
+        Assert.assertEquals("{center={0.23412; 1.3}; vertices=[{1.25; -3.15}, "
+                + "{1.25; 3.15}, {-1.25; 3.15}, {-1.25; -3.15}]}", polygon.toString());
     }
 }

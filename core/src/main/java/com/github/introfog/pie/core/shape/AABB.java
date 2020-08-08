@@ -17,6 +17,8 @@ package com.github.introfog.pie.core.shape;
 
 import com.github.introfog.pie.core.math.Vector2f;
 
+import java.util.StringJoiner;
+
 // Axis Aligned Bounding Box
 public class AABB {
     public Vector2f min;
@@ -70,5 +72,13 @@ public class AABB {
         }
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner("; ", "{", "}")
+                .add("min=" + min)
+                .add("max=" + max)
+                .toString();
     }
 }

@@ -79,4 +79,10 @@ public class BodyTest extends PIETest {
 
         Assert.assertFalse(body.equals(null));
     }
+
+    @Test
+    public void toStringTest() {
+        Body body = new Body(0.1634345f, 0.2f, 0.3f, 0.4f);
+        Assert.assertEquals("{position={0.1634345; 0.2}; density=0.3; restitution=0.4}", body.toString());
+    }
 }

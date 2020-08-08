@@ -18,8 +18,6 @@ package com.github.introfog.pie.core.math;
 import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
-import java.lang.reflect.Field;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -27,22 +25,14 @@ import org.junit.experimental.categories.Category;
 @Category(UnitTest.class)
 public class RotationMatrix2x2Test extends PIETest {
     @Test
-    public void setAngleTest() throws NoSuchFieldException, IllegalAccessException {
+    public void setAngleTest() {
         RotationMatrix2x2 matrix = new RotationMatrix2x2();
         matrix.setAngle((float) Math.PI / 3);
 
-        Field field = RotationMatrix2x2.class.getDeclaredField("m00");
-        field.setAccessible(true);
-        Assert.assertEquals(0.5f, (float) field.get(matrix), PIETest.FLOAT_EPSILON_COMPARISON);
-        field = RotationMatrix2x2.class.getDeclaredField("m01");
-        field.setAccessible(true);
-        Assert.assertEquals(-Math.sqrt(3) / 2, (float) field.get(matrix), PIETest.FLOAT_EPSILON_COMPARISON);
-        field = RotationMatrix2x2.class.getDeclaredField("m10");
-        field.setAccessible(true);
-        Assert.assertEquals(Math.sqrt(3) / 2, (float) field.get(matrix), PIETest.FLOAT_EPSILON_COMPARISON);
-        field = RotationMatrix2x2.class.getDeclaredField("m11");
-        field.setAccessible(true);
-        Assert.assertEquals(0.5f, (float) field.get(matrix), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5f, matrix.m00, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-Math.sqrt(3) / 2, matrix.m01, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(Math.sqrt(3) / 2, matrix.m10, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5f, matrix.m11, PIETest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -89,5 +79,12 @@ public class RotationMatrix2x2Test extends PIETest {
         matrix.transposeMul(2, 1, out);
         Assert.assertEquals(1.0 + Math.sqrt(3) / 2, out.x, PIETest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(0.5 - Math.sqrt(3), out.y, PIETest.FLOAT_EPSILON_COMPARISON);
+    }
+
+    @Test
+    public void toStringTest() {
+        RotationMatrix2x2 matrix = new RotationMatrix2x2();
+        matrix.setAngle((float) Math.PI / 3);
+        Assert.assertEquals("{{m00=0.49999997; m01=-0.86602545}; {m10=0.86602545; m11=0.49999997}}", matrix.toString());
     }
 }

@@ -16,6 +16,7 @@
 package com.github.introfog.pie.core.math;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class Vector2f {
     public float x;
@@ -92,7 +93,10 @@ public class Vector2f {
 
     @Override
     public String toString() {
-        return "Vector2f [" + x + "][" + y + "]";
+        return new StringJoiner("; ", "{", "}")
+                .add("" + x)
+                .add("" + y)
+                .toString();
     }
 
     public void set(float x, float y) {

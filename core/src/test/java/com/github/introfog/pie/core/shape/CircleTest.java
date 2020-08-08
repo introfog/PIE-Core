@@ -107,4 +107,10 @@ public class CircleTest extends PIETest {
         Assert.assertEquals(1f / 100f, circle.body.invertMass, PIETest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(1f / 10000f, circle.body.invertInertia, PIETest.FLOAT_EPSILON_COMPARISON);
     }
+
+    @Test
+    public void toStringTest() {
+        Circle circle = new Circle(10.2f, 12.45f, 433.456215f, (float) (1 / Math.PI), 0);
+        Assert.assertEquals("{center={12.45; 433.4562}; radius=10.2}", circle.toString());
+    }
 }
