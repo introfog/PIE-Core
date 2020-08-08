@@ -23,14 +23,27 @@ import com.github.introfog.pie.core.util.ShapePair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class is a sweep and prune method that sorts shapes along a certain axis with the highest variance at
+ * the previous iteration of collision calculation. Further, if the projections of the shapes AABB on this
+ * axis intersect, check if their AABB intersect, if so, put them in the list of possibly intersecting shapes.
+ *
+ * <p>
+ * This method is effective in most cases.
+ *
+ * @see AbstractBroadPhase
+ */
 public class SweepAndPruneMethod extends AbstractBroadPhase {
     private int currentSweepAndPruneAxis;
-    private Vector2f p;
-    private Vector2f s;
-    private Vector2f s2;
+    private final Vector2f p;
+    private final Vector2f s;
+    private final Vector2f s2;
     private List<IShape> xAxisProjection;
     private List<IShape> yAxisProjection;
 
+    /**
+     * Instantiates a new {@link SweepAndPruneMethod} instance.
+     */
     public SweepAndPruneMethod() {
         currentSweepAndPruneAxis = 0;
         p = new Vector2f();
@@ -57,7 +70,7 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     public List<ShapePair> domesticCalculateAabbCollisions() {
         // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
         // Looking for possible intersections along the current axis, and then use brute force algorithm
-        // Each time using dispersion we select the next axis
+        // Each time using variance select the next axis
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
         // TODO use insertion sorting (effective when the list is almost sorted)
@@ -101,15 +114,15 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
             }
         }
 
-        // With the help of dispersion, we select the next axis (we look for the axis along which the coordinates
+        // With the help of variance, select the next axis (look for the axis along which the coordinates
         // of the objects are most different) to make fewer checks and reduce the algorithm complexity to O(k*n)
         s.mul(1.0f / shapes.size());
         s.mul(s);
         s2.mul(1.0f / shapes.size());
-        Vector2f dispersion = s2;
-        dispersion.sub(s);
+        Vector2f variance = s2;
+        variance.sub(s);
         currentSweepAndPruneAxis = 0;
-        if (dispersion.y > dispersion.x) {
+        if (variance.y > variance.x) {
             currentSweepAndPruneAxis = 1;
         }
 

@@ -75,7 +75,7 @@ public class Polygon extends IShape {
             // (Calculate the angle through the vector product)
             int nextHullIndex = 0;
             for (int i = 1; i < vertices.length; ++i) {
-                // Skip the same vertices, because we need unique vertices in the triangle
+                // Skip the same vertices, because need unique vertices in the triangle
                 if (nextHullIndex == indexHull) {
                     nextHullIndex = i;
                     continue;
@@ -91,7 +91,7 @@ public class Polygon extends IShape {
                     nextHullIndex = i;
                 }
                 // If the vector product is 0, then they lie on one straight line,
-                // and we need the vertex farthest from the given vertex
+                // and need the vertex farthest from the given vertex
                 if (c == 0.0f && tmpV2.lengthWithoutSqrt() > tmpV.lengthWithoutSqrt()) {
                     nextHullIndex = i;
                 }

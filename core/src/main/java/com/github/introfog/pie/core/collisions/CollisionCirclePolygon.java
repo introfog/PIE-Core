@@ -64,7 +64,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
             }
             // Save the nearest edge to the center of the circle, if the center is inside the polygon,
             // the usual dotProduct > separation gives an incorrect answer,
-            // because all derivatives are negative, but we need less modulo
+            // because all derivatives are negative, but need less modulo
             if (Math.abs(dotProduct) < separationIfCircleInPolygon) {
                 separationIfCircleInPolygon = Math.abs(dotProduct);
                 indexFaceNormalIfCircleInPolygon = i;
