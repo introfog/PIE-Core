@@ -56,7 +56,7 @@ public class Manifold {
     }
 
     public void initializeCollision() {
-        if (MathPIE.equal(a.invertMass + b.invertMass, 0f)) {
+        if (MathPIE.equal(a.invertedMass + b.invertedMass, 0f)) {
             a.velocity.set(0f, 0f);
             b.velocity.set(0f, 0f);
             areBodiesCollision = false;
@@ -144,8 +144,8 @@ public class Manifold {
 
             float raCrossN = Vector2f.crossProduct(radA, normal);
             float rbCrossN = Vector2f.crossProduct(radB, normal);
-            float invertMassSum = a.invertMass + b.invertMass + (raCrossN * raCrossN) * a.invertInertia
-                    + (rbCrossN * rbCrossN) * b.invertInertia;
+            float invertMassSum = a.invertedMass + b.invertedMass + (raCrossN * raCrossN) * a.invertedInertia
+                    + (rbCrossN * rbCrossN) * b.invertedInertia;
 
             // Calculate the scalar of the force impulse
             float j = -(1.0f + e) * velAlongNormal;
@@ -201,8 +201,8 @@ public class Manifold {
             return;
         }
         Vector2f correction = Vector2f.mul(normal, penetration *
-                context.getCorrectPositionPercent() / (a.invertMass + b.invertMass));
-        a.position.sub(Vector2f.mul(correction, a.invertMass));
-        b.position.add(Vector2f.mul(correction, b.invertMass));
+                context.getCorrectPositionPercent() / (a.invertedMass + b.invertedMass));
+        a.position.sub(Vector2f.mul(correction, a.invertedMass));
+        b.position.add(Vector2f.mul(correction, b.invertedMass));
     }
 }

@@ -229,9 +229,8 @@ public class Polygon extends IShape {
         }
 
         float mass = body.density * area;
-        body.invertMass = (mass != 0f) ? 1f / mass : 0f;
+        body.invertedMass = (mass != 0f) ? 1f / mass : 0f;
         float inertia = I * body.density;
-        body.invertInertia = (inertia != 0f) ? 1f / inertia : 0f;
+        body.invertedInertia = (inertia != 0f) ? 1f / inertia : 0f;
     }
-
 }

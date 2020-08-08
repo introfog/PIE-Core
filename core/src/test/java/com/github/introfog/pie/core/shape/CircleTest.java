@@ -104,8 +104,8 @@ public class CircleTest extends PIETest {
     public void computeMassAndInertiaTest() {
         Circle circle = new Circle(10, 0, 0, (float) (1 / Math.PI), 0);
 
-        Assert.assertEquals(1f / 100f, circle.body.invertMass, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1f / 10000f, circle.body.invertInertia, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 100f, circle.body.invertedMass, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 10000f, circle.body.invertedInertia, PIETest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
