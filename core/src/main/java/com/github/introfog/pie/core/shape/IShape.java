@@ -21,28 +21,58 @@ import com.github.introfog.pie.core.math.Vector2f;
 
 import java.util.Objects;
 
+/**
+ * The IShape abstract class represent a physical object in the
+ * {@link com.github.introfog.pie.core.World} that has a shape and body.
+ */
 public abstract class IShape {
+    /** The shape type. */
     public ShapeType type;
+    /** The shape axis aligned bounding box. */
     public AABB aabb;
+    /** The body that stores shape physical parameters. */
     public Body body;
+    /** The rotation matrix. */
     public RotationMatrix2x2 rotateMatrix;
 
+    /**
+     * Instantiates a new {@link IShape} instance.
+     */
     public IShape() {
         aabb = new AABB();
         rotateMatrix = new RotationMatrix2x2();
         rotateMatrix.setAngle(0f);
     }
 
+    /**
+     * Sets the shape orientation in space.
+     *
+     * @param radian the angle in radians that the shape will have in space
+     */
     public final void setOrientation(float radian) {
         body.orientation = radian;
         rotateMatrix.setAngle(radian);
     }
 
+    /**
+     * Apply impulse to shape.
+     *
+     * @param impulse the impulse vector
+     * @param contactVector the point of impulse application (coordinates are set relative to the center of the shape)
+     */
     public final void applyImpulse(Vector2f impulse, Vector2f contactVector) {
-        body.velocity.add(impulse, body.invertMass);
-        body.angularVelocity += body.invertInertia * Vector2f.crossProduct(contactVector, impulse);
+        body.velocity.add(impulse, body.invertedMass);
+        body.angularVelocity += body.invertedInertia * Vector2f.crossProduct(contactVector, impulse);
     }
 
+    /**
+     * Calculates the current axis aligned bounding box for the shape.
+     *
+     * <p>
+     * The shapes in the world are constantly moving and rotating and hence their AABB changes,
+     * this method update the AABB. The update takes place in the broad phase of collision detection,
+     * see {@link com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase}.
+     */
     public abstract void computeAABB();
 
     @Override
@@ -63,5 +93,9 @@ public abstract class IShape {
         return Objects.hash(type, body);
     }
 
+    /**
+     * A helper method for calculating the mass and inertia
+     * of a shape that is used when initializing the shape.
+     */
     protected abstract void computeMassAndInertia();
 }

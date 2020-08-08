@@ -71,9 +71,9 @@ public class Circle extends IShape {
     @Override
     protected void computeMassAndInertia() {
         float mass = (float) Math.PI * radius * radius * body.density;
-        body.invertMass = (mass == 0f) ? 0f : 1f / mass;
+        body.invertedMass = (mass == 0f) ? 0f : 1f / mass;
 
-        float inertia = radius * radius / body.invertMass;
-        body.invertInertia = (inertia != 0.0f) ? 1.0f / inertia : 0.0f;
+        float inertia = radius * radius / body.invertedMass;
+        body.invertedInertia = (inertia != 0.0f) ? 1.0f / inertia : 0.0f;
     }
 }

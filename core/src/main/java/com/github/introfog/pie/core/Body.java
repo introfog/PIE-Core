@@ -20,21 +20,43 @@ import com.github.introfog.pie.core.math.Vector2f;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+/**
+ * The class stores all the physical parameters of a shape, such as mass, position, speed, etc.
+ */
 public class Body {
+    /** The density. */
     public float density;
+    /** The restitution. */
     public float restitution;
-    public float invertMass;
+    /** The inverted mass. */
+    public float invertedMass;
+    /** The static friction. */
     public float staticFriction;
+    /** The dynamic friction. */
     public float dynamicFriction;
+    /** The torque. */
     public float torque;
-    /** Orientation in radians. */
+    /** The body orientation in radians. */
     public float orientation;
+    /** The angular velocity. */
     public float angularVelocity;
-    public float invertInertia;
+    /** The inverted inertia. */
+    public float invertedInertia;
+    /** The position. */
     public Vector2f position;
+    /** The force. */
     public Vector2f force;
+    /** The velocity. */
     public Vector2f velocity;
 
+    /**
+     * Instantiates a new {@link Body} instance.
+     *
+     * @param positionX the body position in X axis
+     * @param positionY the body position in Y axis
+     * @param density the body density
+     * @param restitution the body restitution
+     */
     public Body(float positionX, float positionY, float density, float restitution) {
         position = new Vector2f(positionX, positionY);
         this.density = density;

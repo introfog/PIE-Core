@@ -126,7 +126,7 @@ public final class World {
     private void narrowPhase() {
         collisions.clear();
         mayBeCollision.forEach((collision) -> {
-            if (collision.first.body.invertMass != 0f || collision.second.body.invertMass != 0f) {
+            if (collision.first.body.invertedMass != 0f || collision.second.body.invertedMass != 0f) {
                 Manifold manifold = new Manifold(collision.first, collision.second, context);
                 manifold.initializeCollision();
                 if (manifold.areBodiesCollision) {
@@ -170,18 +170,18 @@ public final class World {
 
     private void integrateForces(IShape shape) {
         Body body = shape.body;
-        if (body.invertMass == 0.0f) {
+        if (body.invertedMass == 0.0f) {
             return;
         }
 
-        body.velocity.add(body.force, body.invertMass * context.getFixedDeltaTime() * 0.5f);
+        body.velocity.add(body.force, body.invertedMass * context.getFixedDeltaTime() * 0.5f);
         body.velocity.add(context.getGravity(), context.getFixedDeltaTime() * 0.5f);
-        body.angularVelocity += body.torque * body.invertInertia * context.getFixedDeltaTime() * 0.5f;
+        body.angularVelocity += body.torque * body.invertedInertia * context.getFixedDeltaTime() * 0.5f;
     }
 
     private void integrateVelocity(IShape shape) {
         Body body = shape.body;
-        if (body.invertMass == 0.0f) {
+        if (body.invertedMass == 0.0f) {
             return;
         }
 
