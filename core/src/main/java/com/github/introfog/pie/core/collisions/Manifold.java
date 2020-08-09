@@ -108,7 +108,7 @@ public class Manifold {
             rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
             rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
 
-            // Determine whether we should perform a collision with a stop or not.
+            // Determine whether should perform a collision with a stop or not.
             // The idea is that the only thing that moves this object is gravity,
             // then the collision should be carried out without any restitution
             // if(rv.LenSqr( ) < (dt * gravity).LenSqr( ) + EPSILON)

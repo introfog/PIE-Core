@@ -27,10 +27,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The class is a spatial hashing method that divides space into cells, which are stored in a hash table.
+ * Further, if the shape AABB intersects with a cell, then the reference to this shape is placed in the cell
+ * and at the end go through all the cells, and if two shapes are in the same cell, then put them in the
+ * list of possibly intersecting shapes.
+ *
+ * <p>
+ * This method is effective for liquids.
+ *
+ * @see AbstractBroadPhase
+ */
 public class SpatialHashingMethod extends AbstractBroadPhase {
     private int cellSize;
-    private Map<Integer, List<IShape>> cells;
+    private final Map<Integer, List<IShape>> cells;
 
+    /**
+     * Instantiates a new {@link SpatialHashingMethod} instance.
+     */
     public SpatialHashingMethod() {
         cellSize = 0;
         cells = new HashMap<>();

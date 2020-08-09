@@ -8,25 +8,62 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * The class is an AABB node of a AABB tree that is binary (each non-leaf element has
+ * exactly 2 children) and the node AABB completely contains the AABBs of its children.
+ *
+ * @see AABBTreeMethod
+ */
 public class AABBTreeNode {
+    /** The constant DEFAULT_ENLARGED_AABB_COEFFICIENT. */
     public static final float DEFAULT_ENLARGED_AABB_COEFFICIENT = 0.15f;
 
+    /**
+     * Auxiliary flag that is used when calculating collisions and is used to
+     * mark that the children of the marked node have already been viewed.
+     */
     public boolean checked;
+
+    /**
+     * The enlarged AABB coefficient that is used when initializing a tree leaf and is used to create a larger
+     * leaf AABB than the shape AABB that is stored in the leaf. This is done in order not to update each
+     * iteration of the leaf AABB if the shape has moved slightly.
+     *
+     * <p>
+     * Note that the leaf AABB will be on each side greater than the shape AABB by a enlargedAABBCoefficient.
+     * The enlargedAABBCoefficient is also set in the tree by passing it to the node constructor.
+     */
     public final float enlargedAABBCoefficient;
+
+    /**
+     * The node axis aligned bounding box. If the node is leaf, AABB a slightly larger that shape AABB
+     * (see {@link #enlargedAABBCoefficient}), otherwise AABB of minimum size that allows to contain
+     * children AABBs inside it.
+     */
     public AABB aabb;
+
+    /** The parent node. */
     public AABBTreeNode parent;
+
+    /** The children node array.
+     *
+     * <p>
+     * Note that the size of the array is always 2. If it is a leaf, the array contains two NULL elements,
+     * otherwise it contains references to children.
+     */
     public final AABBTreeNode[] children;
+
+    /**
+     * The node shape. If it is not a leaf, this field is NULL.
+     */
     public final IShape shape;
 
-    public AABBTreeNode(AABB aabb, float enlargedAABBCoefficient) {
-        this.checked = false;
-        this.enlargedAABBCoefficient = enlargedAABBCoefficient;
-        this.aabb = aabb;
-        this.parent = null;
-        this.children = new AABBTreeNode[2];
-        this.shape = null;
-    }
-
+    /**
+     * Instantiates a new {@link AABBTreeNode} instance based on shape. This node is a leaf in the tree.
+     *
+     * @param shape the leaf shape
+     * @param enlargedAABBCoefficient the enlarged AABB coefficient
+     */
     public AABBTreeNode(IShape shape, float enlargedAABBCoefficient) {
         this.checked = false;
         this.enlargedAABBCoefficient = enlargedAABBCoefficient;
@@ -36,6 +73,34 @@ public class AABBTreeNode {
         this.shape = shape;
     }
 
+    /**
+     * Instantiates a new {@link AABBTreeNode} instance based on AABB.
+     *
+     * <p>
+     * This is an auxiliary constructor that is used to create non-leaf
+     * elements when inserting new shapes into the tree.
+     *
+     * @param aabb the node axis aligned bounding box
+     * @param enlargedAABBCoefficient the enlarged AABB coefficient
+     */
+    protected AABBTreeNode(AABB aabb, float enlargedAABBCoefficient) {
+        this.checked = false;
+        this.enlargedAABBCoefficient = enlargedAABBCoefficient;
+        this.aabb = aabb;
+        this.parent = null;
+        this.children = new AABBTreeNode[2];
+        this.shape = null;
+    }
+
+    /**
+     * Calculates the shape AABB collisions.
+     *
+     * <p>
+     * Note, when this method is called, all shapes from tree have an up-to-date AABB.
+     *
+     * @return the {@link ShapePair} list in which each item represents
+     * a unique shape pair and the AABB of those shapes intersect
+     */
     public static List<ShapePair> calculateAabbCollisions(AABBTreeNode treeRoot) {
         List<ShapePair> collisions = new ArrayList<>();
         if (treeRoot == null || treeRoot.parent != null) {
@@ -53,6 +118,18 @@ public class AABBTreeNode {
         return collisions;
     }
 
+    /**
+     * Update the AABB tree.
+     *
+     * <p>
+     * The update is performed by deleting and inserting the shape in the tree that went beyond the leaf AABB.
+     *
+     * <p>
+     * Note that the root of the tree may change, so the actual reference to the tree root is returned from the method.
+     *
+     * @param treeRoot the tree root
+     * @return the new or old tree root depending on how the tree was updated
+     */
     public static AABBTreeNode updateTree(AABBTreeNode treeRoot) {
         if (treeRoot == null || treeRoot.parent != null) {
             // TODO add log message
@@ -86,6 +163,16 @@ public class AABBTreeNode {
         return treeRoot;
     }
 
+    /**
+     * Insert shape to the tree.
+     *
+     * <p>
+     * Note that the root of the tree may change, so the actual reference to the tree root is returned from the method.
+     * 
+     * @param treeRoot the tree root to insert the shape into
+     * @param shape the shape to be inserted into the tree
+     * @return the new or old tree root depending on how the leaf was inserted
+     */
     public static AABBTreeNode insertLeaf(AABBTreeNode treeRoot, IShape shape) {
         if (treeRoot == null || treeRoot.parent != null) {
             // TODO add log message
