@@ -34,6 +34,9 @@ import java.util.Set;
  * list of possibly intersecting shapes.
  *
  * <p>
+ * Note, the calculation of the size of the cells and filling the hash table occurs every iteration a new.
+ *
+ * <p>
  * This method is effective for liquids.
  *
  * @see AbstractBroadPhase

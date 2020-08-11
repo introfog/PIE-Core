@@ -44,23 +44,6 @@ public class Circle extends IShape {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Circle circle = (Circle) o;
-        return Float.compare(circle.radius, radius) == 0 && super.equals(circle);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(radius, super.hashCode());
-    }
-
-    @Override
     public String toString() {
         return new StringJoiner("; ", "{", "}")
                 .add("center=" + body.position)
