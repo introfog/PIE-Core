@@ -21,6 +21,7 @@ import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
 import com.github.introfog.pie.core.collisions.broadphase.aabbtree.AABBTreeMethod;
+import com.github.introfog.pie.core.collisions.broadphase.spatialhash.NewSpatialHashingMethod;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
 import com.github.introfog.pie.core.util.ShapePair;
@@ -33,11 +34,12 @@ import java.util.List;
 
 public class BroadPhaseAlgorithmicTestRunner {
     public static void runStaticBroadPhaseAlgorithmicTest(String fileName, String sourceFolder) throws IOException {
-        List<IShape> shapes = ShapeIOUtil.readShapesFromFile(sourceFolder + fileName + ".pie");
-        List<ShapePair> cmpShapes = ShapeIOUtil.readShapePairsFromFile(sourceFolder + fileName + "_answer.pie");
-        List<AbstractBroadPhase> methods = BroadPhaseAlgorithmicTestRunner.initializeBroadPhaseMethods(shapes);
+        List<IShape> methodShapes = ShapeIOUtil.readShapesFromFile(sourceFolder + fileName + ".pie");
+        List<AbstractBroadPhase> methods = BroadPhaseAlgorithmicTestRunner.initializeBroadPhaseMethods(methodShapes);
 
         for (AbstractBroadPhase method : methods) {
+            methodShapes.forEach(IShape::computeAABB);
+            List<ShapePair> cmpShapes = BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(methodShapes);
             String messagePrefix = "Method: " + method.getClass().getSimpleName() + ". ";
             TestUtil.assertEqualsShapePairsList(cmpShapes, method.calculateAabbCollisions(), messagePrefix);
         }
@@ -47,12 +49,11 @@ public class BroadPhaseAlgorithmicTestRunner {
         List<IShape> methodShapes = ShapeIOUtil.readShapesFromFile(sourceFolder + fileName + ".pie");
         List<AbstractBroadPhase> methods = BroadPhaseAlgorithmicTestRunner.initializeBroadPhaseMethods(methodShapes);
 
-        List<ShapePair> cmpShapes;
         for (int i = 0; i < call; i++) {
             methodShapes.forEach(IShape::computeAABB);
-            cmpShapes = BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(methodShapes);
+            List<ShapePair> cmpShapes = BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(methodShapes);
             for (AbstractBroadPhase method : methods) {
-                String messagePrefix = "Method: " + method.getClass().getSimpleName() + ". ";
+                String messagePrefix = "Iteration: " + i + "; Method: " + method.getClass().getSimpleName() + ". ";
                 TestUtil.assertEqualsShapePairsList(cmpShapes, method.calculateAabbCollisions(), messagePrefix);
             }
             applier.applyAction(methods, methodShapes);
@@ -63,6 +64,7 @@ public class BroadPhaseAlgorithmicTestRunner {
         List<AbstractBroadPhase> methods = new ArrayList<>();
         methods.add(new BruteForceMethod());
         methods.add(new SpatialHashingMethod());
+        methods.add(new NewSpatialHashingMethod());
         methods.add(new SweepAndPruneMethod());
         methods.add(new AABBTreeMethod());
         methods.forEach(method -> method.setShapes(shapes));

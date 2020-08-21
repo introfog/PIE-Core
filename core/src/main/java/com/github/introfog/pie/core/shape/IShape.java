@@ -26,6 +26,9 @@ import java.util.Objects;
  * {@link com.github.introfog.pie.core.World} that has a shape and body.
  */
 public abstract class IShape {
+    public static int shapeCounter = 0;
+
+    public int shapeId;
     /** The shape type. */
     public ShapeType type;
     /** The shape axis aligned bounding box. */
@@ -39,6 +42,7 @@ public abstract class IShape {
      * Instantiates a new {@link IShape} instance.
      */
     public IShape() {
+        shapeId = shapeCounter++;
         aabb = new AABB();
         rotateMatrix = new RotationMatrix2x2();
         rotateMatrix.setAngle(0f);
@@ -84,13 +88,12 @@ public abstract class IShape {
             return false;
         }
         IShape shape = (IShape) o;
-        return type == shape.type &&
-                body.equals(shape.body);
+        return shapeId == shape.shapeId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, body);
+        return shapeId;
     }
 
     /**
