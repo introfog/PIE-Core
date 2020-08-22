@@ -63,33 +63,10 @@ public class CircleTest extends PIETest {
     }
 
     @Test
-    public void equalsAndHashCodeToAnotherEqualCircleTest() {
+    public void notEqualsAndHashCodeToAnotherEqualCircleTest() {
         Circle first = new Circle(10, 1, 3, 0.1f, 0.2f);
         Circle second = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
-    }
-
-    @Test
-    public void equalsAndHashCodeToAnotherNotEqualCircleTest() {
-        Circle first = new Circle(10, 1, 3, 0.1f, 0.2f);
-        Circle second = new Circle(11, 1, 3, 0.1f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = new Circle(10, 2, 3, 0.1f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = new Circle(10, 1, 4, 0.1f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = new Circle(10, 1, 3, 0.2f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = new Circle(10, 1, 3, 0.1f, 0.3f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = new Circle(10, 1, 3, 0.1f, 0.2f);
-        second.type = ShapeType.polygon;
         PIETest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 

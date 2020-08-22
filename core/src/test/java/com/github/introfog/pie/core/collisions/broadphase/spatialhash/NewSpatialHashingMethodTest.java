@@ -2,7 +2,6 @@ package com.github.introfog.pie.core.collisions.broadphase.spatialhash;
 
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhaseTest;
-import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
@@ -10,8 +9,10 @@ import com.github.introfog.pie.core.shape.Polygon;
 import com.github.introfog.pie.core.util.ShapePair;
 import com.github.introfog.pie.core.util.TestUtil;
 import com.github.introfog.pie.test.annotations.AlgorithmicTest;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 

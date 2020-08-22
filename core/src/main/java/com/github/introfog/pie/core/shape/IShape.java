@@ -18,17 +18,15 @@ package com.github.introfog.pie.core.shape;
 import com.github.introfog.pie.core.Body;
 import com.github.introfog.pie.core.math.RotationMatrix2x2;
 import com.github.introfog.pie.core.math.Vector2f;
-
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The IShape abstract class represent a physical object in the
  * {@link com.github.introfog.pie.core.World} that has a shape and body.
  */
 public abstract class IShape {
-    public static int shapeCounter = 0;
+    private static final AtomicInteger lastShapeId = new AtomicInteger();
 
-    public int shapeId;
     /** The shape type. */
     public ShapeType type;
     /** The shape axis aligned bounding box. */
@@ -38,11 +36,13 @@ public abstract class IShape {
     /** The rotation matrix. */
     public RotationMatrix2x2 rotateMatrix;
 
+    private final int shapeId;
+
     /**
      * Instantiates a new {@link IShape} instance.
      */
     public IShape() {
-        shapeId = shapeCounter++;
+        shapeId = lastShapeId.incrementAndGet();
         aabb = new AABB();
         rotateMatrix = new RotationMatrix2x2();
         rotateMatrix.setAngle(0f);

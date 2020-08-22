@@ -149,56 +149,11 @@ public class PolygonTest extends PIETest {
     }
 
     @Test
-    public void equalsAndHashCodeToAnotherEqualCircleTest() {
+    public void notEqualsAndHashCodeToAnotherEqualCircleTest() {
         Polygon first = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
         Polygon second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
-    }
-
-    @Test
-    public void equalsAndHashCodeToAnotherNotEqualCircleTest() {
-        Polygon first = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
-        Polygon second = Polygon.generateRectangle(11, 1, 3, 4, 0.1f, 0.2f);
         PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 2, 3, 4, 0.1f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 1, 3.5f, 4, 0.1f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 1, 3, 5, 0.12f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.22f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
-        second.type = ShapeType.circle;
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
-        second.vertices[2].x += 0.5f;
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
-        second.vertexCount++;
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
-
-        second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
-        Vector2f temp = new Vector2f(second.vertices[3]);
-        second.vertices[3].set(second.vertices[1]);
-        second.vertices[1].set(temp);
-        Assert.assertNotEquals(first, second);
-        Assert.assertNotEquals(second, first);
-        // It is not clear why the hash codes for the objects are the same, they
-        // must be different, so the standard hash code generator is not ideal.
-        Assert.assertEquals(first.hashCode(), second.hashCode());
-
-        second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
-        second.normals[0].x += 1;
-        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
     }
 
     @Test
