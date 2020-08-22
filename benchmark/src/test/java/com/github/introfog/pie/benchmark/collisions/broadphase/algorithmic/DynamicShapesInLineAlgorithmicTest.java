@@ -63,14 +63,12 @@ public class DynamicShapesInLineAlgorithmicTest extends PIETest {
     }
 
     @Test
-    @Ignore("TODO #65 There is problem with SpatialHashingMethod")
     public void vertical5x500ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
                 PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, true, 7));
     }
 
     @Test
-    @Ignore("TODO #65 There is problem with SpatialHashingMethod")
     public void horizontal500x5ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
                 PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, false, 7));

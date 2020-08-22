@@ -135,23 +135,6 @@ public class Polygon extends IShape {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Polygon polygon = (Polygon) o;
-        return vertexCount == polygon.vertexCount && Arrays.equals(vertices, polygon.vertices) && super.equals(polygon);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(vertexCount, Arrays.hashCode(vertices), super.hashCode());
-    }
-
-    @Override
     public void computeAABB() {
         aabb.min.x = Float.MAX_VALUE;
         aabb.min.y = Float.MAX_VALUE;
