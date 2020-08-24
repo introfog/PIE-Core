@@ -104,22 +104,10 @@ public class RegularSpatialHashingMethod extends AbstractBroadPhase {
         for (IShape shape : shapes) {
             List<Cell> objectCells = objects.get(shape);
             AABB cellAabb = new AABB();
-            cellAabb.min = new Vector2f(Integer.MAX_VALUE, Integer.MAX_VALUE);
-            cellAabb.max = new Vector2f(Integer.MIN_VALUE, Integer.MIN_VALUE);
-            for (Cell cell : objectCells) {
-                if (cell.x < cellAabb.min.x) {
-                    cellAabb.min.x = cell.x;
-                }
-                if (cell.y < cellAabb.min.y) {
-                    cellAabb.min.y = cell.y;
-                }
-                if (cell.x > cellAabb.max.x) {
-                    cellAabb.max.x = cell.x;
-                }
-                if (cell.y > cellAabb.max.y) {
-                    cellAabb.max.y = cell.y;
-                }
-            }
+            // Because the first cell corresponds to the bottom left, and the last
+            // to the top right, then can easily calculate the AABB of all cells
+            cellAabb.min.set(objectCells.get(0).x, objectCells.get(0).y);
+            cellAabb.max.set(objectCells.get(objectCells.size() - 1).x, objectCells.get(objectCells.size() - 1).y);
             cellAabb.min.mul(cellSize);
             cellAabb.max.mul(cellSize);
             if (!AABB.isContained(cellAabb, shape.aabb)) {
@@ -156,9 +144,12 @@ public class RegularSpatialHashingMethod extends AbstractBroadPhase {
         AABB aabb = shape.aabb;
         int cellX = MathPIE.fastFloor(aabb.max.x / cellSize) - MathPIE.fastFloor(aabb.min.x / cellSize);
         int cellY = MathPIE.fastFloor(aabb.max.y / cellSize) - MathPIE.fastFloor(aabb.min.y / cellSize);
-        // Increment the values ​​of cellX and cellY so that the ends of the shape entering the other cells are also processed
+        // Increment the values of cellX and cellY so that the ends of the shape entering the other cells are also processed
         cellX++;
         cellY++;
+        // It is necessary to add cells to the array while preserving the order of elements exactly from the minimum
+        // edge to the maximum, this is used in order to calculate the AABB of all the cells of the shape, in order
+        // to understand, need to re-insert the shape or not (see #updateCells method).
         for (int i = 0; i < cellX; i++) {
             for (int j = 0; j < cellY; j++) {
                 Cell cell = new Cell(aabb.min.x + i * cellSize, aabb.min.y + j * cellSize, cellSize);
