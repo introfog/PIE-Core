@@ -44,84 +44,84 @@ public class DynamicShapesInLineBenchmarkTest extends PIETest {
     @Test
     public void vertical5x500ShapesWith8487CollisionsSlowMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.06, 0.06, 0.01, 0.28}, new MoveActionApplier(30, 2, true));
+                20, 100, new double[]{1.0, 0.05, 0.01, 0.28}, new MoveActionApplier(30, 2, true));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSlowMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.065, 0.07, 0.015, 0.23}, new MoveActionApplier(30, 2, false));
+                20, 100, new double[]{1.0, 0.06, 0.015, 0.23}, new MoveActionApplier(30, 2, false));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsQuickMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.05, 0.06, 0.01, 0.4}, new MoveActionApplier(5, 20, true));
+                20, 100, new double[]{1.0, 0.04, 0.01, 0.4}, new MoveActionApplier(5, 20, true));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsQuickMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.06, 0.07, 0.015, 0.44}, new MoveActionApplier(5, 20, false));
+                20, 100, new double[]{1.0, 0.06, 0.015, 0.44}, new MoveActionApplier(5, 20, false));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.06, 0.06, 0.015, 0.06}, new MoveActionApplier(30, 2, true, 7));
+                20, 100, new double[]{1.0, 0.06, 0.015, 0.06}, new MoveActionApplier(30, 2, true, 7));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.07, 0.08, 0.015, 0.05}, new MoveActionApplier(30, 2, false, 7));
+                20, 100, new double[]{1.0, 0.07, 0.015, 0.05}, new MoveActionApplier(30, 2, false, 7));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsSomeBodiesQuickMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.05, 0.06, 0.012, 0.09}, new MoveActionApplier(5, 20, true, 7));
+                20, 100, new double[]{1.0, 0.05, 0.012, 0.09}, new MoveActionApplier(5, 20, true, 7));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSomeBodiesQuickMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.07, 0.08, 0.02, 0.09}, new MoveActionApplier(5, 20, false, 7));
+                20, 100, new double[]{1.0, 0.07, 0.02, 0.09}, new MoveActionApplier(5, 20, false, 7));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSlowAddingNewShapesTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.06, 0.06, 0.03, 0.02}, new AddShapesActionApplier(20, 10, new Vector2f(100, 100), false));
+                20, 100, new double[]{1.0, 0.05, 0.03, 0.02}, new AddShapesActionApplier(20, 10, new Vector2f(100, 100), false));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsQuickAddingNewShapesTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.08, 0.07, 0.03, 0.02}, new AddShapesActionApplier(20, 4, new Vector2f(100, 100), false));
+                20, 100, new double[]{1.0, 0.07, 0.03, 0.02}, new AddShapesActionApplier(20, 4, new Vector2f(100, 100), false));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsSlowAddingNewShapesTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.06, 0.06, 0.03, 0.02}, new AddShapesActionApplier(20, 10, new Vector2f(176, 100), true));
+                20, 100, new double[]{1.0, 0.055, 0.03, 0.02}, new AddShapesActionApplier(20, 10, new Vector2f(176, 100), true));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsQuickAddingNewShapesTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("5x500line_8487collision", PATH_TO_SOURCE_FOLDER,
-                20, 100, new double[]{1.0, 0.08, 0.07, 0.03, 0.025}, new AddShapesActionApplier(20, 4, new Vector2f(176, 100), true));
+                20, 100, new double[]{1.0, 0.07, 0.03, 0.025}, new AddShapesActionApplier(20, 4, new Vector2f(176, 100), true));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
@@ -132,7 +132,7 @@ public class DynamicShapesInLineBenchmarkTest extends PIETest {
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_8487collision.pie");
         DefaultActionApplier applier = new ChangeShapesActionApplier(firstShapes, secondShapes, 20);
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.09, 0.09, 0.15, 0.05}, applier);
+                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.08, 0.15, 0.05}, applier);
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
@@ -143,7 +143,7 @@ public class DynamicShapesInLineBenchmarkTest extends PIETest {
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
         DefaultActionApplier applier = new ChangeShapesActionApplier(firstShapes, secondShapes, 20);
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_22443collision",
-                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.1, 0.1, 0.15, 0.05}, applier);
+                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.09, 0.15, 0.05}, applier);
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
@@ -154,7 +154,7 @@ public class DynamicShapesInLineBenchmarkTest extends PIETest {
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
         DefaultActionApplier applier = new ChangeShapesActionApplier(firstShapes, secondShapes, 20);
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_22443collision",
-                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.12, 0.11, 0.17, 0.06}, applier);
+                PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.11, 0.17, 0.06}, applier);
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 }
