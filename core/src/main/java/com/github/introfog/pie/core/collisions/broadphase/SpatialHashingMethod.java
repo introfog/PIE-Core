@@ -92,7 +92,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         int key;
         int cellX = MathPIE.fastFloor(aabb.max.x / cellSize) - MathPIE.fastFloor(aabb.min.x / cellSize);
         int cellY = MathPIE.fastFloor(aabb.max.y / cellSize) - MathPIE.fastFloor(aabb.min.y / cellSize);
-        // Increment the values ​​of cellX and cellY so that the ends of the shape entering the other cells are also processed
+        // Increment the values of cellX and cellY so that the ends of the shape entering the other cells are also processed
         cellX++;
         cellY++;
         for (int i = 0; i < cellX; i++) {
@@ -112,11 +112,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         // for example, two shapes can intersect in several cells at once
         Set<ShapePair> possibleIntersect = new HashSet<>();
         cells.forEach((cell, list) -> {
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = i + 1; j < list.size(); j++) {
-                    possibleIntersect.add(new ShapePair(list.get(i), list.get(j)));
-                }
-            }
+            possibleIntersect.addAll(BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(list));
         });
         return possibleIntersect;
     }
