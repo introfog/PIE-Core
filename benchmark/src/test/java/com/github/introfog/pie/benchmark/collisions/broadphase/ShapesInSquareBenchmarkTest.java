@@ -33,35 +33,35 @@ public class ShapesInSquareBenchmarkTest extends PIETest {
     @Test
     public void square50x50ShapesWith9702CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_9702collision",
-                PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.09, 0.09, 0.12, 0.035});
+                PATH_TO_SOURCE_FOLDER, 70, new double[]{1.0, 0.08, 0.1, 0.03});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void square50x50ShapesWith28518CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_28518collision",
-                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.26, 0.17, 0.17, 0.05});
+                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.16, 0.17, 0.05});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void square70x70ShapesWithDifferentSizeAnd17320CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("70x70square+diffSize_17320collision",
-                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.18, 0.06, 0.06, 0.018});
+                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.06, 0.06, 0.016});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void square100x100ScatteredShapesWithDifferentSizeAnd14344CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("100x100square+scattered+diffSize_14344collision",
-                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.04, 0.02, 0.011, 0.01});
+                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.02, 0.011, 0.01});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void square100x100ScatteredShapesWith14602CollisionsTest() throws Exception {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("100x100square+scattered_14602collision",
-                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.01, 0.02, 0.028, 0.005});
+                PATH_TO_SOURCE_FOLDER, new double[]{1.0, 0.01, 0.028, 0.005});
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 }
