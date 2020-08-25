@@ -1,0 +1,15 @@
+language: java
+
+jdk:
+  - openjdk8
+
+# Correctly worked only on linux OS
+os:
+  - linux
+
+# Script for calculating code coverage
+script: "mvn cobertura:cobertura"
+
+# Comand for calculating code coverage
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
