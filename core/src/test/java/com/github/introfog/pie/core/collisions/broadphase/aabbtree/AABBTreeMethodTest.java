@@ -20,7 +20,7 @@ import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhaseTest
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.Circle;
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
+import com.github.introfog.pie.test.annotations.UnitTest;
 
 import java.lang.reflect.Field;
 
@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-@Category(AlgorithmicTest.class)
+@Category(UnitTest.class)
 public class AABBTreeMethodTest extends AbstractBroadPhaseTest {
     @Override
     protected AbstractBroadPhase getBroadPhaseMethod() {

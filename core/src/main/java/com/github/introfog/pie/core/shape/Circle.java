@@ -17,7 +17,6 @@ package com.github.introfog.pie.core.shape;
 
 import com.github.introfog.pie.core.Body;
 
-import java.util.Objects;
 import java.util.StringJoiner;
 
 public class Circle extends IShape {
@@ -56,7 +55,7 @@ public class Circle extends IShape {
         float mass = (float) Math.PI * radius * radius * body.density;
         body.invertedMass = (mass == 0f) ? 0f : 1f / mass;
 
-        float inertia = radius * radius / body.invertedMass;
+        float inertia = radius * radius / (body.invertedMass == 0 ? 1 : body.invertedMass);
         body.invertedInertia = (inertia != 0.0f) ? 1.0f / inertia : 0.0f;
     }
 }

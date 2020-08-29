@@ -21,7 +21,7 @@ import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 import com.github.introfog.pie.test.PIETest;
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
+import com.github.introfog.pie.test.annotations.UnitTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-@Category(AlgorithmicTest.class)
+@Category(UnitTest.class)
 public abstract class AbstractBroadPhaseTest extends PIETest {
     @Test
     public void addShapeMethodTest() {
