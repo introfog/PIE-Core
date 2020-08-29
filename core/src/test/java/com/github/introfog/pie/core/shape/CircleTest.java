@@ -27,13 +27,9 @@ import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
 public class CircleTest extends PIETest {
-    @Rule
-    public ExpectedException junitExpectedException = ExpectedException.none();
-
-    @Test
+    @Test(expected = RuntimeException.class)
     public void paramConstructorWithNegativeRadiusTest() {
-        junitExpectedException.expect(RuntimeException.class);
-        Circle circle = new Circle(-0.01f, 1, 3, 0.1f, 0.2f);
+        new Circle(-0.01f, 1, 3, 0.1f, 0.2f);
     }
 
     @Test
@@ -58,8 +54,7 @@ public class CircleTest extends PIETest {
     public void equalsAndHashCodeItselfTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        Assert.assertTrue(circle.equals(circle));
-        Assert.assertEquals(circle.hashCode(), circle.hashCode());
+        PIETest.checkEqualsAndHashCodeMethods(circle, circle, true);
     }
 
     @Test
@@ -78,11 +73,26 @@ public class CircleTest extends PIETest {
     }
 
     @Test
+    public void equalsToAnotherClassTest() {
+        Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
+
+        Assert.assertFalse(circle.equals(""));
+    }
+
+    @Test
     public void computeMassAndInertiaTest() {
         Circle circle = new Circle(10, 0, 0, (float) (1 / Math.PI), 0);
 
         Assert.assertEquals(1f / 100f, circle.body.invertedMass, PIETest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(1f / 10000f, circle.body.invertedInertia, PIETest.FLOAT_EPSILON_COMPARISON);
+    }
+
+    @Test
+    public void computeMassAndInertiaZeroCircleTest() {
+        Circle circle = new Circle(0, 0, 0, (float) (1 / Math.PI), 0);
+
+        Assert.assertEquals(0, circle.body.invertedMass, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, circle.body.invertedInertia, PIETest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

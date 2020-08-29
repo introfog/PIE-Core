@@ -81,14 +81,9 @@ public abstract class IShape {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        IShape shape = (IShape) o;
-        return shapeId == shape.shapeId;
+        // In general, consider shapes the same only when they refer to the
+        // same object in memory, this is provided by the shapeId variable
+        return this == o;
     }
 
     @Override

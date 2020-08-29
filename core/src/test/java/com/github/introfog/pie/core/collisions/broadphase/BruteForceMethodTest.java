@@ -15,11 +15,11 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
-import com.github.introfog.pie.test.annotations.AlgorithmicTest;
+import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.experimental.categories.Category;
 
-@Category(AlgorithmicTest.class)
+@Category(UnitTest.class)
 public class BruteForceMethodTest extends AbstractBroadPhaseTest {
     @Override
     protected AbstractBroadPhase getBroadPhaseMethod() {

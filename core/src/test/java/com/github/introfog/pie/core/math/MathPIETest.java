@@ -24,6 +24,12 @@ import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
 public class MathPIETest extends PIETest {
+    @Test(expected = IllegalAccessException.class)
+    public void constructorTest() throws IllegalAccessException, InstantiationException {
+        MathPIE.class.newInstance();
+        Assert.fail("Utility class constructor should be private");
+    }
+
     @Test
     public void fastFloorTest() {
         Assert.assertEquals(1.0, MathPIE.fastFloor(1.0000001f), PIETest.FLOAT_EPSILON_COMPARISON);

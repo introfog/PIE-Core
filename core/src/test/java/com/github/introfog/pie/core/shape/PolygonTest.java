@@ -123,10 +123,6 @@ public class PolygonTest extends PIETest {
 
     @Test
     public void aLotOfVerticesExceptionTest() {
-        // TODO use custom PIE exception
-        junitExpectedException.expect(RuntimeException.class);
-        junitExpectedException.expectMessage("Error. Too many vertices in polygon.");
-
         float radius = 10;
         int verticesInCircle = MathPIE.MAX_POLY_VERTEX_COUNT + 1;
         Vector2f[] vertices = Vector2f.arrayOf(verticesInCircle + 1);
@@ -137,6 +133,10 @@ public class PolygonTest extends PIETest {
             vertices[i].set(cos * radius, sin * radius);
         }
         vertices[verticesInCircle].set(0, 0);
+
+        // TODO use custom PIE exception
+        junitExpectedException.expect(RuntimeException.class);
+        junitExpectedException.expectMessage("Error. Too many vertices in polygon.");
         new Polygon(0.1f, 0.2f, 0, 0, vertices);
     }
 
@@ -160,7 +160,14 @@ public class PolygonTest extends PIETest {
     public void equalsToNullTest() {
         Polygon polygon = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
 
-        Assert.assertNotEquals(null, polygon);
+        Assert.assertFalse(polygon.equals(null));
+    }
+
+    @Test
+    public void equalsToAnotherClassTest() {
+        Polygon polygon = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
+
+        Assert.assertFalse(polygon.equals(""));
     }
 
     @Test

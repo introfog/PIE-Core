@@ -60,16 +60,16 @@ public class BodyTest extends PIETest {
     @Test
     public void equalsAndHashCodeToAnotherNotEqualBodyTest() {
         Body first = new Body(0.1f, 0.2f, 0.3f, 0.4f);
-        Body second = new Body(0.2f, 0.2f, 0.3f, 1.8f);
+        Body second = new Body(0.2f, 0.2f, 0.3f, 0.4f);
         PIETest.checkEqualsAndHashCodeMethods(first, second, false);
 
-        second = new Body(0.1f, 0.3f, 0.3f, 1.8f);
+        second = new Body(0.1f, 0.3f, 0.3f, 0.4f);
         PIETest.checkEqualsAndHashCodeMethods(first, second, false);
 
-        second = new Body(0.1f, 0.2f, 0.4f, 1.8f);
+        second = new Body(0.1f, 0.2f, 0.4f, 0.4f);
         PIETest.checkEqualsAndHashCodeMethods(first, second, false);
 
-        second = new Body(0.1f, 0.2f, 0.3f, 1.9f);
+        second = new Body(0.1f, 0.2f, 0.3f, 0.5f);
         PIETest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 
@@ -78,6 +78,13 @@ public class BodyTest extends PIETest {
         Body body = new Body(0.1f, 0.2f, 0.3f, 0.4f);
 
         Assert.assertFalse(body.equals(null));
+    }
+
+    @Test
+    public void equalsToAnotherClassTest() {
+        Body body = new Body(0.1f, 0.2f, 0.3f, 0.4f);
+
+        Assert.assertFalse(body.equals(""));
     }
 
     @Test

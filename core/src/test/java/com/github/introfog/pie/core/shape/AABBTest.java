@@ -94,6 +94,13 @@ public class AABBTest extends PIETest {
         Assert.assertFalse(AABB.isContained(a, b));
 
         a.min.set(0, 0);
+        a.max.set(7, 10);
+        b.min.set(2, 7);
+        b.max.set(5, 11);
+        // AABBs are intersect
+        Assert.assertFalse(AABB.isContained(a, b));
+
+        a.min.set(0, 0);
         a.max.set(10, 10);
         b.min.set(1, 1);
         b.max.set(2, 2);

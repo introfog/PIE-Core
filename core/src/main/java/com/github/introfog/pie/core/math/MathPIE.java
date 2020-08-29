@@ -16,7 +16,11 @@
 package com.github.introfog.pie.core.math;
 
 // TODO Change class to context or property class
-public class MathPIE {
+public final class MathPIE {
+    private MathPIE() {
+        // Empty constructor
+    }
+
     public static final float STATIC_BODY_DENSITY = 0f;
 
     public static final int MAX_POLY_VERTEX_COUNT = 64;
