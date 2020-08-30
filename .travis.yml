@@ -1,3 +1,5 @@
+# Script used by CI tool travis.ci
+
 language: java
 
 jdk:
@@ -10,6 +12,6 @@ os:
 # Script for calculating code coverage
 script: "mvn cobertura:cobertura"
 
-# Comand for calculating code coverage
+# Command for calculating code coverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)
