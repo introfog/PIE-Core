@@ -7,7 +7,7 @@
     <groupId>com.github.introfog.pie</groupId>
     <artifactId>root</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <modules>
         <module>core</module>
@@ -18,6 +18,12 @@
     <name>PIE-Core Root</name>
     <description>PIE-Core is a fast physics 2D engine library on Java.</description>
     <url>https://github.com/introfog/PIE2-Core</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/introfog/PIE-Core.git</connection>
+        <developerConnection>scm:git:ssh://github.com:introfog/PIE-Core.git</developerConnection>
+        <url>http://github.com/introfog/PIE-Core/tree/master</url>
+    </scm>
 
     <licenses>
         <license>
