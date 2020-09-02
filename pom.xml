@@ -7,7 +7,7 @@
     <groupId>com.github.introfog.pie</groupId>
     <artifactId>root</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <modules>
         <module>core</module>
