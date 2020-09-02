@@ -10,16 +10,28 @@
         <version>1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>test</artifactId>
+    <artifactId>assessment</artifactId>
     <packaging>jar</packaging>
 
-    <name>PIE-Core Test</name>
+    <name>PIE-Core Assessment</name>
 
     <properties>
         <junit.version>4.13</junit.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.introfog.pie</groupId>
+            <artifactId>core</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.introfog.pie</groupId>
+            <artifactId>test</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

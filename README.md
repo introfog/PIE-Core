@@ -1,4 +1,4 @@
-PIE
+PIE-Core
 =========
 
 [![License](https://img.shields.io/github/license/introfog/PIE2-Core?logo=Apache-2.0)](https://github.com/introfog/PIE2-Core/blob/develop/LICENSE.txt)
@@ -8,11 +8,11 @@ PIE
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.introfog.pie/root/badge.svg)](https://mvnrepository.com/artifact/com.github.introfog.pie)
 
 ### Main
-This project is a second iteration of physics rigid-body engine on Java8.
+PIE-Core is a fast physics 2D engine library on Java.
 
-PIE consist of three modules:
+PIE-Core consist of three modules:
 * **Core** - main engine logics, such as: broad and narrow phase and collisions resolving.
-* **Benchmark** - different performance tests.
+* **Assessment** - different benchmark and algorithmic tests.
 * **Test** - code for organizing unit tests.
 
 ### Others

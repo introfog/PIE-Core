@@ -11,12 +11,12 @@
 
     <modules>
         <module>core</module>
-        <module>benchmark</module>
+        <module>assessment</module>
         <module>test</module>
     </modules>
 
-    <name>PIE</name>
-    <description>PIE is a physics rigid-body engine on Java 8.</description>
+    <name>PIE-Core Root</name>
+    <description>PIE-Core is a fast physics 2D engine library on Java.</description>
     <url>https://github.com/introfog/PIE2-Core</url>
 
     <licenses>
