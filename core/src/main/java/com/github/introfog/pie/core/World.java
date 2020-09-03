@@ -1,17 +1,17 @@
 /*
-   Copyright 2020 Dmitry Chubrick
+    Copyright 2020 Dmitry Chubrick
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
  */
 package com.github.introfog.pie.core;
 
@@ -19,14 +19,15 @@ import com.github.introfog.pie.core.collisions.Manifold;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * The World is the main class in PIE library.
  * It controls the interaction and updating of the states of all bodies entering the world.
  */
-public class World {
+public final class World {
     private int collisionSolveIterations;
     private float accumulator;
     private Context context;
@@ -43,10 +44,10 @@ public class World {
     public World(Context context) {
         this.context = new Context(context);
         collisionSolveIterations = 1;
-        shapes = new LinkedList<>();
-        mayBeCollision = new LinkedList<>();
-        collisions = new LinkedList<>();
-        this.context.getBroadPhase().setShapes(shapes);
+        shapes = new ArrayList<>();
+        mayBeCollision = new ArrayList<>();
+        collisions = new ArrayList<>();
+        this.context.getBroadPhaseMethod().setShapes(shapes);
     }
 
     // TODO Create good JavaDoc
@@ -99,9 +100,8 @@ public class World {
      * @param shape the new shape
      */
     public void addShape(IShape shape) {
-        shape.computeAABB();
         shapes.add(shape);
-        context.getBroadPhase().addShape(shape);
+        context.getBroadPhaseMethod().addShape(shape);
     }
 
     /**
@@ -109,8 +109,8 @@ public class World {
      *
      * @return the shapes
      */
-    public List<IShape> getShapes() {
-        return shapes;
+    public List<IShape> getUnmodifiableShapes() {
+        return Collections.unmodifiableList(shapes);
     }
 
     /**
@@ -119,14 +119,14 @@ public class World {
      * @param shapes the new shapes
      */
     public void setShapes(List<IShape> shapes) {
-        this.shapes = shapes;
-        context.getBroadPhase().setShapes(shapes);
+        this.shapes = new ArrayList<>(shapes);
+        context.getBroadPhaseMethod().setShapes(shapes);
     }
 
     private void narrowPhase() {
         collisions.clear();
         mayBeCollision.forEach((collision) -> {
-            if (collision.first.body.invertMass != 0f || collision.second.body.invertMass != 0f) {
+            if (collision.first.body.invertedMass != 0f || collision.second.body.invertedMass != 0f) {
                 Manifold manifold = new Manifold(collision.first, collision.second, context);
                 manifold.initializeCollision();
                 if (manifold.areBodiesCollision) {
@@ -140,7 +140,7 @@ public class World {
 
     private void step() {
         // Broad phase
-        mayBeCollision = context.getBroadPhase().calculateAabbCollision();
+        mayBeCollision = context.getBroadPhaseMethod().calculateAabbCollisions();
 
         // Integrate forces
         // Hanna modification Euler's method is used!
@@ -170,18 +170,18 @@ public class World {
 
     private void integrateForces(IShape shape) {
         Body body = shape.body;
-        if (body.invertMass == 0.0f) {
+        if (body.invertedMass == 0.0f) {
             return;
         }
 
-        body.velocity.add(body.force, body.invertMass * context.getFixedDeltaTime() * 0.5f);
+        body.velocity.add(body.force, body.invertedMass * context.getFixedDeltaTime() * 0.5f);
         body.velocity.add(context.getGravity(), context.getFixedDeltaTime() * 0.5f);
-        body.angularVelocity += body.torque * body.invertInertia * context.getFixedDeltaTime() * 0.5f;
+        body.angularVelocity += body.torque * body.invertedInertia * context.getFixedDeltaTime() * 0.5f;
     }
 
     private void integrateVelocity(IShape shape) {
         Body body = shape.body;
-        if (body.invertMass == 0.0f) {
+        if (body.invertedMass == 0.0f) {
             return;
         }
 

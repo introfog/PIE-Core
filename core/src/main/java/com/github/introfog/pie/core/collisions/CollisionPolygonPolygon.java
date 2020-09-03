@@ -1,17 +1,17 @@
 /*
-   Copyright 2020 Dmitry Chubrick
+    Copyright 2020 Dmitry Chubrick
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
  */
 package com.github.introfog.pie.core.collisions;
 
@@ -27,7 +27,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         Polygon A = manifold.polygonA;
         Polygon B = manifold.polygonB;
 
-        // Ищем разделительную ось с внешними гранями А
+        // Looking for a dividing axis with external faces A
         int[] faceA = {0};
         float penetrationA = findAxisLeastPenetration(faceA, A, B);
         if (penetrationA >= 0.0f) {
@@ -35,7 +35,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
             return;
         }
 
-        // Ищем разделительную ось с внешними гранями В
+        // Looking for a dividing axis with external faces В
         int[] faceB = {0};
         float penetrationB = findAxisLeastPenetration(faceB, B, A);
         if (penetrationB >= 0.0f) {
@@ -44,18 +44,17 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         }
 
         int referenceIndex;
-        // Всегда указываем от а к b
+        // Always indicate from a to b
         boolean flip;
 
-        // Reference (ссылка)
+        // Reference
         Polygon RefPoly;
-        // Incident (падающий)
+        // Incident
         Polygon IncPoly;
 
-        // Определяем, какой полигон содержит опорную грань
+        // Determine which polygon contains the incident face
         if (MathPIE.gt(penetrationA, penetrationB)) {
             RefPoly = A;
-            // Падающий объект B
             IncPoly = B;
             referenceIndex = faceA[0];
             flip = false;
@@ -89,7 +88,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         referenceIndex = referenceIndex + 1 == RefPoly.vertexCount ? 0 : referenceIndex + 1;
         Vector2f v2 = new Vector2f(RefPoly.vertices[referenceIndex]);
 
-        // Трансформируем вектора к мировым координатам
+        // Transform vectors to world coordinates
         // v1 = RefPoly->u * v1 + RefPoly->body->position;
         // v2 = RefPoly->u * v2 + RefPoly->body->position;
         RefPoly.rotateMatrix.mul(v1, v1);
@@ -108,7 +107,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         Vector2f refFaceNormal = new Vector2f(sidePlaneNormal.y, -sidePlaneNormal.x);
 
         // ax + by = c
-        // c - расстояние от источника
+        // c - distance from source
         // real refC = Dot( refFaceNormal, v1 );
         // real negSide = -Dot( sidePlaneNormal, v1 );
         // real posSide = Dot( sidePlaneNormal, v2 );
@@ -167,7 +166,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
     }
 
     public float findAxisLeastPenetration(int[] faceIndex, Polygon A, Polygon B) {
-        // Ищем ось наименьшего проникновения
+        // Looking for the axis of least penetration
         float bestDistance = -Float.MAX_VALUE;
         int bestIndex = 0;
 
@@ -190,7 +189,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
             Vector2f s = B.getSupport(n);
             n.negative();
 
-            // Переводим грань А, в локальные координаты B
+            // Translate the face A to the local coordinates of B
             // Vec2 v = A->m_vertices[i];
             // v = A->u * v + A->body->position;
             // v -= B->body->position;
@@ -201,11 +200,11 @@ public class CollisionPolygonPolygon implements CollisionCallback {
             v.sub(B.body.position);
             B.rotateMatrix.transposeMul(v, v);
 
-            // Высчитываем проникновение (в локальных координатах B)
+            // Calculate penetration (in local coordinates B)
             // real d = Dot( n, s - v );
             float d = Vector2f.dotProduct(n, Vector2f.sub(s, v));
 
-            // Запоминаем лучшее проникновение
+            // Remember the best penetration
             if (d > bestDistance) {
                 bestDistance = d;
                 bestIndex = i;

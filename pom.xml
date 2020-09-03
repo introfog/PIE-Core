@@ -7,16 +7,16 @@
     <groupId>com.github.introfog.pie</groupId>
     <artifactId>root</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <modules>
         <module>core</module>
-        <module>benchmark</module>
+        <module>assessment</module>
         <module>test</module>
     </modules>
 
-    <name>PIE</name>
-    <description>PIE is a physics rigid-body engine on Java8.</description>
+    <name>PIE-Core Root</name>
+    <description>PIE-Core is a fast physics 2D engine library on Java.</description>
     <url>https://github.com/introfog/PIE2-Core</url>
 
     <licenses>
@@ -35,52 +35,25 @@
         </developer>
     </developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/introfog/PIE2-Core.git</connection>
-        <developerConnection>scm:git:ssh://github.com:introfog/PIE2-Core.git</developerConnection>
-        <url>http://github.com/introfog/PIE2-Core/tree/master</url>
-    </scm>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <javadoc-additionalOptions/>
         <javadoc-link>https://docs.oracle.com/javase/8/docs/api/</javadoc-link>
         <javadoc.version>3.1.1</javadoc.version>
     </properties>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
 
@@ -127,25 +100,24 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M4</version>
+                <configuration>
+                    <excludedGroups>com.github.introfog.pie.test.annotations.BenchmarkTest</excludedGroups>
+                </configuration>
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.7</version>
                 <configuration>
-                    <skip>true</skip>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                    <check />
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 

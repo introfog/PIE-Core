@@ -1,21 +1,20 @@
 /*
-   Copyright 2020 Dmitry Chubrick
+    Copyright 2020 Dmitry Chubrick
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
-import com.github.introfog.pie.core.Body;
 import com.github.introfog.pie.core.math.MathPIE;
 import com.github.introfog.pie.core.shape.AABB;
 import com.github.introfog.pie.core.shape.IShape;
@@ -24,47 +23,47 @@ import com.github.introfog.pie.core.util.ShapePair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The class is a spatial hashing method that divides space into cells, which are stored in a hash table.
+ * Further, if the shape AABB intersects with a cell, then the reference to this shape is placed in the cell
+ * and at the end go through all the cells, and if two shapes are in the same cell, then put them in the
+ * list of possibly intersecting shapes.
+ *
+ * <p>
+ * Note, the calculation of the size of the cells and filling the hash table occurs every iteration a new.
+ *
+ * <p>
+ * This method is effective for liquids.
+ *
+ * @see AbstractBroadPhase
+ */
 public class SpatialHashingMethod extends AbstractBroadPhase {
     private int cellSize;
-    private float averageMaxBodiesSize;
-    private Map<Integer, LinkedList<IShape>> cells;
-    private Map<Body, LinkedList<Integer>> objects;
-    private Set<ShapePair> collisionPairSet;
+    private final Map<Integer, List<IShape>> cells;
 
+    /**
+     * Instantiates a new {@link SpatialHashingMethod} instance.
+     */
     public SpatialHashingMethod() {
-        averageMaxBodiesSize = 0f;
+        cellSize = 0;
         cells = new HashMap<>();
-        objects = new HashMap<>();
-        collisionPairSet = new HashSet<>();
     }
 
     @Override
-    public List<ShapePair> insideCollisionCalculating() {
-        // Сложность O(n) если минимальный и максимальный размер объектов не сильно отличаются, но если очень сильно,
-        // то сложность близиться к O(n^2)
+    public List<ShapePair> domesticCalculateAabbCollisions() {
+        // The complexity is O(n), if the minimum and maximum size of the objects are not very different,
+        // but if very different, then the complexity tends to O(n^2)
         List<ShapePair> possibleCollisionList = new ArrayList<>();
 
-        averageMaxBodiesSize = 0;
-        for (IShape shape : shapes) {
-            averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y);
-        }
-        averageMaxBodiesSize /= shapes.size();
+        calculateCellSize();
+        cells.clear();
+        shapes.forEach(this::insert);
 
-        setCellSize((int) averageMaxBodiesSize * 2);
-        if (cellSize == 0) {
-            // TODO create PIE custom exception
-            throw new RuntimeException();
-        }
-        clear();
-
-        shapes.forEach(this::optimizedInsert);
-
-        Set<ShapePair> possibleIntersect = computeCollisions();
+        Set<ShapePair> possibleIntersect = computePossibleAabbIntersections();
         possibleIntersect.forEach((pair) -> {
             if (AABB.isIntersected(pair.first.aabb, pair.second.aabb)) {
                 possibleCollisionList.add(pair);
@@ -74,96 +73,47 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         return possibleCollisionList;
     }
 
+    private void calculateCellSize() {
+        float averageMaxBodiesSize = 0;
+        for (IShape shape : shapes) {
+            averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y);
+        }
+        averageMaxBodiesSize /= shapes.size();
 
+        cellSize = (averageMaxBodiesSize == 0) ? 1 : ((int) averageMaxBodiesSize * 2);
+    }
 
-    private int GenerateKey(float x, float y) {
+    private int generateKey(float x, float y) {
         return ((MathPIE.fastFloor(x / cellSize) * 73856093) ^ (MathPIE.fastFloor(y / cellSize) * 19349663));
     }
 
-
-    private void setCellSize(int cellSize) {
-        this.cellSize = cellSize;
-    }
-
-    // Медленый из-за округления и умножения лишнего
     private void insert(IShape shape) {
-        Body body = shape.body;
-        shape.computeAABB();
         AABB aabb = shape.aabb;
         int key;
         int cellX = MathPIE.fastFloor(aabb.max.x / cellSize) - MathPIE.fastFloor(aabb.min.x / cellSize);
         int cellY = MathPIE.fastFloor(aabb.max.y / cellSize) - MathPIE.fastFloor(aabb.min.y / cellSize);
-        for (int i = 0; i <= cellX; i++) {
-            for (int j = 0; j <= cellY; j++) {
-                key = GenerateKey(aabb.min.x + i * cellSize, aabb.min.y + j * cellSize);
+        // Increment the values of cellX and cellY so that the ends of the shape entering the other cells are also processed
+        cellX++;
+        cellY++;
+        for (int i = 0; i < cellX; i++) {
+            for (int j = 0; j < cellY; j++) {
+                key = generateKey(aabb.min.x + i * cellSize, aabb.min.y + j * cellSize);
 
-                if (cells.containsKey(key)) {
-                    cells.get(key).add(shape);
-                } else {
-                    cells.put(key, new LinkedList<>());
-                    cells.get(key).add(shape);
+                if (!cells.containsKey(key)) {
+                    cells.put(key, new ArrayList<>());
                 }
-
-                if (objects.containsKey(body)) {
-                    objects.get(body).add(key);
-                } else {
-                    objects.put(body, new LinkedList<>());
-                    objects.get(body).add(key);
-                }
+                cells.get(key).add(shape);
             }
         }
     }
 
-    private void optimizedInsert(IShape shape) {
-        // Работает быстрее чем insert
-        // Делим AABB на ячейки, пришлось увиличить размер AABB на целую клетку, что бы не проверять дополнительно
-        // лежит ли остаток AABB в новой ячейке.
-        Body body = shape.body;
-        AABB aabb = shape.aabb;
-        float currX = aabb.min.x;
-        float currY = aabb.min.y;
-        int key;
-        while (currX <= aabb.max.x + cellSize) {
-            while (currY <= aabb.max.y + cellSize) {
-                key = GenerateKey(currX, currY);
-
-                if (cells.containsKey(key)) {
-                    cells.get(key).add(shape);
-                } else {
-                    cells.put(key, new LinkedList<>());
-                    cells.get(key).add(shape);
-                }
-
-                if (objects.containsKey(body)) {
-                    objects.get(body).add(key);
-                } else {
-                    objects.put(body, new LinkedList<>());
-                    objects.get(body).add(key);
-                }
-
-                currY += cellSize;
-            }
-            currY = aabb.min.y;
-            currX += cellSize;
-        }
-    }
-
-    private void clear() {
-        cells.clear();
-        objects.clear();
-    }
-
-    private Set<ShapePair> computeCollisions() {
-        // Использую LinkedHashSet что бы избежать повторяющихся пар, это не очень быстро
-        // TODO возможно есть более легкий способ избежать повтора пар кроме как использовать LinkedHashSet (какое-нить лексикографическое сравнение)
-        collisionPairSet.clear();
+    private Set<ShapePair> computePossibleAabbIntersections() {
+        // HashSet is used because requires the uniqueness of pairs,
+        // for example, two shapes can intersect in several cells at once
+        Set<ShapePair> possibleIntersect = new HashSet<>();
         cells.forEach((cell, list) -> {
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = i + 1; j < list.size(); j++) {
-                    collisionPairSet.add(new ShapePair(list.get(i), list.get(j)));
-                }
-            }
+            possibleIntersect.addAll(BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(list));
         });
-        return collisionPairSet;
+        return possibleIntersect;
     }
 }
