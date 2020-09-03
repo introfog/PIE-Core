@@ -1,17 +1,17 @@
 /*
-   Copyright 2020 Dmitry Chubrick
+    Copyright 2020 Dmitry Chubrick
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
  */
 package com.github.introfog.pie.core.collisions;
 
@@ -28,13 +28,14 @@ public class CollisionCirclePolygon implements CollisionCallback {
         Circle A = manifold.circleA;
         Polygon B = manifold.polygonB;
 
-        // Перевели координаты центра в координаты полигона
+        // Translate center coordinates to polygon coordinates
         // center = B->u.Transpose( ) * (center - b->position);
         Vector2f centerA = new Vector2f(A.body.position);
         centerA.sub(B.body.position);
         B.rotateMatrix.transposeMul(centerA, centerA);
 
-        // Ищем ближайшее ребро полигона к центру окружности, проецируя центр на каждую нормаль ребра полигона
+        // Looking for the nearest edge of the polygon to the center of the circle,
+        // projecting the center on each edge normal of the polygon
         float separation = -Float.MAX_VALUE;
         float separationIfCircleInPolygon = Float.MAX_VALUE;
         int indexFaceNormalIfCircleInPolygon = 0;
@@ -50,7 +51,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
             projection.x = dotProduct * B.normals[i].x;
             projection.y = dotProduct * B.normals[i].y;
 
-            // Знак скалярного произведение показывает, находиться ли центр с противоположной стороны прямой от нормали
+            // The sign of the scalar product indicates whether the center is on the opposite side of the line from the normal
             if (dotProduct > 0f && projection.lengthWithoutSqrt() > A.radius * A.radius) {
                 manifold.areBodiesCollision = false;
                 return;
@@ -61,16 +62,16 @@ public class CollisionCirclePolygon implements CollisionCallback {
                 separation = dotProduct;
                 indexFaceNormal = i;
             }
-            // Сохраняем ближайшее ребро к центру окружности, наслучай если центр внутри полигона,
-            // обычное dotProduct > separation даёт не правильный ответ, т.к. все производные отрицательные,
-            // а нам нужно меньшее по модулю
+            // Save the nearest edge to the center of the circle, if the center is inside the polygon,
+            // the usual dotProduct > separation gives an incorrect answer,
+            // because all derivatives are negative, but need less modulo
             if (Math.abs(dotProduct) < separationIfCircleInPolygon) {
                 separationIfCircleInPolygon = Math.abs(dotProduct);
                 indexFaceNormalIfCircleInPolygon = i;
             }
         }
 
-        // Если max скалярное произведение меньше 0, то значит центр круга внутри полигона
+        // If max scalar product is less than 0, then the center of the circle inside the polygon
         if (separation < MathPIE.EPSILON) {
             // m->normal = -(B->u * B->m_normals[faceNormal]);
             // m->contacts[0] = m->normal * A->radius + a->position;
@@ -86,8 +87,8 @@ public class CollisionCirclePolygon implements CollisionCallback {
             return;
         }
 
-        // Мы нашли ближайшее ребро к центру окржуности, и центр круга лежит снаружи полигона
-        // Теперь определяем область Вороного в которой находится центр круга относительно ближайшего ребра полигона
+        // Found the nearest edge to the center of the circle, and the center of the circle lies outside the polygon.
+        // Now define the Voronoi region in which the center of the circle is located relative to the nearest edge of the polygon
         Vector2f v1 = new Vector2f(B.vertices[indexFaceNormal]);
         Vector2f v2 = new Vector2f(B.vertices[(indexFaceNormal + 1) % B.vertexCount]);
 
@@ -95,7 +96,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
         float dot2 = Vector2f.dotProduct(Vector2f.sub(centerA, v2), Vector2f.sub(v1, v2));
 
         if (dot1 <= 0f) {
-            // Ближе к первой вершине
+            // Closer to the first vertex
             if (Vector2f.distanceWithoutSqrt(centerA, v1) > A.radius * A.radius) {
                 manifold.areBodiesCollision = false;
                 return;
@@ -118,7 +119,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
             v1.add(B.body.position);
             manifold.contacts[0].set(v1);
         } else if (dot2 <= 0f) {
-            // Ближе ко второй вершине
+            // Closer to the second vertex
             if (Vector2f.distanceWithoutSqrt(centerA, v2) > A.radius * A.radius) {
                 manifold.areBodiesCollision = false;
                 return;
@@ -141,7 +142,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
             v2.add(B.body.position);
             manifold.contacts[0].set(v2);
         } else {
-            // Ближе к лицевой стороне
+            // Closer to the front vertex
             Vector2f n = new Vector2f(B.normals[indexFaceNormal]);
 
             manifold.penetration = A.radius - (float) Math.sqrt(realProjection.lengthWithoutSqrt());

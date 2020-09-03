@@ -10,8 +10,9 @@
 # Log file
 *.log
 
-#Package Files #
+# Package Files
 *.jar
 
-#Util classes for creating .PIE files
-/Benchmark/src/main/java/com/github/introfog/pie/benchmark/
+# Util classes for creating .PIE files
+/assessment/src/main/java/com/github/introfog/pie/assessment/Display.java
+/assessment/src/main/java/com/github/introfog/pie/assessment/Main.java
