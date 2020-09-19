@@ -68,32 +68,6 @@ public class QuadTreeNode {
         this.shapes = new ArrayList<>();
     }
 
-    public int getMaxShapesInLeaf() {
-        return maxShapesInLeaf;
-    }
-
-    public void setMaxShapesInLeaf(int maxShapesInLeaf) {
-        this.maxShapesInLeaf = maxShapesInLeaf;
-        for (QuadTreeNode child : children) {
-            if (child != null) {
-                child.setMaxShapesInLeaf(maxShapesInLeaf);
-            }
-        }
-    }
-
-    public float getMinBoundingBoxSize() {
-        return minBoundingBoxSize;
-    }
-
-    public void setMinBoundingBoxSize(float minBoundingBoxSize) {
-        this.minBoundingBoxSize = minBoundingBoxSize;
-        for (QuadTreeNode child : children) {
-            if (child != null) {
-                child.setMinBoundingBoxSize(minBoundingBoxSize);
-            }
-        }
-    }
-
     public void clear() {
         shapes.clear();
 

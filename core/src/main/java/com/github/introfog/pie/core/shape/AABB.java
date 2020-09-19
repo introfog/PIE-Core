@@ -29,6 +29,11 @@ public class AABB {
         max = new Vector2f();
     }
 
+    public AABB(Vector2f min, Vector2f max) {
+        this.min = min;
+        this.max = max;
+    }
+
     public float surfaceArea() {
         return (max.x - min.x) * (max.y - min.y);
     }
