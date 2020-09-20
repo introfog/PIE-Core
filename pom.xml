@@ -51,10 +51,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <javadoc-additionalOptions/>
-        <javadoc-link>https://docs.oracle.com/javase/8/docs/api/</javadoc-link>
+        <javadoc-link>https://docs.oracle.com/javase/11/docs/api/</javadoc-link>
         <javadoc.version>3.1.1</javadoc.version>
     </properties>
 
@@ -101,7 +101,7 @@
                 </executions>
                 <configuration>
                     <failOnError>false</failOnError>
-                    <source>8</source>
+                    <source>11</source>
                     <detectLinks>true</detectLinks>
                     <additionalOptions>${javadoc-additionalOptions}</additionalOptions>
                     <links>
