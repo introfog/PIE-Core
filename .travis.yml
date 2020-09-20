@@ -3,15 +3,19 @@
 language: java
 
 jdk:
-  - openjdk8
+  - openjdk11
 
 # Correctly worked only on linux OS
 os:
   - linux
 
-# Script for calculating code coverage
-script: "mvn cobertura:cobertura"
+# Sonar cloud configuration
+addons:
+  sonarcloud:
+    organization: "introfog"
+    token:
+      secure: "iJCjSFN7fBU6jyLL9IszSip0qgxBvV48MzM7c7uQOobEmmYo6FKDoaI81oMEKgdZhIjT8eJvuGZfNCSd8vJIzAjjXQzmVQQJrRbjeMWgC7YwRzFBK+K0tYy4E0cHgNguzlhqEmEjvhK7PPLVK3ppNamFSW6DMgOl0UGS0J8U/M5Ua45DkgQRsqPjf/NQ7Ys6asK8sGhz2h3mmbD/WD7AaTf8rPu8zJjB3mvQldIKJYbya7WGVuTPOQoBorVKAlwq2k4uFpAUg0O1c72kW9VmkM4z/6Q+57TWZ/+nx8BZ++aVtQmZDmdi3qRLeJxUfAAubVEBUBpLF/5MPhCK5Had5W5z0nC1t7MkFL1aCO5+MXCi1u5YODsAh3/XhzBvpsghXHiORzd25hLCjY62HcdHtCmM8rhAfi6CtMXoNifO2Bd/oVDYCzMg8kIpUAUI4TtU2sUA4ntzcdsRmDiIF2ll6ikTuqq3UxNRuc8XkfX9TG8i6yo5npBgaQpFeplLetXhx50xdPHRUnXuTcy8zdeNS0D8RnZP9lwKT9oBUPZH+G/PnECleoSIwAOO6sbdkH3pTkwjMTM3tleAZToqjrs88BQ3hf0LCUOMEXAVRatUYQMK0njMldHvF3Fi/gchzd6ZSTtrJ1s59lnw3lgsJ379G5VkSQIumhr5x2qSGSACp2A="
 
-# Command for calculating code coverage
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+script: 
+  # Script for Sonar cloud
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=introfog_PIE-Core
