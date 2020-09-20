@@ -102,6 +102,7 @@ public class Context {
      * The recommended value is 20 times greater than the value of {@link Context#fixedDeltaTime}.
      *
      * @param deadLoopBorder the dead loop border
+     * @return the {@link Context} instance
      */
     public Context setDeadLoopBorder(float deadLoopBorder) {
         this.deadLoopBorder = deadLoopBorder;
@@ -131,6 +132,7 @@ public class Context {
      * the engine may not have time to iterate and a dead loop may occur (see {@link Context#deadLoopBorder}).
      *
      * @param fixedDeltaTime the fixed delta time
+     * @return the {@link Context} instance
      */
     public Context setFixedDeltaTime(float fixedDeltaTime) {
         this.fixedDeltaTime = fixedDeltaTime;
@@ -162,6 +164,7 @@ public class Context {
      * a correctPositionPercent of penetration depth (usually 20-80 percent).
      *
      * @param correctPositionPercent the correct position percent
+     * @return the {@link Context} instance
      */
     public Context setCorrectPositionPercent(float correctPositionPercent) {
         this.correctPositionPercent = correctPositionPercent;
@@ -189,6 +192,7 @@ public class Context {
      * not performed (see {@link Context#correctPositionPercent}).
      *
      * @param minBorderSlop the minimal border slop
+     * @return the {@link Context} instance
      */
     public Context setMinBorderSlop(float minBorderSlop) {
         this.minBorderSlop = minBorderSlop;
@@ -216,6 +220,7 @@ public class Context {
      * PIE, in the real world it would be 100 per 100 meters.
      *
      * @param gravity the gravity
+     * @return the {@link Context} instance
      */
     public Context setGravity(Vector2f gravity) {
         this.gravity = new Vector2f(gravity);
@@ -241,6 +246,7 @@ public class Context {
      * definition of collisions {@link com.github.introfog.pie.core.shape.AABB}.
      *
      * @param broadPhaseMethod the broad phase method
+     * @return the {@link Context} instance
      */
     public Context setBroadPhaseMethod(AbstractBroadPhase broadPhaseMethod) {
         this.broadPhaseMethod = broadPhaseMethod;
