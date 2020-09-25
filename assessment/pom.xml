@@ -17,6 +17,7 @@
 
     <properties>
         <junit.version>4.13</junit.version>
+        <sonar.coverage.jacoco.xmlReportPaths>${basedir}/../${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
