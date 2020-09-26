@@ -22,7 +22,6 @@ import com.github.introfog.pie.core.math.Vector2f;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 public class Polygon extends IShape {
@@ -131,7 +130,7 @@ public class Polygon extends IShape {
         computeMassAndInertia();
         computeAABB();
 
-        type = ShapeType.polygon;
+        type = ShapeType.POLYGON;
     }
 
     @Override

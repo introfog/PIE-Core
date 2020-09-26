@@ -20,9 +20,9 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.Assert;
-
 public class BenchmarkTestMethodResult {
+    private static final String OUTPUT_TABLE_LINE = "+---------------------------+----------------+-------------+-------------+-------------+-------------+\n";
+
     private final String methodName;
     private final double methodTime;
     private final double expectedDifference;
@@ -30,11 +30,11 @@ public class BenchmarkTestMethodResult {
     private final double topDifference;
     private final double actualDifference;
 
-    public static void checkAndOutputResults(List<BenchmarkTestMethodResult> testResults) {
+    public static void outputTestMethodResults(List<BenchmarkTestMethodResult> testResults) {
         System.out.println("\nRESULTS");
-        System.out.format("+---------------------------+----------------+-------------+-------------+-------------+-------------+\n");
+        System.out.format(OUTPUT_TABLE_LINE);
         System.out.format("| Method name               | Time           | Expected    | Actual      | Bottom      | Top         |\n");
-        System.out.format("+---------------------------+----------------+-------------+-------------+-------------+-------------+\n");
+        System.out.format(OUTPUT_TABLE_LINE);
         NumberFormat numberFormat = NumberFormat.getInstance(Locale.CANADA_FRENCH);
         numberFormat.setMaximumFractionDigits(3);
         for (BenchmarkTestMethodResult result : testResults) {
@@ -43,9 +43,7 @@ public class BenchmarkTestMethodResult {
                     result.actualDifference, result.bottomDifference, result.topDifference);
             System.out.println(result.isPassed() ? "" : " - failed");
         }
-        System.out.format("+---------------------------+----------------+-------------+-------------+-------------+-------------+\n");
-
-        testResults.forEach(testResult -> Assert.assertTrue(testResult.isPassed()));
+        System.out.format(OUTPUT_TABLE_LINE);
     }
 
     public BenchmarkTestMethodResult(String methodName, double methodTime, double comparativeTime, double expectedDifference,

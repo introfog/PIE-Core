@@ -19,9 +19,10 @@ import com.github.introfog.pie.core.shape.AABB;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * The class is an AABB node of a AABB tree that is binary (each non-leaf element has
@@ -247,10 +248,10 @@ public class AABBTreeNode {
     private static AABBTreeNode findBestSibling(AABBTreeNode treeRoot, AABBTreeNode leaf) {
         AABBTreeNode bestSibling = null;
         float bestCost = Float.MAX_VALUE;
-        Stack<AABBTreeNode> priorityNodes = new Stack<>();
+        Deque<AABBTreeNode> priorityNodes = new ArrayDeque<>();
         priorityNodes.push(treeRoot);
 
-        while (!priorityNodes.empty()) {
+        while (!priorityNodes.isEmpty()) {
             AABBTreeNode currentNode = priorityNodes.pop();
 
             float[] nodeCosts = currentNode.nodeCost(leaf.aabb);
@@ -318,9 +319,9 @@ public class AABBTreeNode {
 
     private static List<AABBTreeNode> getInvalidLeafs(AABBTreeNode treeRoot) {
         List<AABBTreeNode> invalidNodes = new ArrayList<>();
-        Stack<AABBTreeNode> nodes = new Stack<>();
+        Deque<AABBTreeNode> nodes = new ArrayDeque<>();
         nodes.push(treeRoot);
-        while (!nodes.empty()) {
+        while (!nodes.isEmpty()) {
             AABBTreeNode currentNode = nodes.pop();
             if (currentNode.isLeaf()) {
                 if (!AABB.isContained(currentNode.aabb, currentNode.shape.aabb)) {
@@ -384,6 +385,10 @@ public class AABBTreeNode {
     }
 
     private static AABBTreeNode createNewParent(AABBTreeNode treeRoot, AABBTreeNode leaf, AABBTreeNode bestSibling) {
+        if (bestSibling == null) {
+            return treeRoot;
+        }
+
         AABBTreeNode oldParent = bestSibling.parent;
         AABBTreeNode newParent = new AABBTreeNode(AABB.union(leaf.aabb, bestSibling.aabb), treeRoot.enlargedAABBCoefficient);
         newParent.parent = oldParent;

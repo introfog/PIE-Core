@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.assessment.collisions.broadphase;
 
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveToPointActionApplier;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveShapesToPointAction;
 import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.BenchmarkTest;
 
@@ -36,14 +36,14 @@ public class DynamicShapesInSquareBenchmarkTest extends PIETest {
     @Test
     public void mediumSquareSlowMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_28518collision", PATH_TO_SOURCE_FOLDER,
-                10, 100, new double[]{1.0, 0.13, 0.15, 0.4}, new MoveToPointActionApplier(30, 2));
+                10, 100, new double[]{1.0, 0.13, 0.15, 0.4}, new MoveShapesToPointAction(30, 2));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 
     @Test
     public void mediumSquareQuickMovingTest() throws IOException {
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("50x50square_28518collision", PATH_TO_SOURCE_FOLDER,
-                10, 100, new double[]{1.0, 0.1, 0.12, 0.75}, new MoveToPointActionApplier(30, 20));
+                10, 100, new double[]{1.0, 0.1, 0.12, 0.75}, new MoveShapesToPointAction(30, 20));
         BroadPhaseBenchmarkTestRunner.runBroadPhaseBenchmarkTest(testConfig);
     }
 }

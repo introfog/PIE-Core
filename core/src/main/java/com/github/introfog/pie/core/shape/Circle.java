@@ -33,7 +33,7 @@ public class Circle extends IShape {
         computeMassAndInertia();
         computeAABB();
 
-        type = ShapeType.circle;
+        type = ShapeType.CIRCLE;
     }
 
     @Override

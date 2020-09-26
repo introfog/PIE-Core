@@ -16,10 +16,10 @@
 package com.github.introfog.pie.assessment.collisions.broadphase.algorithmic;
 
 import com.github.introfog.pie.assessment.collisions.broadphase.BroadPhaseAlgorithmicTestRunner;
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.DefaultActionApplier;
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.AddShapesActionApplier;
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveActionApplier;
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.ChangeShapesActionApplier;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.AddShapesAction;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.IAction;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveShapesAction;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.ChangeShapesAction;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
@@ -40,73 +40,73 @@ public class DynamicShapesInLineAlgorithmicTest extends PIETest {
     @Test
     public void vertical5x500ShapesWith8487CollisionsSlowMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, true));
+                PATH_TO_SOURCE_FOLDER, 60, new MoveShapesAction(30, 2, true));
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSlowMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, false));
+                PATH_TO_SOURCE_FOLDER, 60, new MoveShapesAction(30, 2, false));
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsQuickMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
-                PATH_TO_SOURCE_FOLDER,10, new MoveActionApplier(5, 20, true));
+                PATH_TO_SOURCE_FOLDER,10, new MoveShapesAction(5, 20, true));
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsQuickMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER,10, new MoveActionApplier(5, 20, false));
+                PATH_TO_SOURCE_FOLDER,10, new MoveShapesAction(5, 20, false));
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, true, 7));
+                PATH_TO_SOURCE_FOLDER, 60, new MoveShapesAction(30, 2, true, 7));
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSomeBodiesSlowMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 60, new MoveActionApplier(30, 2, false, 7));
+                PATH_TO_SOURCE_FOLDER, 60, new MoveShapesAction(30, 2, false, 7));
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsSomeBodiesQuickMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
-                PATH_TO_SOURCE_FOLDER,10, new MoveActionApplier(5, 20, true, 7));
+                PATH_TO_SOURCE_FOLDER,10, new MoveShapesAction(5, 20, true, 7));
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSomeBodiesQuickMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER,10, new MoveActionApplier(5, 20, false, 7));
+                PATH_TO_SOURCE_FOLDER,10, new MoveShapesAction(5, 20, false, 7));
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsSlowAddingNewShapesTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER,10, new AddShapesActionApplier(20, 10, new Vector2f(100, 100), false));
+                PATH_TO_SOURCE_FOLDER,10, new AddShapesAction(20, 10, new Vector2f(100, 100), false));
     }
 
     @Test
     public void horizontal500x5ShapesWith8487CollisionsQuickAddingNewShapesTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 10, new AddShapesActionApplier(20, 4, new Vector2f(100, 100), false));
+                PATH_TO_SOURCE_FOLDER, 10, new AddShapesAction(20, 4, new Vector2f(100, 100), false));
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsSlowAddingNewShapesTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 10, new AddShapesActionApplier(20, 10, new Vector2f(176, 100), true));
+                PATH_TO_SOURCE_FOLDER, 10, new AddShapesAction(20, 10, new Vector2f(176, 100), true));
     }
 
     @Test
     public void vertical5x500ShapesWith8487CollisionsQuickAddingNewShapesTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("5x500line_8487collision",
-                PATH_TO_SOURCE_FOLDER, 10, new AddShapesActionApplier(20, 4, new Vector2f(176, 100), true));
+                PATH_TO_SOURCE_FOLDER, 10, new AddShapesAction(20, 4, new Vector2f(176, 100), true));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class DynamicShapesInLineAlgorithmicTest extends PIETest {
     public void horizontal500x5With8487CollisionsAnd5x500With22443ChangesTest() throws IOException {
         List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_8487collision.pie");
-        DefaultActionApplier applier = new ChangeShapesActionApplier(firstShapes, secondShapes, 8);
+        IAction applier = new ChangeShapesAction(firstShapes, secondShapes, 8);
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_8487collision",
                 PATH_TO_SOURCE_FOLDER,16, applier);
     }
@@ -125,7 +125,7 @@ public class DynamicShapesInLineAlgorithmicTest extends PIETest {
     public void horizontal500x5With22443CollisionsAnd5x500With8487ChangesTest() throws IOException {
         List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_8487collision.pie");
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
-        DefaultActionApplier applier = new ChangeShapesActionApplier(firstShapes, secondShapes, 8);
+        IAction applier = new ChangeShapesAction(firstShapes, secondShapes, 8);
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_22443collision",
                 PATH_TO_SOURCE_FOLDER, 16, applier);
     }
@@ -135,7 +135,7 @@ public class DynamicShapesInLineAlgorithmicTest extends PIETest {
     public void horizontal500x5With22443CollisionsAnd5x500With22443ChangesTest() throws IOException {
         List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
         List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
-        DefaultActionApplier applier = new ChangeShapesActionApplier(firstShapes, secondShapes, 8);
+        IAction applier = new ChangeShapesAction(firstShapes, secondShapes, 8);
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("500x5line_22443collision",
                 PATH_TO_SOURCE_FOLDER, 16, applier);
     }

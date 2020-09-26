@@ -16,5 +16,5 @@
 package com.github.introfog.pie.core.shape;
 
 public enum ShapeType {
-    circle, polygon
+    CIRCLE, POLYGON
 }

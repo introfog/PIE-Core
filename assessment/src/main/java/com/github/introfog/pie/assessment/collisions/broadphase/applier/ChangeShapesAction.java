@@ -20,12 +20,12 @@ import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
 
-public class ChangeShapesActionApplier extends DefaultActionApplier {
+public class ChangeShapesAction extends CallCountAction {
     private final List<IShape> firstShapes;
     private final List<IShape> secondShapes;
     private final int iterationCalls;
 
-    public ChangeShapesActionApplier(List<IShape> firstShapes, List<IShape> secondShapes, int iterationCalls) {
+    public ChangeShapesAction(List<IShape> firstShapes, List<IShape> secondShapes, int iterationCalls) {
         this.firstShapes = firstShapes;
         this.secondShapes = secondShapes;
         this.iterationCalls = iterationCalls;

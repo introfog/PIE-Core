@@ -20,9 +20,8 @@ import com.github.introfog.pie.core.math.Vector2f;
 
 public class CollisionCircleCircle implements CollisionCallback {
     public static final CollisionCircleCircle instance = new CollisionCircleCircle();
-    private static float distanceWithoutSqrt;
 
-    private boolean areIntersected(Circle a, Circle b) {
+    private boolean areIntersected(Circle a, Circle b, float distanceWithoutSqrt) {
         float sumRadius = a.radius + b.radius;
         sumRadius *= sumRadius;
         return sumRadius > distanceWithoutSqrt;
@@ -30,29 +29,29 @@ public class CollisionCircleCircle implements CollisionCallback {
 
     @Override
     public void handleCollision(Manifold manifold) {
-        Circle A = manifold.circleA;
-        Circle B = manifold.circleB;
+        Circle circleA = manifold.circleA;
+        Circle circleB = manifold.circleB;
 
-        manifold.normal = Vector2f.sub(B.body.position, A.body.position);
-        distanceWithoutSqrt = manifold.normal.lengthWithoutSqrt();
+        manifold.normal = Vector2f.sub(circleB.body.position, circleA.body.position);
+        final float distanceWithoutSqrt = manifold.normal.lengthWithoutSqrt();
 
-        if (!areIntersected(A, B)) {
+        if (!areIntersected(circleA, circleB, distanceWithoutSqrt)) {
             manifold.areBodiesCollision = false;
             return;
         }
 
         manifold.contactCount = 1;
-        manifold.penetration = A.radius + B.radius - (float) Math.sqrt(distanceWithoutSqrt);
+        manifold.penetration = circleA.radius + circleB.radius - (float) Math.sqrt(distanceWithoutSqrt);
         // m->contacts[0] = m->normal * A->radius + a->position;
         manifold.normal.normalize();
         manifold.contacts[0].set(manifold.normal);
-        manifold.contacts[0].mul(A.radius);
-        manifold.contacts[0].add(A.body.position);
+        manifold.contacts[0].mul(circleA.radius);
+        manifold.contacts[0].add(circleA.body.position);
 
         if (distanceWithoutSqrt == 0) {
             manifold.normal.set(1f, 0f);
-            manifold.penetration = A.radius;
-            manifold.contacts[0].set(A.body.position);
+            manifold.penetration = circleA.radius;
+            manifold.contacts[0].set(circleA.body.position);
         }
     }
 }

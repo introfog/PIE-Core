@@ -23,13 +23,13 @@ import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
 
-public class AddShapesActionApplier extends DefaultActionApplier {
+public class AddShapesAction extends CallCountAction {
     private final float circleDiameter;
     private final float offsetValue;
     private final Vector2f startPoint;
     private final boolean isHorizontalAdder;
 
-    public AddShapesActionApplier(float circleDiameter, float offsetValue, Vector2f startPoint, boolean isHorizontalAdder) {
+    public AddShapesAction(float circleDiameter, float offsetValue, Vector2f startPoint, boolean isHorizontalAdder) {
         this.circleDiameter = circleDiameter;
         this.offsetValue = offsetValue;
         this.startPoint = startPoint;
