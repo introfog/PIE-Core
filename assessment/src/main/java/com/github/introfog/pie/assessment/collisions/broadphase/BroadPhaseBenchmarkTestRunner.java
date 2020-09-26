@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.junit.Assert;
 
 /*
 Currently, benchmark tests are run only on the developer's machine, as it was not possible to achieve uniform results
@@ -57,7 +58,8 @@ public class BroadPhaseBenchmarkTestRunner {
                     config.expectedCoefficients[i], config.allowedWorkingTimeDifference));
         }
 
-        BenchmarkTestMethodResult.checkAndOutputResults(methodResults);
+        BenchmarkTestMethodResult.outputTestMethodResults(methodResults);
+        Assert.assertTrue(methodResults.stream().allMatch(BenchmarkTestMethodResult::isPassed));
     }
 
     private static List<AbstractBroadPhase> initializeBroadPhaseMethods(List<IShape> shapes) {

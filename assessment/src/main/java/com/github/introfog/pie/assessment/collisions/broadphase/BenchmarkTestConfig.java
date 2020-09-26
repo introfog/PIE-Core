@@ -15,10 +15,11 @@
  */
 package com.github.introfog.pie.assessment.collisions.broadphase;
 
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.DefaultActionApplier;
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.IActionApplier;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.CallCountAction;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.IAction;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class BenchmarkTestConfig {
     public final static double DEFAULT_ALLOWED_WORKING_TIME_DIFFERENCE = 0.25;
     public final static String DEFAULT_COMPARATIVE_METHOD_NAME = BruteForceMethod.class.getSimpleName();
     public final static TimeUnit DEFAULT_TIME_UNIT = TimeUnit.MICROSECONDS;
-    public final static Class<DefaultActionApplier> DEFAULT_ACTION_APPLIER = DefaultActionApplier.class;
+    public final static Class<CallCountAction> DEFAULT_ACTION_APPLIER = CallCountAction.class;
 
     public int warm;
     public int measure;
@@ -42,25 +43,27 @@ public class BenchmarkTestConfig {
     public String sourceFolder;
     public String comparativeMethodName;
     public TimeUnit timeUnit;
-    public IActionApplier applier;
+    public IAction applier;
 
-    public BenchmarkTestConfig(String fileName, String sourceFolder, double[] expectedCoefficients) throws Exception {
+    public BenchmarkTestConfig(String fileName, String sourceFolder, double[] expectedCoefficients) throws ReflectiveOperationException {
         this(fileName, sourceFolder, DEFAULT_TIME_UNIT, DEFAULT_WARM_VALUE, DEFAULT_MEASURE_VALUE, expectedCoefficients,
-                DEFAULT_ALLOWED_WORKING_TIME_DIFFERENCE, DEFAULT_ACTION_APPLIER.newInstance(), DEFAULT_COMPARATIVE_METHOD_NAME);
+                DEFAULT_ALLOWED_WORKING_TIME_DIFFERENCE, DEFAULT_ACTION_APPLIER.getDeclaredConstructor().newInstance(),
+                DEFAULT_COMPARATIVE_METHOD_NAME);
     }
 
-    public BenchmarkTestConfig(String fileName, String sourceFolder, int warm, double[] expectedCoefficients) throws Exception {
+    public BenchmarkTestConfig(String fileName, String sourceFolder, int warm, double[] expectedCoefficients) throws ReflectiveOperationException {
         this(fileName, sourceFolder, DEFAULT_TIME_UNIT, warm, DEFAULT_MEASURE_VALUE, expectedCoefficients,
-                DEFAULT_ALLOWED_WORKING_TIME_DIFFERENCE, DEFAULT_ACTION_APPLIER.newInstance(), DEFAULT_COMPARATIVE_METHOD_NAME);
+                DEFAULT_ALLOWED_WORKING_TIME_DIFFERENCE, DEFAULT_ACTION_APPLIER.getDeclaredConstructor().newInstance(),
+                DEFAULT_COMPARATIVE_METHOD_NAME);
     }
 
-    public BenchmarkTestConfig(String fileName, String sourceFolder, int warm, int measure, double[] expectedCoefficients, IActionApplier applier) {
+    public BenchmarkTestConfig(String fileName, String sourceFolder, int warm, int measure, double[] expectedCoefficients, IAction applier) {
         this(fileName, sourceFolder, DEFAULT_TIME_UNIT, warm, measure, expectedCoefficients,
                 DEFAULT_ALLOWED_WORKING_TIME_DIFFERENCE, applier, DEFAULT_COMPARATIVE_METHOD_NAME);
     }
 
     public BenchmarkTestConfig(String fileName, String sourceFolder, TimeUnit timeUnit, int warm, int measure,
-            double[] expectedCoefficients, double allowedWorkingTimeDifference, IActionApplier applier, String comparativeMethodName) {
+            double[] expectedCoefficients, double allowedWorkingTimeDifference, IAction applier, String comparativeMethodName) {
         this.fileName = fileName;
         this.sourceFolder = sourceFolder;
         this.timeUnit = timeUnit;
@@ -79,15 +82,8 @@ public class BenchmarkTestConfig {
                 sourceFolder.length(), comparativeMethodName.length()));
 
         System.out.println("CONFIG");
-        System.out.print("+");
-        for (int i = 0; i < firstColumnWidth + 2; i++) {
-            System.out.print("-");
-        }
-        System.out.print("+");
-        for (int i = 0; i < secondColumnWidth + 2; i++) {
-            System.out.print("-");
-        }
-        System.out.print("+\n");
+        BenchmarkTestConfig.outputConfigLine(firstColumnWidth, secondColumnWidth);
+
         String stringFormat = "| %-" + firstColumnWidth + "s | %-" + secondColumnWidth + "s |\n";
         NumberFormat numberFormat = NumberFormat.getInstance(Locale.CANADA_FRENCH);
         numberFormat.setMaximumFractionDigits(3);
@@ -99,6 +95,10 @@ public class BenchmarkTestConfig {
         System.out.format(stringFormat, "Comparative method", comparativeMethodName);
         System.out.format(stringFormat, "Allowed difference", allowedWorkingTimeDifference);
 
+        BenchmarkTestConfig.outputConfigLine(firstColumnWidth, secondColumnWidth);
+    }
+
+    private static void outputConfigLine(int firstColumnWidth, int secondColumnWidth) {
         System.out.print("+");
         for (int i = 0; i < firstColumnWidth + 2; i++) {
             System.out.print("-");

@@ -24,12 +24,12 @@ public class CollisionPolygonPolygon implements CollisionCallback {
 
     @Override
     public void handleCollision(Manifold manifold) {
-        Polygon A = manifold.polygonA;
-        Polygon B = manifold.polygonB;
+        Polygon polygonA = manifold.polygonA;
+        Polygon polygonB = manifold.polygonB;
 
         // Looking for a dividing axis with external faces A
         int[] faceA = {0};
-        float penetrationA = findAxisLeastPenetration(faceA, A, B);
+        float penetrationA = findAxisLeastPenetration(faceA, polygonA, polygonB);
         if (penetrationA >= 0.0f) {
             manifold.areBodiesCollision = false;
             return;
@@ -37,7 +37,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
 
         // Looking for a dividing axis with external faces В
         int[] faceB = {0};
-        float penetrationB = findAxisLeastPenetration(faceB, B, A);
+        float penetrationB = findAxisLeastPenetration(faceB, polygonB, polygonA);
         if (penetrationB >= 0.0f) {
             manifold.areBodiesCollision = false;
             return;
@@ -48,19 +48,19 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         boolean flip;
 
         // Reference
-        Polygon RefPoly;
+        Polygon refPoly;
         // Incident
-        Polygon IncPoly;
+        Polygon incPoly;
 
         // Determine which polygon contains the incident face
         if (MathPIE.gt(penetrationA, penetrationB)) {
-            RefPoly = A;
-            IncPoly = B;
+            refPoly = polygonA;
+            incPoly = polygonB;
             referenceIndex = faceA[0];
             flip = false;
         } else {
-            RefPoly = B;
-            IncPoly = A;
+            refPoly = polygonB;
+            incPoly = polygonA;
             referenceIndex = faceB[0];
             flip = true;
         }
@@ -68,7 +68,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         // World space incident face
         Vector2f[] incidentFace = Vector2f.arrayOf(2);
 
-        findIncidentFace(incidentFace, RefPoly, IncPoly, referenceIndex);
+        findIncidentFace(incidentFace, refPoly, incPoly, referenceIndex);
 
         // y
         // ^ .n ^
@@ -84,17 +84,17 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         // n : incident normal
 
         // Setup reference face vertices
-        Vector2f v1 = new Vector2f(RefPoly.vertices[referenceIndex]);
-        referenceIndex = referenceIndex + 1 == RefPoly.vertexCount ? 0 : referenceIndex + 1;
-        Vector2f v2 = new Vector2f(RefPoly.vertices[referenceIndex]);
+        Vector2f v1 = new Vector2f(refPoly.vertices[referenceIndex]);
+        referenceIndex = referenceIndex + 1 == refPoly.vertexCount ? 0 : referenceIndex + 1;
+        Vector2f v2 = new Vector2f(refPoly.vertices[referenceIndex]);
 
         // Transform vectors to world coordinates
         // v1 = RefPoly->u * v1 + RefPoly->body->position;
         // v2 = RefPoly->u * v2 + RefPoly->body->position;
-        RefPoly.rotateMatrix.mul(v1, v1);
-        v1.add(RefPoly.body.position);
-        RefPoly.rotateMatrix.mul(v2, v2);
-        v2.add(RefPoly.body.position);
+        refPoly.rotateMatrix.mul(v1, v1);
+        v1.add(refPoly.body.position);
+        refPoly.rotateMatrix.mul(v2, v2);
+        v2.add(refPoly.body.position);
 
         // Calculate reference face side normal in world space
         // Vec2 sidePlaneNormal = (v2 - v1);
@@ -165,28 +165,28 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         manifold.contactCount = cp;
     }
 
-    public float findAxisLeastPenetration(int[] faceIndex, Polygon A, Polygon B) {
+    public float findAxisLeastPenetration(int[] faceIndex, Polygon polygonA, Polygon polygonB) {
         // Looking for the axis of least penetration
         float bestDistance = -Float.MAX_VALUE;
         int bestIndex = 0;
 
-        for (int i = 0; i < A.vertexCount; ++i) {
+        for (int i = 0; i < polygonA.vertexCount; ++i) {
             // Retrieve a face normal from A
             // Vec2 n = A->m_normals[i];
             // Vec2 nw = A->u * n;
             Vector2f nw = new Vector2f();
-            A.rotateMatrix.mul(A.normals[i], nw);
+            polygonA.rotateMatrix.mul(polygonA.normals[i], nw);
 
             // Transform face normal into B's model space
             // Mat2 buT = B->u.Transpose( );
             // n = buT * nw;
             Vector2f n = new Vector2f();
-            B.rotateMatrix.transposeMul(nw, n);
+            polygonB.rotateMatrix.transposeMul(nw, n);
 
             // Retrieve support point from B along -n
             // Vector2f s = B->GetSupport( -n );
             n.negative();
-            Vector2f s = B.getSupport(n);
+            Vector2f s = polygonB.getSupport(n);
             n.negative();
 
             // Translate the face A to the local coordinates of B
@@ -194,11 +194,11 @@ public class CollisionPolygonPolygon implements CollisionCallback {
             // v = A->u * v + A->body->position;
             // v -= B->body->position;
             // v = buT * v;
-            Vector2f v = new Vector2f(A.vertices[i]);
-            A.rotateMatrix.mul(v, v);
-            v.add(A.body.position);
-            v.sub(B.body.position);
-            B.rotateMatrix.transposeMul(v, v);
+            Vector2f v = new Vector2f(polygonA.vertices[i]);
+            polygonA.rotateMatrix.mul(v, v);
+            v.add(polygonA.body.position);
+            v.sub(polygonB.body.position);
+            polygonB.rotateMatrix.transposeMul(v, v);
 
             // Calculate penetration (in local coordinates B)
             // real d = Dot( n, s - v );
@@ -215,15 +215,15 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         return bestDistance;
     }
 
-    public void findIncidentFace(Vector2f[] v, Polygon RefPoly, Polygon IncPoly, int referenceIndex) {
-        Vector2f referenceNormal = new Vector2f(RefPoly.normals[referenceIndex]);
+    public void findIncidentFace(Vector2f[] v, Polygon refPoly, Polygon incPoly, int referenceIndex) {
+        Vector2f referenceNormal = new Vector2f(refPoly.normals[referenceIndex]);
 
         // Calculate normal in incident's frame of reference
         // referenceNormal = RefPoly->u * referenceNormal; // To world space
         // referenceNormal = IncPoly->u.Transpose( ) * referenceNormal; // To
         // incident's model space
-        RefPoly.rotateMatrix.mul(referenceNormal, referenceNormal); // To world space
-        IncPoly.rotateMatrix.transposeMul(referenceNormal, referenceNormal);// To
+        refPoly.rotateMatrix.mul(referenceNormal, referenceNormal); // To world space
+        incPoly.rotateMatrix.transposeMul(referenceNormal, referenceNormal);// To
         // incident's
         // model
         // space
@@ -231,9 +231,9 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         // Find most anti-normal face on incident polygon
         int incidentFace = 0;
         float minDot = Float.MAX_VALUE;
-        for (int i = 0; i < IncPoly.vertexCount; ++i) {
+        for (int i = 0; i < incPoly.vertexCount; ++i) {
             // real dot = Dot( referenceNormal, IncPoly->m_normals[i] );
-            float dotProduct = Vector2f.dotProduct(referenceNormal, IncPoly.normals[i]);
+            float dotProduct = Vector2f.dotProduct(referenceNormal, incPoly.normals[i]);
 
             if (dotProduct < minDot) {
                 minDot = dotProduct;
@@ -248,11 +248,11 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         // incidentFace + 1;
         // v[1] = IncPoly->u * IncPoly->m_vertices[incidentFace] +
         // IncPoly->body->position;
-        IncPoly.rotateMatrix.mul(IncPoly.vertices[incidentFace], v[0]);
-        v[0].add(IncPoly.body.position);
-        incidentFace = incidentFace + 1 >= IncPoly.vertexCount ? 0 : incidentFace + 1;
-        IncPoly.rotateMatrix.mul(IncPoly.vertices[incidentFace], v[1]);
-        v[1].add(IncPoly.body.position);
+        incPoly.rotateMatrix.mul(incPoly.vertices[incidentFace], v[0]);
+        v[0].add(incPoly.body.position);
+        incidentFace = incidentFace + 1 >= incPoly.vertexCount ? 0 : incidentFace + 1;
+        incPoly.rotateMatrix.mul(incPoly.vertices[incidentFace], v[1]);
+        v[1].add(incPoly.body.position);
     }
 
     public int clip(Vector2f n, float c, Vector2f[] face) {

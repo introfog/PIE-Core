@@ -48,13 +48,18 @@ public class PIETest {
      * @param checkEqual the boolean flag
      */
     public static void checkEqualsAndHashCodeMethods(Object a, Object b, boolean checkEqual) {
+        boolean result;
         if (checkEqual) {
-            Assert.assertTrue(a.equals(b));
-            Assert.assertTrue(b.equals(a));
+            result = a.equals(b);
+            Assert.assertTrue(result);
+            result = b.equals(a);
+            Assert.assertTrue(result);
             Assert.assertEquals(a.hashCode(), b.hashCode());
         } else {
-            Assert.assertFalse(a.equals(b));
-            Assert.assertFalse(b.equals(a));
+            result = a.equals(b);
+            Assert.assertFalse(result);
+            result = b.equals(a);
+            Assert.assertFalse(result);
             Assert.assertNotEquals(a.hashCode(), b.hashCode());
         }
     }

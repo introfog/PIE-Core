@@ -26,12 +26,12 @@ public class ShapePair {
     /**
      * The shape of the pair with the smaller hash code.
      */
-    public IShape first;
+    public final IShape first;
 
     /**
      * The shape of the pair with the bigger hash code.
      */
-    public IShape second;
+    public final IShape second;
 
     /**
      * Instantiates a new {@link com.github.introfog.pie.core.util.ShapePair} instance based

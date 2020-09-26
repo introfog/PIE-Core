@@ -15,9 +15,13 @@
  */
 package com.github.introfog.pie.core.collisions;
 
-public class Collisions {
-    public static CollisionCallback[][] table = {
+public final class Collisions {
+    public static final CollisionCallback[][] table = {
             {CollisionCircleCircle.instance, CollisionCirclePolygon.instance},
             {CollisionPolygonCircle.instance, CollisionPolygonPolygon.instance}
     };
+
+    private Collisions() {
+        // Empty private constructor
+    }
 }

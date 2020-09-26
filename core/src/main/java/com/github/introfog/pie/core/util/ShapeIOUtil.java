@@ -33,7 +33,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShapeIOUtil {
+public final class ShapeIOUtil {
+    private ShapeIOUtil() {
+        // Empty private constructor
+    }
+
     public static boolean filesIdentical(String cmpPath, String outPath) throws IOException {
         return Arrays.equals(Files.readAllBytes(Paths.get(cmpPath)), Files.readAllBytes(Paths.get(outPath)));
     }
@@ -94,10 +98,10 @@ public class ShapeIOUtil {
         float centerY = Float.parseFloat(strings[size - 3]);
         float centerX = Float.parseFloat(strings[size - 4]);
 
-        if (strings[0].equals(ShapeType.circle.toString())) {
+        if (strings[0].equals(ShapeType.CIRCLE.toString())) {
             float radius = Float.parseFloat(strings[1]);
             shape = new Circle(radius, centerX, centerY, density, restitution);
-        } else if (strings[0].equals(ShapeType.polygon.toString())) {
+        } else if (strings[0].equals(ShapeType.POLYGON.toString())) {
             int vertexCount = Integer.parseInt(strings[1]);
             Vector2f[] vertices = new Vector2f[vertexCount];
             for (int i = 0; i < vertexCount; i++) {
@@ -105,6 +109,7 @@ public class ShapeIOUtil {
             }
             shape = new Polygon(density, restitution, centerX, centerY, vertices);
         }
+        // TODO add log message if shape doesn't created
 
         return shape;
     }

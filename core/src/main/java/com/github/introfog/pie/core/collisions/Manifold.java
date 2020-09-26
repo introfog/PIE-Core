@@ -56,23 +56,23 @@ public class Manifold {
     }
 
     public void initializeCollision() {
-        if (MathPIE.equal(a.invertedMass + b.invertedMass, 0f)) {
+        if (MathPIE.areEqual(a.invertedMass + b.invertedMass, 0f)) {
             a.velocity.set(0f, 0f);
             b.velocity.set(0f, 0f);
             areBodiesCollision = false;
             return;
         }
 
-        if (aShape.type == ShapeType.circle && bShape.type == ShapeType.circle) {
+        if (aShape.type == ShapeType.CIRCLE && bShape.type == ShapeType.CIRCLE) {
             circleA = (Circle) aShape;
             circleB = (Circle) bShape;
-        } else if (aShape.type == ShapeType.polygon && bShape.type == ShapeType.polygon) {
+        } else if (aShape.type == ShapeType.POLYGON && bShape.type == ShapeType.POLYGON) {
             polygonA = (Polygon) aShape;
             polygonB = (Polygon) bShape;
-        } else if (aShape.type == ShapeType.polygon && bShape.type == ShapeType.circle) {
+        } else if (aShape.type == ShapeType.POLYGON && bShape.type == ShapeType.CIRCLE) {
             polygonA = (Polygon) aShape;
             circleB = (Circle) bShape;
-        } else if (aShape.type == ShapeType.circle && bShape.type == ShapeType.polygon) {
+        } else if (aShape.type == ShapeType.CIRCLE && bShape.type == ShapeType.POLYGON) {
             circleA = (Circle) aShape;
             polygonB = (Polygon) bShape;
         }
@@ -177,7 +177,7 @@ public class Manifold {
             jt /= contactCount;
 
             // If jt is very small then do not apply and do return
-            if (MathPIE.equal(jt, 0f)) {
+            if (MathPIE.areEqual(jt, 0f)) {
                 return;
             }
 

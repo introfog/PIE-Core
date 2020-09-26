@@ -25,14 +25,14 @@ public class CollisionCirclePolygon implements CollisionCallback {
 
     @Override
     public void handleCollision(Manifold manifold) {
-        Circle A = manifold.circleA;
-        Polygon B = manifold.polygonB;
+        Circle circleA = manifold.circleA;
+        Polygon polygonB = manifold.polygonB;
 
         // Translate center coordinates to polygon coordinates
         // center = B->u.Transpose( ) * (center - b->position);
-        Vector2f centerA = new Vector2f(A.body.position);
-        centerA.sub(B.body.position);
-        B.rotateMatrix.transposeMul(centerA, centerA);
+        Vector2f centerA = new Vector2f(circleA.body.position);
+        centerA.sub(polygonB.body.position);
+        polygonB.rotateMatrix.transposeMul(centerA, centerA);
 
         // Looking for the nearest edge of the polygon to the center of the circle,
         // projecting the center on each edge normal of the polygon
@@ -44,15 +44,15 @@ public class CollisionCirclePolygon implements CollisionCallback {
         Vector2f projection = new Vector2f();
         Vector2f realProjection = new Vector2f();
         Vector2f tmpV = new Vector2f();
-        for (int i = 0; i < B.vertexCount; i++) {
+        for (int i = 0; i < polygonB.vertexCount; i++) {
             tmpV.set(centerA);
-            tmpV.sub(B.vertices[i]);
-            dotProduct = Vector2f.dotProduct(B.normals[i], tmpV);
-            projection.x = dotProduct * B.normals[i].x;
-            projection.y = dotProduct * B.normals[i].y;
+            tmpV.sub(polygonB.vertices[i]);
+            dotProduct = Vector2f.dotProduct(polygonB.normals[i], tmpV);
+            projection.x = dotProduct * polygonB.normals[i].x;
+            projection.y = dotProduct * polygonB.normals[i].y;
 
             // The sign of the scalar product indicates whether the center is on the opposite side of the line from the normal
-            if (dotProduct > 0f && projection.lengthWithoutSqrt() > A.radius * A.radius) {
+            if (dotProduct > 0f && projection.lengthWithoutSqrt() > circleA.radius * circleA.radius) {
                 manifold.areBodiesCollision = false;
                 return;
             }
@@ -77,32 +77,32 @@ public class CollisionCirclePolygon implements CollisionCallback {
             // m->contacts[0] = m->normal * A->radius + a->position;
 
             manifold.contactCount = 1;
-            B.rotateMatrix.mul(B.normals[indexFaceNormalIfCircleInPolygon], manifold.normal);
+            polygonB.rotateMatrix.mul(polygonB.normals[indexFaceNormalIfCircleInPolygon], manifold.normal);
             manifold.normal.negative();
 
             manifold.contacts[0].set(manifold.normal);
-            manifold.contacts[0].mul(A.radius);
-            manifold.contacts[0].add(A.body.position);
-            manifold.penetration = A.radius;
+            manifold.contacts[0].mul(circleA.radius);
+            manifold.contacts[0].add(circleA.body.position);
+            manifold.penetration = circleA.radius;
             return;
         }
 
         // Found the nearest edge to the center of the circle, and the center of the circle lies outside the polygon.
         // Now define the Voronoi region in which the center of the circle is located relative to the nearest edge of the polygon
-        Vector2f v1 = new Vector2f(B.vertices[indexFaceNormal]);
-        Vector2f v2 = new Vector2f(B.vertices[(indexFaceNormal + 1) % B.vertexCount]);
+        Vector2f v1 = new Vector2f(polygonB.vertices[indexFaceNormal]);
+        Vector2f v2 = new Vector2f(polygonB.vertices[(indexFaceNormal + 1) % polygonB.vertexCount]);
 
         float dot1 = Vector2f.dotProduct(Vector2f.sub(centerA, v1), Vector2f.sub(v2, v1));
         float dot2 = Vector2f.dotProduct(Vector2f.sub(centerA, v2), Vector2f.sub(v1, v2));
 
         if (dot1 <= 0f) {
             // Closer to the first vertex
-            if (Vector2f.distanceWithoutSqrt(centerA, v1) > A.radius * A.radius) {
+            if (Vector2f.distanceWithoutSqrt(centerA, v1) > circleA.radius * circleA.radius) {
                 manifold.areBodiesCollision = false;
                 return;
             }
 
-            manifold.penetration = A.radius - (float) Math.sqrt(Vector2f.distanceWithoutSqrt(centerA, v1));
+            manifold.penetration = circleA.radius - (float) Math.sqrt(Vector2f.distanceWithoutSqrt(centerA, v1));
 
             manifold.contactCount = 1;
             // Vec2 n = v1 - center;
@@ -112,20 +112,20 @@ public class CollisionCirclePolygon implements CollisionCallback {
             // v1 = B->u * v1 + b->position;
             // m->contacts[0] = v1;
             Vector2f n = Vector2f.sub(v1, centerA);
-            B.rotateMatrix.mul(n, n);
+            polygonB.rotateMatrix.mul(n, n);
             n.normalize();
             manifold.normal.set(n);
-            B.rotateMatrix.mul(v1, v1);
-            v1.add(B.body.position);
+            polygonB.rotateMatrix.mul(v1, v1);
+            v1.add(polygonB.body.position);
             manifold.contacts[0].set(v1);
         } else if (dot2 <= 0f) {
             // Closer to the second vertex
-            if (Vector2f.distanceWithoutSqrt(centerA, v2) > A.radius * A.radius) {
+            if (Vector2f.distanceWithoutSqrt(centerA, v2) > circleA.radius * circleA.radius) {
                 manifold.areBodiesCollision = false;
                 return;
             }
 
-            manifold.penetration = A.radius - (float) Math.sqrt(Vector2f.distanceWithoutSqrt(centerA, v2));
+            manifold.penetration = circleA.radius - (float) Math.sqrt(Vector2f.distanceWithoutSqrt(centerA, v2));
 
             manifold.contactCount = 1;
             // Vec2 n = v2 - center;
@@ -135,28 +135,28 @@ public class CollisionCirclePolygon implements CollisionCallback {
             // n.Normalize( );
             // m->normal = n;
             Vector2f n = Vector2f.sub(v2, centerA);
-            B.rotateMatrix.mul(n, n);
+            polygonB.rotateMatrix.mul(n, n);
             n.normalize();
             manifold.normal.set(n);
-            B.rotateMatrix.mul(v2, v2);
-            v2.add(B.body.position);
+            polygonB.rotateMatrix.mul(v2, v2);
+            v2.add(polygonB.body.position);
             manifold.contacts[0].set(v2);
         } else {
             // Closer to the front vertex
-            Vector2f n = new Vector2f(B.normals[indexFaceNormal]);
+            Vector2f n = new Vector2f(polygonB.normals[indexFaceNormal]);
 
-            manifold.penetration = A.radius - (float) Math.sqrt(realProjection.lengthWithoutSqrt());
+            manifold.penetration = circleA.radius - (float) Math.sqrt(realProjection.lengthWithoutSqrt());
 
             manifold.contactCount = 1;
             // n = B->u * n;
             // m->normal = -n;
             // m->contacts[0] = m->normal * A->radius + a->position;
-            B.rotateMatrix.mul(n, n);
+            polygonB.rotateMatrix.mul(n, n);
             n.negative();
             manifold.normal.set(n);
             manifold.contacts[0].set(manifold.normal);
-            manifold.contacts[0].mul(A.radius);
-            manifold.contacts[0].add(A.body.position);
+            manifold.contacts[0].mul(circleA.radius);
+            manifold.contacts[0].add(circleA.body.position);
         }
     }
 }

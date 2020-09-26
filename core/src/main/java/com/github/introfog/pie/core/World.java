@@ -125,7 +125,7 @@ public final class World {
 
     private void narrowPhase() {
         collisions.clear();
-        mayBeCollision.forEach((collision) -> {
+        mayBeCollision.forEach(collision -> {
             if (collision.first.body.invertedMass != 0f || collision.second.body.invertedMass != 0f) {
                 Manifold manifold = new Manifold(collision.first, collision.second, context);
                 manifold.initializeCollision();
@@ -165,7 +165,7 @@ public final class World {
         collisions.forEach(Manifold::correctPosition);
 
         // Clear all forces
-        shapes.forEach((shape) -> shape.body.force.set(0f, 0f));
+        shapes.forEach(shape -> shape.body.force.set(0f, 0f));
     }
 
     private void integrateForces(IShape shape) {

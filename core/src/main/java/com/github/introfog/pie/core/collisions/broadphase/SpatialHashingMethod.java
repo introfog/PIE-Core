@@ -64,7 +64,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         shapes.forEach(this::insert);
 
         Set<ShapePair> possibleIntersect = computePossibleAabbIntersections();
-        possibleIntersect.forEach((pair) -> {
+        possibleIntersect.forEach(pair -> {
             if (AABB.isIntersected(pair.first.aabb, pair.second.aabb)) {
                 possibleCollisionList.add(pair);
             }
@@ -111,9 +111,8 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         // HashSet is used because requires the uniqueness of pairs,
         // for example, two shapes can intersect in several cells at once
         Set<ShapePair> possibleIntersect = new HashSet<>();
-        cells.forEach((cell, list) -> {
-            possibleIntersect.addAll(BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(list));
-        });
+        cells.forEach((cell, list) ->
+                possibleIntersect.addAll(BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(list)));
         return possibleIntersect;
     }
 }

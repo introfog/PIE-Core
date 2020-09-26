@@ -20,6 +20,6 @@ import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
 
-public interface IActionApplier {
+public interface IAction {
     void applyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes);
 }

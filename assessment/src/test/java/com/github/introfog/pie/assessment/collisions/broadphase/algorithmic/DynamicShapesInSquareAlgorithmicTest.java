@@ -16,7 +16,7 @@
 package com.github.introfog.pie.assessment.collisions.broadphase.algorithmic;
 
 import com.github.introfog.pie.assessment.collisions.broadphase.BroadPhaseAlgorithmicTestRunner;
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveToPointActionApplier;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveShapesToPointAction;
 import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 
@@ -32,12 +32,12 @@ public class DynamicShapesInSquareAlgorithmicTest extends PIETest {
     @Test
     public void mediumSquareSlowMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("50x50square_28518collision",
-                PATH_TO_SOURCE_FOLDER,60, new MoveToPointActionApplier(30, 2));
+                PATH_TO_SOURCE_FOLDER,60, new MoveShapesToPointAction(30, 2));
     }
 
     @Test
     public void mediumSquareQuickMovingTest() throws IOException {
         BroadPhaseAlgorithmicTestRunner.runDynamicBroadPhaseAlgorithmicTest("50x50square_28518collision",
-                PATH_TO_SOURCE_FOLDER, 60, new MoveToPointActionApplier(30, 20));
+                PATH_TO_SOURCE_FOLDER, 60, new MoveShapesToPointAction(30, 20));
     }
 }

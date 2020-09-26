@@ -20,15 +20,23 @@ import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class MoveToPointActionApplier extends DefaultActionApplier {
+public class MoveShapesAction extends CallCountAction {
     private final int iterationOneWay;
     private final float offsetValue;
+    private final boolean isHorizontalMover;
+    private final int oneMovingBodyOfBodies;
 
-    public MoveToPointActionApplier(int iterationOneWay, float offsetValue) {
+    public MoveShapesAction(int iterationOneWay, float offsetValue, boolean isHorizontalMover) {
+        this(iterationOneWay, offsetValue, isHorizontalMover, 1);
+    }
+
+    public MoveShapesAction(int iterationOneWay, float offsetValue, boolean isHorizontalMover,
+            int oneMovingBodyOfBodies) {
         this.iterationOneWay = iterationOneWay;
         this.offsetValue = offsetValue;
+        this.isHorizontalMover = isHorizontalMover;
+        this.oneMovingBodyOfBodies = oneMovingBodyOfBodies;
     }
 
     @Override
@@ -37,21 +45,14 @@ public class MoveToPointActionApplier extends DefaultActionApplier {
             callCounter = -iterationOneWay;
         }
 
-        Vector2f center = methodShapes.stream().map((shape) -> shape.body.position).collect(Collectors.toList()).stream().
-                reduce((sum, current) -> {sum.add(current); return sum;}).orElse(new Vector2f());
-        center.mul(1.0f / methodShapes.size());
-
-        for (IShape shape : methodShapes) {
-            float dist = (float) Math.sqrt(Vector2f.distanceWithoutSqrt(center, shape.body.position));
-            float cos = 0;
-            float sin = 0;
-            if (dist != 0) {
-                cos = (shape.body.position.x - center.x) / dist;
-                sin = (shape.body.position.y - center.y) / dist;
-            }
-            Vector2f offset = new Vector2f(cos, sin);
-            offset.mul(callCounter > 0 ? offsetValue : -offsetValue);
-            shape.body.position.add(offset);
+        Vector2f offset;
+        if (isHorizontalMover) {
+            offset = new Vector2f(callCounter > 0 ? offsetValue : -offsetValue, 0);
+        } else {
+            offset = new Vector2f(0, callCounter >= 0 ? offsetValue : -offsetValue);
+        }
+        for (int i = 0; i < methodShapes.size(); i += oneMovingBodyOfBodies) {
+            methodShapes.get(i).body.position.add(offset, i % 2 == 0 ? -1 : 1);
         }
     }
 }

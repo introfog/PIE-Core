@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.assessment.collisions.broadphase;
 
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.IActionApplier;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.IAction;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
@@ -44,7 +44,7 @@ public class BroadPhaseAlgorithmicTestRunner {
         }
     }
 
-    public static void runDynamicBroadPhaseAlgorithmicTest(String fileName, String sourceFolder, int call, IActionApplier applier) throws IOException {
+    public static void runDynamicBroadPhaseAlgorithmicTest(String fileName, String sourceFolder, int call, IAction applier) throws IOException {
         List<IShape> methodShapes = ShapeIOUtil.readShapesFromFile(sourceFolder + fileName + ".pie");
         List<AbstractBroadPhase> methods = BroadPhaseAlgorithmicTestRunner.initializeBroadPhaseMethods(methodShapes);
 

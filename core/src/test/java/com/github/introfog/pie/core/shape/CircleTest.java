@@ -20,10 +20,8 @@ import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
 public class CircleTest extends PIETest {
@@ -36,7 +34,7 @@ public class CircleTest extends PIETest {
     public void paramConstructorTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        Assert.assertEquals(ShapeType.circle, circle.type);
+        Assert.assertEquals(ShapeType.CIRCLE, circle.type);
         Assert.assertEquals(new Vector2f(1, 3), circle.body.position);
         Assert.assertEquals(0.1f, circle.body.density, PIETest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(0.2f, circle.body.restitution, PIETest.FLOAT_EPSILON_COMPARISON);

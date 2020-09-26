@@ -44,7 +44,54 @@ public class ShapePairTest extends PIETest {
     }
 
     @Test
-    public void hashCodeTest() {
+    public void equalsAndHashCodeItselfTest() {
+        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        ShapePair shapePair = new ShapePair(c1, c2);
 
+        Assert.assertTrue(shapePair.equals(shapePair));
+        Assert.assertEquals(shapePair.hashCode(), shapePair.hashCode());
+    }
+
+    @Test
+    public void equalsAndHashCodeToAnotherEqualBodyTest() {
+        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        ShapePair first = new ShapePair(c1, c2);
+        ShapePair second = new ShapePair(c1, c2);
+
+        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
+    }
+
+    @Test
+    public void equalsAndHashCodeToAnotherNotEqualBodyTest() {
+        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c3 = new Circle(10, 10, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        ShapePair first = new ShapePair(c1, c2);
+        ShapePair second = new ShapePair(c1, c3);
+
+        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+
+        second = new ShapePair(c3, c2);
+        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+    }
+
+    @Test
+    public void equalsToNullTest() {
+        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        ShapePair shapePair = new ShapePair(c1, c2);
+
+        Assert.assertFalse(shapePair.equals(null));
+    }
+
+    @Test
+    public void equalsToAnotherClassTest() {
+        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        ShapePair shapePair = new ShapePair(c1, c2);
+
+        Assert.assertFalse(shapePair.equals(""));
     }
 }

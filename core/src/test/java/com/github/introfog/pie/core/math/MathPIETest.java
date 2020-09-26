@@ -42,11 +42,11 @@ public class MathPIETest extends PIETest {
 
     @Test
     public void floatEqualTest() {
-        Assert.assertTrue(MathPIE.equal(1.0f, 1.0f));
-        Assert.assertTrue(MathPIE.equal(1.0f, 1.0f + MathPIE.EPSILON - PIETest.FLOAT_EPSILON_COMPARISON));
+        Assert.assertTrue(MathPIE.areEqual(1.0f, 1.0f));
+        Assert.assertTrue(MathPIE.areEqual(1.0f, 1.0f + MathPIE.EPSILON - PIETest.FLOAT_EPSILON_COMPARISON));
 
-        Assert.assertFalse(MathPIE.equal(1.0f, 1.0f + MathPIE.EPSILON));
-        Assert.assertFalse(MathPIE.equal(1.0f, 1.0f + MathPIE.EPSILON + PIETest.FLOAT_EPSILON_COMPARISON));
+        Assert.assertFalse(MathPIE.areEqual(1.0f, 1.0f + MathPIE.EPSILON));
+        Assert.assertFalse(MathPIE.areEqual(1.0f, 1.0f + MathPIE.EPSILON + PIETest.FLOAT_EPSILON_COMPARISON));
     }
 
     @Test

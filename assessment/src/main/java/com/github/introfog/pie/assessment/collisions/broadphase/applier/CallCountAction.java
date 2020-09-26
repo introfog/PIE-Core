@@ -20,10 +20,10 @@ import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
 
-public class DefaultActionApplier implements IActionApplier {
+public abstract class CallCountAction implements IAction {
     protected long callCounter;
 
-    public DefaultActionApplier() {
+    public CallCountAction() {
         callCounter = 0;
     }
 
@@ -32,6 +32,5 @@ public class DefaultActionApplier implements IActionApplier {
         callCounter++;
     }
 
-    protected void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
-    }
+    protected abstract void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes);
 }

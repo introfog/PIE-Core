@@ -33,7 +33,7 @@ public final class MathPIE {
         return (int) (f + BIG_ENOUGH_FLOOR) - BIG_ENOUGH_INT;
     }
 
-    public static boolean equal(float a, float b) {
+    public static boolean areEqual(float a, float b) {
         return Math.abs(a - b) <= EPSILON;
     }
 
