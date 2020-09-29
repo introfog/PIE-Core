@@ -31,80 +31,29 @@ public class Polygon extends IShape {
 
     public static Polygon generateRectangle(float centerX, float centerY, float width, float height, float density,
             float restitution) {
-        Vector2f[] vertices = new Vector2f[4];
-        vertices[0] = new Vector2f(-width / 2f, -height / 2f);
-        vertices[1] = new Vector2f(width / 2f, -height / 2f);
-        vertices[2] = new Vector2f(width / 2f, height / 2f);
-        vertices[3] = new Vector2f(-width / 2f, height / 2f);
+        List<Vector2f> vertices = new ArrayList<>(4);
+        vertices.add(new Vector2f(-width / 2f, -height / 2f));
+        vertices.add(new Vector2f(width / 2f, -height / 2f));
+        vertices.add(new Vector2f(width / 2f, height / 2f));
+        vertices.add(new Vector2f(-width / 2f, height / 2f));
         return new Polygon(density, restitution, centerX, centerY, vertices);
     }
 
     // TODO Search for the minimum convex hull (Jarvis algorithm) works for O(n*h) where h is the number of vertices in the MCH
-    public Polygon(float density, float restitution, float centreX, float centreY, Vector2f... vertices) {
+    public Polygon(float density, float restitution, float centreX, float centreY, List<Vector2f> vertices) {
         body = new Body(centreX, centreY, density, restitution);
-        Vector2f tmpV = new Vector2f();
-        Vector2f tmpV2 = new Vector2f();
 
-        // Jarvis's algorithm for constructing a minimal convex hull.
-        // Find the lowest and rightmost coordinate, it will become the
-        // starting point, and exactly belongs to the MCH (min. convex hull)
-        tmpV.set(vertices[0]);
-        int rightMost = 0;
-        for (int i = 0; i < vertices.length; i++) {
-            if (vertices[i].x > tmpV.x) {
-                tmpV.set(vertices[i]);
-                rightMost = i;
-            } else if (tmpV.x == vertices[i].x && tmpV.y > vertices[i].y) {
-                tmpV.set(vertices[i]);
-                rightMost = i;
+        for (int i = vertices.size() - 1; i > -1; i--) {
+            for (int j = i - 1; j > -1; j--) {
+                if (Vector2f.distanceWithoutSqrt(vertices.get(i), vertices.get(j)) < MathPIE.EPSILON * MathPIE.EPSILON) {
+                    vertices.remove(i);
+                    break;
+                }
             }
         }
 
-        List<Integer> hull = new ArrayList<>();
-        for (int i = 0; i < vertices.length + 1; i++) {
-            hull.add(0);
-        }
-        int outCount = 0;
-        int indexHull = rightMost;
-
-        while (true){
-            hull.set(outCount, indexHull);
-
-            // Looking for the vertex with the largest angle counterclockwise from the current vertex
-            // (Calculate the angle through the vector product)
-            int nextHullIndex = 0;
-            for (int i = 1; i < vertices.length; ++i) {
-                // Skip the same vertices, because need unique vertices in the triangle
-                if (nextHullIndex == indexHull) {
-                    nextHullIndex = i;
-                    continue;
-                }
-                // Sort through all the triangles, looking for the most extreme vertex
-                tmpV.set(vertices[nextHullIndex]);
-                tmpV.sub(vertices[hull.get(outCount)]);
-
-                tmpV2.set(vertices[i]);
-                tmpV2.sub(vertices[hull.get(outCount)]);
-                float c = Vector2f.crossProduct(tmpV, tmpV2);
-                if (c < 0.0f) {
-                    nextHullIndex = i;
-                }
-                // If the vector product is 0, then they lie on one straight line,
-                // and need the vertex farthest from the given vertex
-                if (c == 0.0f && tmpV2.lengthWithoutSqrt() > tmpV.lengthWithoutSqrt()) {
-                    nextHullIndex = i;
-                }
-            }
-
-            outCount++;
-            indexHull = nextHullIndex;
-
-            // When reached the starting vertex, the Jarvis algorithm is complete
-            if (nextHullIndex == rightMost) {
-                vertexCount = outCount;
-                break;
-            }
-        }
+        List<Integer> hull = Polygon.calculateHullIndices(vertices);
+        vertexCount = hull.size();
 
         if (vertexCount > MathPIE.MAX_POLY_VERTEX_COUNT) {
             // TODO create PIE custom exception
@@ -115,9 +64,10 @@ public class Polygon extends IShape {
         this.normals = Vector2f.arrayOf(vertexCount);
 
         for (int i = 0; i < vertexCount; i++) {
-            this.vertices[i].set(vertices[hull.get(i)]);
+            this.vertices[i].set(vertices.get(hull.get(i)));
         }
 
+        Vector2f tmpV = new Vector2f();
         for (int i = 0; i < vertexCount; i++) {
             tmpV.set(this.vertices[(i + 1) % vertexCount]);
             tmpV.sub(this.vertices[i]);
@@ -214,5 +164,69 @@ public class Polygon extends IShape {
         body.invertedMass = (mass != 0f) ? 1f / mass : 0f;
         float inertia = I * body.density;
         body.invertedInertia = (inertia != 0f) ? 1f / inertia : 0f;
+    }
+
+    private static List<Integer> calculateHullIndices(List<Vector2f> vertices) {
+        Vector2f tmpV = new Vector2f();
+        Vector2f tmpV2 = new Vector2f();
+
+        // Jarvis's algorithm for constructing a minimal convex hull.
+        // Find the lowest and rightmost coordinate, it will become the
+        // starting point, and exactly belongs to the MCH (min. convex hull)
+        tmpV.set(vertices.get(0));
+        int rightMost = 0;
+        for (int i = 0; i < vertices.size(); i++) {
+            Vector2f currentVec = vertices.get(i);
+            if (currentVec.x > tmpV.x) {
+                tmpV.set(currentVec);
+                rightMost = i;
+            } else if (tmpV.x == currentVec.x && currentVec.y < tmpV.y) {
+                tmpV.set(currentVec);
+                rightMost = i;
+            }
+        }
+
+        List<Integer> hull = new ArrayList<>();
+        int outCount = 0;
+        int indexHull = rightMost;
+
+        while (true){
+            hull.add(indexHull);
+
+            // Looking for the vertex with the largest angle counterclockwise from the current vertex
+            // (Calculate the angle through the vector product)
+            int nextHullIndex = 0;
+            for (int i = 1; i < vertices.size(); ++i) {
+                // Skip the same vertices, because need unique vertices in the triangle
+                if (nextHullIndex == indexHull) {
+                    nextHullIndex = i;
+                    continue;
+                }
+                // Sort through all the triangles, looking for the most extreme vertex
+                tmpV.set(vertices.get(nextHullIndex));
+                tmpV.sub(vertices.get(hull.get(outCount)));
+
+                tmpV2.set(vertices.get(i));
+                tmpV2.sub(vertices.get(hull.get(outCount)));
+                float c = Vector2f.crossProduct(tmpV, tmpV2);
+                if (c < -MathPIE.EPSILON) {
+                    nextHullIndex = i;
+                }
+                // If the vector product is 0, then they lie on one straight line,
+                // and need the vertex farthest from the given vertex
+                if (MathPIE.areEqual(c, 0) && tmpV2.lengthWithoutSqrt() > tmpV.lengthWithoutSqrt()) {
+                    nextHullIndex = i;
+                }
+            }
+
+            outCount++;
+            indexHull = nextHullIndex;
+
+            // When reached the starting vertex, the Jarvis algorithm is complete
+            if (nextHullIndex == rightMost) {
+                break;
+            }
+        }
+        return hull;
     }
 }

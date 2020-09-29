@@ -20,8 +20,10 @@ import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.test.PIETest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -65,15 +67,15 @@ public class PolygonTest extends PIETest {
 
     @Test
     public void paramConstructorTest() {
-        Vector2f[] vertices = Vector2f.arrayOf(8);
-        vertices[0].set(0, 0);
-        vertices[1].set(7.5f, 5);
-        vertices[2].set(7.5f, -5);
-        vertices[3].set(-7.5f, -5);
-        vertices[4].set(-7.5f, 5);
-        vertices[5].set(-6.5f, 5);
-        vertices[6].set(7, -3);
-        vertices[7].set(0, 4.99f);
+        List<Vector2f> vertices = new ArrayList<>(8);
+        vertices.add(new Vector2f(0, 0));
+        vertices.add(new Vector2f(7.5f, 5));
+        vertices.add(new Vector2f(7.5f, -5));
+        vertices.add(new Vector2f(-7.5f, -5));
+        vertices.add(new Vector2f(-7.5f, 5));
+        vertices.add(new Vector2f(-6.5f, 5));
+        vertices.add(new Vector2f(7, -3));
+        vertices.add(new Vector2f(0, 4.99f));
 
         Polygon polygon = new Polygon(0.1f, 0.2f, 0, 0, vertices);
         Assert.assertEquals(4, polygon.vertexCount);
@@ -106,33 +108,33 @@ public class PolygonTest extends PIETest {
     }
     
     @Test
-    @Ignore("TODO #69 IndexOutOfBoundsException is thrown")
     public void verticesInCircleTest() {
         float radius = 10;
-        Vector2f[] vertices = Vector2f.arrayOf(MathPIE.MAX_POLY_VERTEX_COUNT + 2);
+        List<Vector2f> vertices = new ArrayList<>(MathPIE.MAX_POLY_VERTEX_COUNT + 2);
         for (int i = 0; i < MathPIE.MAX_POLY_VERTEX_COUNT + 1; i++) {
             float cos = (float) Math.cos(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
             float sin = (float) Math.sin(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
 
-            vertices[i].set(cos * radius, sin * radius);
+            vertices.add(new Vector2f(cos * radius, sin * radius));
         }
-        vertices[MathPIE.MAX_POLY_VERTEX_COUNT + 1].set(0, 0);
+        vertices.add(new Vector2f(0, 0));
 
-        new Polygon(0.1f, 0.2f, 0, 0, vertices);
+        Polygon polygon = new Polygon(0.1f, 0.2f, 0, 0, vertices);
+        Assert.assertEquals(MathPIE.MAX_POLY_VERTEX_COUNT, polygon.vertices.length);
     }
 
     @Test
     public void aLotOfVerticesExceptionTest() {
         float radius = 10;
         int verticesInCircle = MathPIE.MAX_POLY_VERTEX_COUNT + 1;
-        Vector2f[] vertices = Vector2f.arrayOf(verticesInCircle + 1);
+        List<Vector2f> vertices = new ArrayList<>(verticesInCircle + 1);
         for (int i = 0; i < verticesInCircle; i++) {
             float cos = (float) Math.cos(2 * Math.PI * i / verticesInCircle);
             float sin = (float) Math.sin(2 * Math.PI * i / verticesInCircle);
 
-            vertices[i].set(cos * radius, sin * radius);
+            vertices.add(new Vector2f(cos * radius, sin * radius));
         }
-        vertices[verticesInCircle].set(0, 0);
+        vertices.add(new Vector2f(0, 0));
 
         // TODO use custom PIE exception
         junitExpectedException.expect(RuntimeException.class);

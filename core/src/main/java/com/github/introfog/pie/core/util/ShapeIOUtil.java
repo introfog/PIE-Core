@@ -103,9 +103,9 @@ public final class ShapeIOUtil {
             shape = new Circle(radius, centerX, centerY, density, restitution);
         } else if (strings[0].equals(ShapeType.POLYGON.toString())) {
             int vertexCount = Integer.parseInt(strings[1]);
-            Vector2f[] vertices = new Vector2f[vertexCount];
+            List<Vector2f> vertices = new ArrayList<>(vertexCount);
             for (int i = 0; i < vertexCount; i++) {
-                vertices[i] = new Vector2f(Float.parseFloat(strings[2 + i * 2]), Float.parseFloat(strings[3 + i * 2]));
+                vertices.add(new Vector2f(Float.parseFloat(strings[2 + i * 2]), Float.parseFloat(strings[3 + i * 2])));
             }
             shape = new Polygon(density, restitution, centerX, centerY, vertices);
         }
