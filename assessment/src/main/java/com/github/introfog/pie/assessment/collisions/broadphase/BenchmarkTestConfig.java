@@ -19,7 +19,6 @@ import com.github.introfog.pie.assessment.collisions.broadphase.applier.CallCoun
 import com.github.introfog.pie.assessment.collisions.broadphase.applier.IAction;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 
 import java.util.Arrays;

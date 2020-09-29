@@ -4,7 +4,7 @@ PIE-Core
 [![License](https://img.shields.io/github/license/introfog/PIE2-Core?logo=Apache-2.0)](https://github.com/introfog/PIE2-Core/blob/develop/LICENSE.txt)
 [![Build](https://github.com/introfog/PIE2-Core/workflows/Build/badge.svg?branch=develop)](https://github.com/introfog/PIE2-Core/actions?query=workflow%3ABuild+branch%3Adevelop)
 [![Build Status](https://travis-ci.org/introfog/PIE-Core.svg?branch=develop)](https://travis-ci.org/introfog/PIE-Core)
-[![codecov](https://codecov.io/gh/introfog/PIE-Core/branch/develop/graph/badge.svg)](https://codecov.io/gh/introfog/PIE-Core)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=introfog_PIE-Core&metric=coverage)](https://sonarcloud.io/dashboard?id=introfog_PIE-Core)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.introfog.pie/root/badge.svg)](https://mvnrepository.com/artifact/com.github.introfog.pie)
 
 ### Main
