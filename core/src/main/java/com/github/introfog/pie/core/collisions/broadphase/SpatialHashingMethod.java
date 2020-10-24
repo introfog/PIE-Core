@@ -57,20 +57,11 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     public List<ShapePair> domesticCalculateAabbCollisions() {
         // The complexity is O(n), if the minimum and maximum size of the objects are not very different,
         // but if very different, then the complexity tends to O(n^2)
-        List<ShapePair> possibleCollisionList = new ArrayList<>();
-
         calculateCellSize();
         cells.clear();
         shapes.forEach(this::insert);
 
-        Set<ShapePair> possibleIntersect = computePossibleAabbIntersections();
-        possibleIntersect.forEach(pair -> {
-            if (AABB.isIntersected(pair.first.aabb, pair.second.aabb)) {
-                possibleCollisionList.add(pair);
-            }
-        });
-
-        return possibleCollisionList;
+        return new ArrayList<>(computePossibleAabbIntersections());
     }
 
     private void calculateCellSize() {

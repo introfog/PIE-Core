@@ -16,7 +16,7 @@
     <name>PIE-Core Core</name>
 
     <properties>
-        <junit.version>4.13</junit.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
     <dependencies>

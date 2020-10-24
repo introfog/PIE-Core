@@ -15,8 +15,8 @@
  */
 package com.github.introfog.pie.assessment.collisions.broadphase;
 
-import com.github.introfog.pie.assessment.collisions.broadphase.applier.CallCountAction;
 import com.github.introfog.pie.assessment.collisions.broadphase.applier.IAction;
+import com.github.introfog.pie.assessment.collisions.broadphase.applier.ToDoNothingAction;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 
 import java.text.NumberFormat;
@@ -32,7 +32,7 @@ public class BenchmarkTestConfig {
     public final static double DEFAULT_ALLOWED_WORKING_TIME_DIFFERENCE = 0.25;
     public final static String DEFAULT_COMPARATIVE_METHOD_NAME = BruteForceMethod.class.getSimpleName();
     public final static TimeUnit DEFAULT_TIME_UNIT = TimeUnit.MICROSECONDS;
-    public final static Class<CallCountAction> DEFAULT_ACTION_APPLIER = CallCountAction.class;
+    public final static Class<ToDoNothingAction> DEFAULT_ACTION_APPLIER = ToDoNothingAction.class;
 
     public int warm;
     public int measure;
