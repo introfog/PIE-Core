@@ -15,6 +15,7 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase.aabbtree;
 
+import com.github.introfog.pie.core.collisions.broadphase.AABBTreeMethod;
 import com.github.introfog.pie.core.shape.AABB;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
@@ -210,7 +211,7 @@ public class AABBTreeNode {
         return newTreeRoot;
     }
 
-    private boolean isLeaf() {
+    public boolean isLeaf() {
         return shape != null;
     }
 
@@ -246,7 +247,7 @@ public class AABBTreeNode {
     }
 
     private static AABBTreeNode findBestSibling(AABBTreeNode treeRoot, AABBTreeNode leaf) {
-        AABBTreeNode bestSibling = null;
+        AABBTreeNode bestSibling = treeRoot;
         float bestCost = Float.MAX_VALUE;
         Deque<AABBTreeNode> priorityNodes = new ArrayDeque<>();
         priorityNodes.push(treeRoot);
@@ -351,9 +352,6 @@ public class AABBTreeNode {
             return;
         }
         AABBTreeNode sibling = node.parent.children[0] == node ? node.parent.children[1] : node.parent.children[0];
-        if (sibling == null) {
-            return;
-        }
 
         float currentSa = node.aabb.surfaceArea();
 
@@ -385,10 +383,6 @@ public class AABBTreeNode {
     }
 
     private static AABBTreeNode createNewParent(AABBTreeNode treeRoot, AABBTreeNode leaf, AABBTreeNode bestSibling) {
-        if (bestSibling == null) {
-            return treeRoot;
-        }
-
         AABBTreeNode oldParent = bestSibling.parent;
         AABBTreeNode newParent = new AABBTreeNode(AABB.union(leaf.aabb, bestSibling.aabb), treeRoot.enlargedAABBCoefficient);
         newParent.parent = oldParent;

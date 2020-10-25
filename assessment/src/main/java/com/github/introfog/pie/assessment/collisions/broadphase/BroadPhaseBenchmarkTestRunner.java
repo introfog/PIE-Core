@@ -19,7 +19,7 @@ import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
-import com.github.introfog.pie.core.collisions.broadphase.aabbtree.AABBTreeMethod;
+import com.github.introfog.pie.core.collisions.broadphase.AABBTreeMethod;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
 
