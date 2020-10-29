@@ -15,9 +15,9 @@
  */
 package com.github.introfog.pie.core.shape;
 
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
-public class PolygonTest extends PIETest {
+public class PolygonTest extends PieTest {
     @Rule
     public ExpectedException junitExpectedException = ExpectedException.none();
 
     @Test
     public void staticGenerateRectangleTest() {
-        Polygon rectangle = Polygon.generateRectangle(0, 0, 15, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        Polygon rectangle = Polygon.generateRectangle(0, 0, 15, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
         Assert.assertEquals(4, rectangle.vertexCount);
         Assert.assertEquals(4, rectangle.normals.length);
         Assert.assertEquals(4, rectangle.vertices.length);
@@ -110,23 +110,23 @@ public class PolygonTest extends PIETest {
     @Test
     public void verticesInCircleTest() {
         float radius = 10;
-        List<Vector2f> vertices = new ArrayList<>(MathPIE.MAX_POLY_VERTEX_COUNT + 2);
-        for (int i = 0; i < MathPIE.MAX_POLY_VERTEX_COUNT + 1; i++) {
-            float cos = (float) Math.cos(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
-            float sin = (float) Math.sin(2 * Math.PI * i / MathPIE.MAX_POLY_VERTEX_COUNT);
+        List<Vector2f> vertices = new ArrayList<>(MathPie.MAX_POLY_VERTEX_COUNT + 2);
+        for (int i = 0; i < MathPie.MAX_POLY_VERTEX_COUNT + 1; i++) {
+            float cos = (float) Math.cos(2 * Math.PI * i / MathPie.MAX_POLY_VERTEX_COUNT);
+            float sin = (float) Math.sin(2 * Math.PI * i / MathPie.MAX_POLY_VERTEX_COUNT);
 
             vertices.add(new Vector2f(cos * radius, sin * radius));
         }
         vertices.add(new Vector2f(0, 0));
 
         Polygon polygon = new Polygon(0.1f, 0.2f, 0, 0, vertices);
-        Assert.assertEquals(MathPIE.MAX_POLY_VERTEX_COUNT, polygon.vertices.length);
+        Assert.assertEquals(MathPie.MAX_POLY_VERTEX_COUNT, polygon.vertices.length);
     }
 
     @Test
     public void aLotOfVerticesExceptionTest() {
         float radius = 10;
-        int verticesInCircle = MathPIE.MAX_POLY_VERTEX_COUNT + 1;
+        int verticesInCircle = MathPie.MAX_POLY_VERTEX_COUNT + 1;
         List<Vector2f> vertices = new ArrayList<>(verticesInCircle + 1);
         for (int i = 0; i < verticesInCircle; i++) {
             float cos = (float) Math.cos(2 * Math.PI * i / verticesInCircle);
@@ -136,7 +136,7 @@ public class PolygonTest extends PIETest {
         }
         vertices.add(new Vector2f(0, 0));
 
-        // TODO use custom PIE exception
+        // TODO use custom Pie exception
         junitExpectedException.expect(RuntimeException.class);
         junitExpectedException.expectMessage("Error. Too many vertices in polygon.");
         new Polygon(0.1f, 0.2f, 0, 0, vertices);
@@ -155,7 +155,7 @@ public class PolygonTest extends PIETest {
         Polygon first = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
         Polygon second = Polygon.generateRectangle(10, 1, 3, 4, 0.1f, 0.2f);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 
     @Test
@@ -176,8 +176,8 @@ public class PolygonTest extends PIETest {
     public void computeMassAndInertiaTest() {
         Polygon polygon = Polygon.generateRectangle(0, 0, 1, 2, 5, 0.2f);
 
-        Assert.assertEquals(1f / 10f, polygon.body.invertedMass, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1f / 4.166666f, polygon.body.invertedInertia, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 10f, polygon.body.invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 4.166666f, polygon.body.invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

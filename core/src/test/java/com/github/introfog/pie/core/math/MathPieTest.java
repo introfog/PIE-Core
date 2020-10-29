@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core.math;
 
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
@@ -23,37 +23,37 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
-public class MathPIETest extends PIETest {
+public class MathPieTest extends PieTest {
     @Test(expected = IllegalAccessException.class)
     public void constructorTest() throws IllegalAccessException, InstantiationException {
-        MathPIE.class.newInstance();
+        MathPie.class.newInstance();
         Assert.fail("Utility class constructor should be private");
     }
 
     @Test
     public void fastFloorTest() {
-        Assert.assertEquals(1.0, MathPIE.fastFloor(1.0000001f), PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.0, MathPIE.fastFloor(1.00000001f), PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.0, MathPIE.fastFloor(1.23f), PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.0, MathPIE.fastFloor(1.9999999f), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0, MathPie.fastFloor(1.0000001f), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0, MathPie.fastFloor(1.00000001f), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0, MathPie.fastFloor(1.23f), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0, MathPie.fastFloor(1.9999999f), PieTest.FLOAT_EPSILON_COMPARISON);
 
-        Assert.assertEquals(2.0, MathPIE.fastFloor(1.99999999f), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(2.0, MathPie.fastFloor(1.99999999f), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void floatEqualTest() {
-        Assert.assertTrue(MathPIE.areEqual(1.0f, 1.0f));
-        Assert.assertTrue(MathPIE.areEqual(1.0f, 1.0f + MathPIE.EPSILON - PIETest.FLOAT_EPSILON_COMPARISON));
+        Assert.assertTrue(MathPie.areEqual(1.0f, 1.0f));
+        Assert.assertTrue(MathPie.areEqual(1.0f, 1.0f + MathPie.EPSILON - PieTest.FLOAT_EPSILON_COMPARISON));
 
-        Assert.assertFalse(MathPIE.areEqual(1.0f, 1.0f + MathPIE.EPSILON));
-        Assert.assertFalse(MathPIE.areEqual(1.0f, 1.0f + MathPIE.EPSILON + PIETest.FLOAT_EPSILON_COMPARISON));
+        Assert.assertFalse(MathPie.areEqual(1.0f, 1.0f + MathPie.EPSILON));
+        Assert.assertFalse(MathPie.areEqual(1.0f, 1.0f + MathPie.EPSILON + PieTest.FLOAT_EPSILON_COMPARISON));
     }
 
     @Test
     public void gtTest() {
         float a = 1.0f;
-        float b = a * (1.0f - MathPIE.BIAS_ABSOLUTE) / MathPIE.BIAS_RELATIVE;
-        Assert.assertTrue(MathPIE.gt(a, b - PIETest.FLOAT_EPSILON_COMPARISON));
-        Assert.assertFalse(MathPIE.gt(a, b + PIETest.FLOAT_EPSILON_COMPARISON));
+        float b = a * (1.0f - MathPie.BIAS_ABSOLUTE) / MathPie.BIAS_RELATIVE;
+        Assert.assertTrue(MathPie.gt(a, b - PieTest.FLOAT_EPSILON_COMPARISON));
+        Assert.assertFalse(MathPie.gt(a, b + PieTest.FLOAT_EPSILON_COMPARISON));
     }
 }

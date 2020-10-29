@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core;
 
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
-public class BodyTest extends PIETest {
+public class BodyTest extends PieTest {
     @Test
     public void paramConstructorTest() {
         Body body = new Body(0.1f, 0.2f, 0.3f, 0.4f);
@@ -54,23 +54,23 @@ public class BodyTest extends PIETest {
         Body first = new Body(0.1f, 0.2f, 0.3f, 0.4f);
         Body second = new Body(0.1f, 0.2f, 0.3f, 0.4f);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, true);
     }
 
     @Test
     public void equalsAndHashCodeToAnotherNotEqualBodyTest() {
         Body first = new Body(0.1f, 0.2f, 0.3f, 0.4f);
         Body second = new Body(0.2f, 0.2f, 0.3f, 0.4f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
 
         second = new Body(0.1f, 0.3f, 0.3f, 0.4f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
 
         second = new Body(0.1f, 0.2f, 0.4f, 0.4f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
 
         second = new Body(0.1f, 0.2f, 0.3f, 0.5f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 
     @Test

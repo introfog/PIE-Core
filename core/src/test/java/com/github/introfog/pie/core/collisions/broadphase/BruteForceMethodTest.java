@@ -15,8 +15,12 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
+import com.github.introfog.pie.core.shape.Circle;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
@@ -24,5 +28,15 @@ public class BruteForceMethodTest extends AbstractBroadPhaseTest {
     @Override
     protected AbstractBroadPhase getBroadPhaseMethod() {
         return new BruteForceMethod();
+    }
+
+    @Test
+    public void newInstanceTest() {
+        BruteForceMethod method = (BruteForceMethod) getBroadPhaseMethod();
+        method.addShape(new Circle(0, 0, 0, 0, 0));
+        BruteForceMethod clone = method.newInstance();
+        Assert.assertNotSame(method, clone);
+        Assert.assertNotSame(method.shapes, clone.shapes);
+        Assert.assertEquals(method.shapes, clone.shapes);
     }
 }

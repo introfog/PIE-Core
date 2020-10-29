@@ -16,7 +16,7 @@
 package com.github.introfog.pie.core.shape;
 
 import com.github.introfog.pie.core.Body;
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class Polygon extends IShape {
 
         for (int i = vertices.size() - 1; i > -1; i--) {
             for (int j = i - 1; j > -1; j--) {
-                if (Vector2f.distanceWithoutSqrt(vertices.get(i), vertices.get(j)) < MathPIE.EPSILON * MathPIE.EPSILON) {
+                if (Vector2f.distanceWithoutSqrt(vertices.get(i), vertices.get(j)) < MathPie.EPSILON * MathPie.EPSILON) {
                     vertices.remove(i);
                     break;
                 }
@@ -55,8 +55,8 @@ public class Polygon extends IShape {
         List<Integer> hull = Polygon.calculateHullIndices(vertices);
         vertexCount = hull.size();
 
-        if (vertexCount > MathPIE.MAX_POLY_VERTEX_COUNT) {
-            // TODO create PIE custom exception
+        if (vertexCount > MathPie.MAX_POLY_VERTEX_COUNT) {
+            // TODO create Pie custom exception
             throw new RuntimeException("Error. Too many vertices in polygon.");
         }
 
@@ -78,13 +78,13 @@ public class Polygon extends IShape {
         }
 
         computeMassAndInertia();
-        computeAABB();
+        computeAabb();
 
         type = ShapeType.POLYGON;
     }
 
     @Override
-    public void computeAABB() {
+    public void computeAabb() {
         aabb.min.x = Float.MAX_VALUE;
         aabb.min.y = Float.MAX_VALUE;
 
@@ -209,12 +209,12 @@ public class Polygon extends IShape {
                 tmpV2.set(vertices.get(i));
                 tmpV2.sub(vertices.get(hull.get(outCount)));
                 float c = Vector2f.crossProduct(tmpV, tmpV2);
-                if (c < -MathPIE.EPSILON) {
+                if (c < -MathPie.EPSILON) {
                     nextHullIndex = i;
                 }
                 // If the vector product is 0, then they lie on one straight line,
                 // and need the vertex farthest from the given vertex
-                if (MathPIE.areEqual(c, 0) && tmpV2.lengthWithoutSqrt() > tmpV.lengthWithoutSqrt()) {
+                if (MathPie.areEqual(c, 0) && tmpV2.lengthWithoutSqrt() > tmpV.lengthWithoutSqrt()) {
                     nextHullIndex = i;
                 }
             }

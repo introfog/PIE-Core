@@ -15,10 +15,12 @@
  */
 package com.github.introfog.pie.core;
 
+import com.github.introfog.pie.core.collisions.Manifold;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
+import com.github.introfog.pie.core.shape.Aabb;
 
 /**
  * The class contains fields that specify the basic properties of the
@@ -29,6 +31,7 @@ public class Context {
     private float deadLoopBorder;
     private float correctPositionPercent;
     private float minBorderSlop;
+    private int collisionSolveIterations;
     private Vector2f gravity;
     private AbstractBroadPhase broadPhaseMethod;
 
@@ -40,6 +43,7 @@ public class Context {
         deadLoopBorder = fixedDeltaTime * 20f;
         correctPositionPercent = 0.5f;
         minBorderSlop = 0.1f;
+        collisionSolveIterations = 1;
         // Earth value is (0f, 9.807f)
         gravity = new Vector2f(0f, 50f);
         broadPhaseMethod = new BruteForceMethod();
@@ -51,12 +55,9 @@ public class Context {
      * @param other the other {@link Context} instance
      */
     public Context(Context other) {
-        this.fixedDeltaTime = other.fixedDeltaTime;
-        this.deadLoopBorder = other.deadLoopBorder;
-        this.correctPositionPercent = other.correctPositionPercent;
-        this.minBorderSlop = other.minBorderSlop;
-        this.gravity = other.gravity;
-        this.broadPhaseMethod = other.broadPhaseMethod;
+        this(other.getFixedDeltaTime(), other.getDeadLoopBorder(), other.getCorrectPositionPercent(),
+                other.getMinBorderSlop(), other.getCollisionSolveIterations(), other.getGravity(),
+                other.getBroadPhaseMethod());
     }
 
     /**
@@ -70,13 +71,49 @@ public class Context {
      * @param broadPhase the broad phase algorithm
      */
     public Context(float fixedDeltaTime, float deadLoopBorder, float correctPositionPercent, float minBorderSlop,
-            Vector2f gravity, AbstractBroadPhase broadPhase) {
-        this.fixedDeltaTime = fixedDeltaTime;
-        this.deadLoopBorder = deadLoopBorder;
-        this.correctPositionPercent = correctPositionPercent;
-        this.minBorderSlop = minBorderSlop;
-        this.gravity = gravity;
-        this.broadPhaseMethod = broadPhase;
+            int collisionSolveIterations, Vector2f gravity, AbstractBroadPhase broadPhase) {
+        this.setFixedDeltaTime(fixedDeltaTime);
+        this.setDeadLoopBorder(deadLoopBorder);
+        this.setCorrectPositionPercent(correctPositionPercent);
+        this.setMinBorderSlop(minBorderSlop);
+        this.setCollisionSolveIterations(collisionSolveIterations);
+        this.setGravity(gravity);
+        this.setBroadPhaseMethod(broadPhase);
+    }
+
+    /**
+     * Sets the number of collision solve iterations.
+     *
+     * <p>
+     * Because collisions are resolved not absolutely, but in part, to speed up the performance,
+     * this number determines how many times the {@link Manifold#solve()} method will be called.
+     * The larger the number, the more accurate collision resolution will be, but the longer it
+     * will take to resolve collisions.
+     *
+     * @param collisionSolveIterations the number of collision solve iterations
+     * @return the {@link Context} instance
+     */
+    public Context setCollisionSolveIterations(int collisionSolveIterations) {
+        if (collisionSolveIterations < 0) {
+            throw new IllegalArgumentException(PieExceptionMessage.COLLISION_SOLVE_ITERATION_MUST_NOT_BE_NEGATIVE);
+        }
+        this.collisionSolveIterations = collisionSolveIterations;
+        return this;
+    }
+
+    /**
+     * Gets the number of collision solve iterations.
+     *
+     * <p>
+     * Because collisions are resolved not absolutely, but in part, to speed up the performance,
+     * this number determines how many times the {@link Manifold#solve()} method will be called.
+     * The larger the number, the more accurate collision resolution will be, but the longer it
+     * will take to resolve collisions.
+     *
+     * @return the number of collision solve iterations
+     */
+    public int getCollisionSolveIterations() {
+        return collisionSolveIterations;
     }
 
     /**
@@ -144,7 +181,7 @@ public class Context {
      *
      * The correctPositionPercent is used to prevent the situation of sinking objects, i.e. for example,
      * when a body hits a wall with infinite mass (the reciprocal mass is 0, in this way static bodies are
-     * determined in PIE), due to a floating-point calculation, the error is accumulating and the body begins
+     * determined in Pie), due to a floating-point calculation, the error is accumulating and the body begins
      * to sink in the wall. Therefore, at each iteration, the object is moving along the collision normal by
      * a correctPositionPercent of penetration depth (usually 20-80 percent).
      *
@@ -159,7 +196,7 @@ public class Context {
      *
      * The correctPositionPercent is used to prevent the situation of sinking objects, i.e. for example,
      * when a body hits a wall with infinite mass (the reciprocal mass is 0, in this way static bodies are
-     * determined in PIE), due to a floating-point calculation, the error is accumulating and the body begins
+     * determined in Pie), due to a floating-point calculation, the error is accumulating and the body begins
      * to sink in the wall. Therefore, at each iteration, the object is moving along the collision normal by
      * a correctPositionPercent of penetration depth (usually 20-80 percent).
      *
@@ -204,7 +241,7 @@ public class Context {
      *
      * Note that in order to achieve object physics similar to real physics, it is necessary to set more
      * gravity than on planet Earth, this is due to the fact that when you create an object 100x100 in
-     * PIE, in the real world it would be 100 per 100 meters.
+     * Pie, in the real world it would be 100 per 100 meters.
      *
      * @return the gravity
      */
@@ -217,7 +254,7 @@ public class Context {
      *
      * Note that in order to achieve object physics similar to real physics, it is necessary to set more
      * gravity than on planet Earth, this is due to the fact that when you create an object 100x100 in
-     * PIE, in the real world it would be 100 per 100 meters.
+     * Pie, in the real world it would be 100 per 100 meters.
      *
      * @param gravity the gravity
      * @return the {@link Context} instance
@@ -230,8 +267,8 @@ public class Context {
     /**
      * Gets the broad phase method.
      *
-     * The broadPhaseMethod is used to determine possible collisions of bodies, through the
-     * definition of collisions {@link com.github.introfog.pie.core.shape.AABB}.
+     * The broad phase method is used to determine possible collisions
+     * of bodies, through the definition of collisions {@link Aabb}.
      *
      * @return the broad phase method
      */
@@ -242,8 +279,8 @@ public class Context {
     /**
      * Sets the broad phase method.
      *
-     * The broadPhaseMethod is used to determine possible collisions of bodies, through the
-     * definition of collisions {@link com.github.introfog.pie.core.shape.AABB}.
+     * The broad phase method is used to determine possible collisions
+     * of bodies, through the definition of collisions {@link Aabb}.
      *
      * @param broadPhaseMethod the broad phase method
      * @return the {@link Context} instance
@@ -261,6 +298,6 @@ public class Context {
      * @return the resting
      */
     public float getResting() {
-        return Vector2f.mul(gravity, fixedDeltaTime).lengthWithoutSqrt() + MathPIE.EPSILON;
+        return Vector2f.mul(gravity, fixedDeltaTime).lengthWithoutSqrt() + MathPie.EPSILON;
     }
 }

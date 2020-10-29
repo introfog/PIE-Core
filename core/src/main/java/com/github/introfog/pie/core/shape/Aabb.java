@@ -20,11 +20,11 @@ import com.github.introfog.pie.core.math.Vector2f;
 import java.util.StringJoiner;
 
 // Axis Aligned Bounding Box
-public class AABB {
+public class Aabb {
     public Vector2f min;
     public Vector2f max;
 
-    public AABB() {
+    public Aabb() {
         min = new Vector2f();
         max = new Vector2f();
     }
@@ -33,13 +33,13 @@ public class AABB {
         return (max.x - min.x) * (max.y - min.y);
     }
 
-    public float deltaSurfaceArea(AABB aabb) {
+    public float deltaSurfaceArea(Aabb aabb) {
         return  (Math.max(this.max.x, aabb.max.x) - Math.min(this.min.x, aabb.min.x)) *
                 (Math.max(this.max.y, aabb.max.y) - Math.min(this.min.y, aabb.min.y)) - surfaceArea();
     }
 
-    public static AABB union(AABB a, AABB b) {
-        AABB result = new AABB();
+    public static Aabb union(Aabb a, Aabb b) {
+        Aabb result = new Aabb();
         result.min.x = Math.min(a.min.x, b.min.x);
         result.min.y = Math.min(a.min.y, b.min.y);
 
@@ -49,16 +49,16 @@ public class AABB {
         return result;
     }
 
-    public static boolean isIntersected(AABB a, AABB b) {
+    public static boolean isIntersected(Aabb a, Aabb b) {
         // Exit without intersection because a dividing axis is found
         if (a.max.x < b.min.x || a.min.x > b.max.x) {
             return false;
         }
         // No separation axis found, therefore at least one intersecting axis exists
-        return !(a.max.y < b.min.y) && !(a.min.y > b.max.y);
+        return a.max.y >= b.min.y && a.min.y <= b.max.y;
     }
 
-    public static boolean isContained(AABB container, AABB content) {
+    public static boolean isContained(Aabb container, Aabb content) {
         if (container == content) {
             return true;
         }

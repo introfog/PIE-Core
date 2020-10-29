@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
-import com.github.introfog.pie.core.shape.AABB;
+import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The class is a brute force method that iterates over all possible pairs of shapes and checks to see if their AABBs are intersected.
+ * The class is a brute force method that iterates over all possible pairs of shapes and checks to see if their Aabbs are intersected.
  *
  * <p>
  * This method is effective for a small number of shapes (up to 100).
@@ -32,17 +32,24 @@ import java.util.List;
  */
 public class BruteForceMethod extends AbstractBroadPhase {
     @Override
-    public List<ShapePair> domesticCalculateAabbCollisions() {
+    public BruteForceMethod newInstance() {
+        BruteForceMethod bruteForceMethod = new BruteForceMethod();
+        bruteForceMethod.setShapes(shapes);
+        return bruteForceMethod;
+    }
+
+    @Override
+    protected List<ShapePair> domesticCalculateAabbCollisions() {
         return BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(shapes);
     }
 
     /**
-     * A helper method for calculating the shape AABB collisions which is used by the {@link BruteForceMethod}
+     * A helper method for calculating the shape Aabb collisions which is used by the {@link BruteForceMethod}
      * (in fact, this method is) and in testing to obtain a known correct result and compare it with other methods.
      *
      * @param shapes the shape list
      * @return the {@link ShapePair} list in which each item represents
-     * a unique shape pair and the AABB of those shapes intersect
+     * a unique shape pair and the Aabb of those shapes intersect
      */
     public static List<ShapePair> calculateAabbCollisionsWithoutAabbUpdating(List<IShape> shapes) {
         IShape a;
@@ -54,7 +61,7 @@ public class BruteForceMethod extends AbstractBroadPhase {
                 a = shapes.get(i);
                 b = shapes.get(j);
 
-                if (AABB.isIntersected(a.aabb, b.aabb)) {
+                if (Aabb.isIntersected(a.aabb, b.aabb)) {
                     collisionsList.add(new ShapePair(a, b));
                 }
             }

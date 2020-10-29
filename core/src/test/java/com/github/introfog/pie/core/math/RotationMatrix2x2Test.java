@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core.math;
 
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
@@ -23,16 +23,16 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
-public class RotationMatrix2x2Test extends PIETest {
+public class RotationMatrix2x2Test extends PieTest {
     @Test
     public void setAngleTest() {
         RotationMatrix2x2 matrix = new RotationMatrix2x2();
         matrix.setAngle((float) Math.PI / 3);
 
-        Assert.assertEquals(0.5f, matrix.m00, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(-Math.sqrt(3) / 2, matrix.m01, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(Math.sqrt(3) / 2, matrix.m10, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.5f, matrix.m11, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5f, matrix.m00, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-Math.sqrt(3) / 2, matrix.m01, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(Math.sqrt(3) / 2, matrix.m10, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5f, matrix.m11, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -43,8 +43,8 @@ public class RotationMatrix2x2Test extends PIETest {
         Vector2f in = new Vector2f(1, 2);
         Vector2f out = new Vector2f();
         matrix.mul(in, out);
-        Assert.assertEquals(0.5 - Math.sqrt(3), out.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.0 + Math.sqrt(3) / 2, out.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5 - Math.sqrt(3), out.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0 + Math.sqrt(3) / 2, out.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -54,8 +54,8 @@ public class RotationMatrix2x2Test extends PIETest {
 
         Vector2f out = new Vector2f();
         matrix.mul(2, 1, out);
-        Assert.assertEquals(1.0 - Math.sqrt(3) / 2, out.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.5 + Math.sqrt(3), out.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0 - Math.sqrt(3) / 2, out.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5 + Math.sqrt(3), out.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -66,8 +66,8 @@ public class RotationMatrix2x2Test extends PIETest {
         Vector2f in = new Vector2f(1, 2);
         Vector2f out = new Vector2f();
         matrix.transposeMul(in, out);
-        Assert.assertEquals(0.5 + Math.sqrt(3), out.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.0 - Math.sqrt(3) / 2, out.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5 + Math.sqrt(3), out.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0 - Math.sqrt(3) / 2, out.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -77,8 +77,8 @@ public class RotationMatrix2x2Test extends PIETest {
 
         Vector2f out = new Vector2f();
         matrix.transposeMul(2, 1, out);
-        Assert.assertEquals(1.0 + Math.sqrt(3) / 2, out.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.5 - Math.sqrt(3), out.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.0 + Math.sqrt(3) / 2, out.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5 - Math.sqrt(3), out.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

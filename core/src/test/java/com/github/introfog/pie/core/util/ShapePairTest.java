@@ -15,10 +15,10 @@
  */
 package com.github.introfog.pie.core.util;
 
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
@@ -26,11 +26,11 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
-public class ShapePairTest extends PIETest {
+public class ShapePairTest extends PieTest {
     @Test
     public void fieldStoringTest() {
-        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c1 = new Circle(10, 10, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
 
         ShapePair shapePair = new ShapePair(c1, c2);
         boolean c1First = c1.hashCode() < c2.hashCode();
@@ -45,8 +45,8 @@ public class ShapePairTest extends PIETest {
 
     @Test
     public void equalsAndHashCodeItselfTest() {
-        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c1 = new Circle(10, 10, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         ShapePair shapePair = new ShapePair(c1, c2);
 
         Assert.assertTrue(shapePair.equals(shapePair));
@@ -55,32 +55,32 @@ public class ShapePairTest extends PIETest {
 
     @Test
     public void equalsAndHashCodeToAnotherEqualBodyTest() {
-        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c1 = new Circle(10, 10, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         ShapePair first = new ShapePair(c1, c2);
         ShapePair second = new ShapePair(c1, c2);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, true);
     }
 
     @Test
     public void equalsAndHashCodeToAnotherNotEqualBodyTest() {
-        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        IShape c3 = new Circle(10, 10, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c1 = new Circle(10, 10, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c3 = new Circle(10, 10, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         ShapePair first = new ShapePair(c1, c2);
         ShapePair second = new ShapePair(c1, c3);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
 
         second = new ShapePair(c3, c2);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 
     @Test
     public void equalsToNullTest() {
-        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c1 = new Circle(10, 10, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         ShapePair shapePair = new ShapePair(c1, c2);
 
         Assert.assertFalse(shapePair.equals(null));
@@ -88,8 +88,8 @@ public class ShapePairTest extends PIETest {
 
     @Test
     public void equalsToAnotherClassTest() {
-        IShape c1 = new Circle(10, 10, 10, MathPIE.STATIC_BODY_DENSITY, 0.2f);
-        IShape c2 = new Circle(10, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0.2f);
+        IShape c1 = new Circle(10, 10, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         ShapePair shapePair = new ShapePair(c1, c2);
 
         Assert.assertFalse(shapePair.equals(""));

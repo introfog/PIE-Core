@@ -17,7 +17,7 @@ package com.github.introfog.pie.assessment.collisions.broadphase.algorithmic;
 
 import com.github.introfog.pie.assessment.collisions.broadphase.BroadPhaseAlgorithmicTestRunner;
 import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveShapesToPointAction;
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(AlgorithmicTest.class)
-public class DynamicShapesInSquareAlgorithmicTest extends PIETest {
+public class DynamicShapesInSquareAlgorithmicTest extends PieTest {
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/assessment/collisions/broadphase/Square/";
 
     @Test

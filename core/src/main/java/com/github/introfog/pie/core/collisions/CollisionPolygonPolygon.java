@@ -16,7 +16,7 @@
 package com.github.introfog.pie.core.collisions;
 
 import com.github.introfog.pie.core.shape.Polygon;
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 
 public class CollisionPolygonPolygon implements CollisionCallback {
@@ -53,7 +53,7 @@ public class CollisionPolygonPolygon implements CollisionCallback {
         Polygon incPoly;
 
         // Determine which polygon contains the incident face
-        if (MathPIE.gt(penetrationA, penetrationB)) {
+        if (MathPie.gt(penetrationA, penetrationB)) {
             refPoly = polygonA;
             incPoly = polygonB;
             referenceIndex = faceA[0];

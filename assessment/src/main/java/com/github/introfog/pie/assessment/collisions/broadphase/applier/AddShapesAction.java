@@ -16,7 +16,7 @@
 package com.github.introfog.pie.assessment.collisions.broadphase.applier;
 
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
@@ -42,10 +42,10 @@ public class AddShapesAction extends CallCountAction {
             Circle circle;
             if (isHorizontalAdder) {
                 circle = new Circle(circleDiameter / 2, startPoint.x - callCounter * offsetValue,
-                        startPoint.y + i * (circleDiameter - 1), MathPIE.STATIC_BODY_DENSITY, 0f);
+                        startPoint.y + i * (circleDiameter - 1), MathPie.STATIC_BODY_DENSITY, 0f);
             } else {
                 circle = new Circle(circleDiameter / 2, startPoint.x + i * (circleDiameter - 1),
-                        startPoint.y + callCounter * offsetValue, MathPIE.STATIC_BODY_DENSITY, 0f);
+                        startPoint.y + callCounter * offsetValue, MathPie.STATIC_BODY_DENSITY, 0f);
             }
             methods.forEach(method -> method.addShape(circle));
             methodShapes.add(circle);
