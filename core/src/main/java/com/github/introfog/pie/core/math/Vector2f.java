@@ -137,7 +137,7 @@ public class Vector2f {
     }
 
     public void normalize() {
-        if (MathPIE.areEqual(x * x + y * y, 1.0f)) {
+        if (MathPie.areEqual(x * x + y * y, 1.0f)) {
             return;
         }
 

@@ -16,7 +16,7 @@
 package com.github.introfog.pie.core.shape;
 
 import com.github.introfog.pie.core.math.Vector2f;
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
-public class CircleTest extends PIETest {
+public class CircleTest extends PieTest {
     @Test(expected = RuntimeException.class)
     public void paramConstructorWithNegativeRadiusTest() {
         new Circle(-0.01f, 1, 3, 0.1f, 0.2f);
@@ -36,12 +36,12 @@ public class CircleTest extends PIETest {
 
         Assert.assertEquals(ShapeType.CIRCLE, circle.type);
         Assert.assertEquals(new Vector2f(1, 3), circle.body.position);
-        Assert.assertEquals(0.1f, circle.body.density, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.2f, circle.body.restitution, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.1f, circle.body.density, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.2f, circle.body.restitution, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
-    public void computeAABBTest() {
+    public void computeAabbTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
 
         Assert.assertEquals(new Vector2f(-9, -7), circle.aabb.min);
@@ -52,7 +52,7 @@ public class CircleTest extends PIETest {
     public void equalsAndHashCodeItselfTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        PIETest.checkEqualsAndHashCodeMethods(circle, circle, true);
+        PieTest.checkEqualsAndHashCodeMethods(circle, circle, true);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class CircleTest extends PIETest {
         Circle first = new Circle(10, 1, 3, 0.1f, 0.2f);
         Circle second = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 
     @Test
@@ -81,16 +81,16 @@ public class CircleTest extends PIETest {
     public void computeMassAndInertiaTest() {
         Circle circle = new Circle(10, 0, 0, (float) (1 / Math.PI), 0);
 
-        Assert.assertEquals(1f / 100f, circle.body.invertedMass, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1f / 10000f, circle.body.invertedInertia, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 100f, circle.body.invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 10000f, circle.body.invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void computeMassAndInertiaZeroCircleTest() {
         Circle circle = new Circle(0, 0, 0, (float) (1 / Math.PI), 0);
 
-        Assert.assertEquals(0, circle.body.invertedMass, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, circle.body.invertedInertia, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, circle.body.invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, circle.body.invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

@@ -23,7 +23,7 @@ import com.github.introfog.pie.assessment.collisions.broadphase.applier.ChangeSh
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(AlgorithmicTest.class)
-public class DynamicShapesInLineAlgorithmicTest extends PIETest {
+public class DynamicShapesInLineAlgorithmicTest extends PieTest {
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/assessment/collisions/broadphase/Line/";
 
     @Test

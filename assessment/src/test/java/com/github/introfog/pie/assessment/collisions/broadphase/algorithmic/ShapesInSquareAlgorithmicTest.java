@@ -16,14 +16,14 @@
 package com.github.introfog.pie.assessment.collisions.broadphase.algorithmic;
 
 import com.github.introfog.pie.assessment.collisions.broadphase.BroadPhaseAlgorithmicTestRunner;
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(AlgorithmicTest.class)
-public class ShapesInSquareAlgorithmicTest extends PIETest {
+public class ShapesInSquareAlgorithmicTest extends PieTest {
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/assessment/collisions/broadphase/Square/";
 
     @Test

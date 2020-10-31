@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
@@ -24,6 +24,7 @@ import com.github.introfog.pie.test.annotations.AlgorithmicTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -36,9 +37,9 @@ public class SweepAndPruneMethodTest extends AbstractBroadPhaseTest {
 
     @Test
     public void yAxisTest() {
-        IShape c1 = new Circle(2f, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0f);
-        IShape c2 = new Circle(2f, 0, 2, MathPIE.STATIC_BODY_DENSITY, 0f);
-        IShape c3 = new Circle(2f, 5, 10, MathPIE.STATIC_BODY_DENSITY, 0f);
+        IShape c1 = new Circle(2f, 0, 0, MathPie.STATIC_BODY_DENSITY, 0f);
+        IShape c2 = new Circle(2f, 0, 2, MathPie.STATIC_BODY_DENSITY, 0f);
+        IShape c3 = new Circle(2f, 5, 10, MathPie.STATIC_BODY_DENSITY, 0f);
 
         List<IShape> shapes = new ArrayList<>();
         shapes.add(c1);
@@ -59,10 +60,10 @@ public class SweepAndPruneMethodTest extends AbstractBroadPhaseTest {
     public void intersectedByCurrentAxisButNotIntersectedByOtherAxisTest() {
         // The test reproduces the situation when shape intersect along the axis
         // that is current in the SAP method, but do not intersect along the other axis
-        IShape c1 = new Circle(2f, 0, 0, MathPIE.STATIC_BODY_DENSITY, 0f);
-        IShape c2 = new Circle(2f, 0, 5, MathPIE.STATIC_BODY_DENSITY, 0f);
-        IShape c3 = new Circle(2f, 5, 5, MathPIE.STATIC_BODY_DENSITY, 0f);
-        IShape c4 = new Circle(2f, 0, 10, MathPIE.STATIC_BODY_DENSITY, 0f);
+        IShape c1 = new Circle(2f, 0, 0, MathPie.STATIC_BODY_DENSITY, 0f);
+        IShape c2 = new Circle(2f, 0, 5, MathPie.STATIC_BODY_DENSITY, 0f);
+        IShape c3 = new Circle(2f, 5, 5, MathPie.STATIC_BODY_DENSITY, 0f);
+        IShape c4 = new Circle(2f, 0, 10, MathPie.STATIC_BODY_DENSITY, 0f);
 
         List<IShape> shapes = new ArrayList<>();
         shapes.add(c1);
@@ -76,5 +77,15 @@ public class SweepAndPruneMethodTest extends AbstractBroadPhaseTest {
 
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
+    }
+
+    @Test
+    public void newInstanceTest() {
+        SweepAndPruneMethod method = (SweepAndPruneMethod) getBroadPhaseMethod();
+        method.addShape(new Circle(0, 0, 0, 0, 0));
+        SweepAndPruneMethod clone = method.newInstance();
+        Assert.assertNotSame(method, clone);
+        Assert.assertNotSame(method.shapes, clone.shapes);
+        Assert.assertEquals(method.shapes, clone.shapes);
     }
 }

@@ -20,7 +20,7 @@ import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
-import com.github.introfog.pie.core.collisions.broadphase.AABBTreeMethod;
+import com.github.introfog.pie.core.collisions.broadphase.AabbTreeMethod;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
 import com.github.introfog.pie.core.util.ShapePair;
@@ -37,7 +37,7 @@ public class BroadPhaseAlgorithmicTestRunner {
         List<AbstractBroadPhase> methods = BroadPhaseAlgorithmicTestRunner.initializeBroadPhaseMethods(methodShapes);
 
         for (AbstractBroadPhase method : methods) {
-            methodShapes.forEach(IShape::computeAABB);
+            methodShapes.forEach(IShape::computeAabb);
             List<ShapePair> cmpShapes = BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(methodShapes);
             String messagePrefix = "Method: " + method.getClass().getSimpleName() + ". ";
             TestUtil.assertEqualsShapePairsList(cmpShapes, method.calculateAabbCollisions(), messagePrefix);
@@ -49,7 +49,7 @@ public class BroadPhaseAlgorithmicTestRunner {
         List<AbstractBroadPhase> methods = BroadPhaseAlgorithmicTestRunner.initializeBroadPhaseMethods(methodShapes);
 
         for (int i = 0; i < call; i++) {
-            methodShapes.forEach(IShape::computeAABB);
+            methodShapes.forEach(IShape::computeAabb);
             List<ShapePair> cmpShapes = BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(methodShapes);
             for (AbstractBroadPhase method : methods) {
                 String messagePrefix = "Iteration: " + i + "; Method: " + method.getClass().getSimpleName() + ". ";
@@ -64,7 +64,7 @@ public class BroadPhaseAlgorithmicTestRunner {
         methods.add(new BruteForceMethod());
         methods.add(new SpatialHashingMethod());
         methods.add(new SweepAndPruneMethod());
-        methods.add(new AABBTreeMethod());
+        methods.add(new AabbTreeMethod());
         methods.forEach(method -> method.setShapes(shapes));
         return methods;
     }

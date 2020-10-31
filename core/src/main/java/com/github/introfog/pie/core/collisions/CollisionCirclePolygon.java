@@ -17,7 +17,7 @@ package com.github.introfog.pie.core.collisions;
 
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.Polygon;
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 
 public class CollisionCirclePolygon implements CollisionCallback {
@@ -72,7 +72,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
         }
 
         // If max scalar product is less than 0, then the center of the circle inside the polygon
-        if (separation < MathPIE.EPSILON) {
+        if (separation < MathPie.EPSILON) {
             // m->normal = -(B->u * B->m_normals[faceNormal]);
             // m->contacts[0] = m->normal * A->radius + a->position;
 

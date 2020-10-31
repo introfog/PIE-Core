@@ -16,7 +16,7 @@
 package com.github.introfog.pie.core.collisions.broadphase;
 
 import com.github.introfog.pie.core.math.Vector2f;
-import com.github.introfog.pie.core.shape.AABB;
+import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
@@ -25,8 +25,8 @@ import java.util.List;
 
 /**
  * The class is a sweep and prune method that sorts shapes along a certain axis with the highest variance at
- * the previous iteration of collision calculation. Further, if the projections of the shapes AABB on this
- * axis intersect, check if their AABB intersect, if so, put them in the list of possibly intersecting shapes.
+ * the previous iteration of collision calculation. Further, if the projections of the shapes Aabb on this
+ * axis intersect, check if their Aabb intersect, if so, put them in the list of possibly intersecting shapes.
  *
  * <p>
  * This method is effective in most cases.
@@ -49,25 +49,50 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
         p = new Vector2f();
         s = new Vector2f();
         s2 = new Vector2f();
-        xAxisProjection = this.shapes;
+        xAxisProjection = new ArrayList<>();
         yAxisProjection = new ArrayList<>();
     }
 
     @Override
     public void setShapes(List<IShape> shapes) {
         super.setShapes(shapes);
-        xAxisProjection = this.shapes;
+        xAxisProjection = new ArrayList<>(shapes);
         yAxisProjection = new ArrayList<>(shapes);
     }
 
     @Override
     public void addShape(IShape shape) {
         super.addShape(shape);
+        xAxisProjection.add(shape);
         yAxisProjection.add(shape);
     }
 
     @Override
-    public List<ShapePair> domesticCalculateAabbCollisions() {
+    public boolean remove(IShape shape) {
+        boolean removed = super.remove(shape);
+        if (removed) {
+            xAxisProjection.remove(shape);
+            yAxisProjection.remove(shape);
+        }
+        return removed;
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        xAxisProjection.clear();
+        yAxisProjection.clear();
+    }
+
+    @Override
+    public SweepAndPruneMethod newInstance() {
+        SweepAndPruneMethod sweepAndPruneMethod = new SweepAndPruneMethod();
+        sweepAndPruneMethod.setShapes(shapes);
+        return sweepAndPruneMethod;
+    }
+
+    @Override
+    protected List<ShapePair> domesticCalculateAabbCollisions() {
         // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
         // Looking for possible intersections along the current axis, and then use brute force algorithm
         // Each time using variance select the next axis
@@ -84,31 +109,31 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
         s.set(0f, 0f);
         s2.set(0f, 0f);
 
-        AABB currAABB;
+        Aabb currAabb;
         for (int i = 0; i < shapes.size(); i++) {
             if (currentSweepAndPruneAxis == 0) {
-                currAABB = xAxisProjection.get(i).aabb;
+                currAabb = xAxisProjection.get(i).aabb;
             } else {
-                currAABB = yAxisProjection.get(i).aabb;
+                currAabb = yAxisProjection.get(i).aabb;
             }
 
-            p.set(currAABB.min.x + currAABB.max.x, currAABB.min.y + currAABB.max.y);
+            p.set(currAabb.min.x + currAabb.max.x, currAabb.min.y + currAabb.max.y);
             p.mul(1.0f / 2);
             s.add(p);
             p.mul(p);
             s2.add(p);
 
             for (int j = i + 1; j < shapes.size(); j++) {
-                if (currentSweepAndPruneAxis == 0 && xAxisProjection.get(j).aabb.min.x > currAABB.max.x) {
+                if (currentSweepAndPruneAxis == 0 && xAxisProjection.get(j).aabb.min.x > currAabb.max.x) {
                     break;
-                } else if (currentSweepAndPruneAxis == 1 && yAxisProjection.get(j).aabb.min.y > currAABB.max.y) {
+                } else if (currentSweepAndPruneAxis == 1 && yAxisProjection.get(j).aabb.min.y > currAabb.max.y) {
                     break;
                 }
 
 
-                if (currentSweepAndPruneAxis == 0 && AABB.isIntersected(xAxisProjection.get(j).aabb, currAABB)) {
+                if (currentSweepAndPruneAxis == 0 && Aabb.isIntersected(xAxisProjection.get(j).aabb, currAabb)) {
                     possibleCollisionList.add(new ShapePair(xAxisProjection.get(j), xAxisProjection.get(i)));
-                } else if (currentSweepAndPruneAxis == 1 && AABB.isIntersected(yAxisProjection.get(j).aabb, currAABB)) {
+                } else if (currentSweepAndPruneAxis == 1 && Aabb.isIntersected(yAxisProjection.get(j).aabb, currAabb)) {
                     possibleCollisionList.add(new ShapePair(yAxisProjection.get(j), yAxisProjection.get(i)));
                 }
             }

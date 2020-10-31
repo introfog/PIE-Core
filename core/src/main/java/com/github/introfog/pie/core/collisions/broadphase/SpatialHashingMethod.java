@@ -15,8 +15,8 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
-import com.github.introfog.pie.core.math.MathPIE;
-import com.github.introfog.pie.core.shape.AABB;
+import com.github.introfog.pie.core.math.MathPie;
+import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
@@ -29,7 +29,7 @@ import java.util.Set;
 
 /**
  * The class is a spatial hashing method that divides space into cells, which are stored in a hash table.
- * Further, if the shape AABB intersects with a cell, then the reference to this shape is placed in the cell
+ * Further, if the shape Aabb intersects with a cell, then the reference to this shape is placed in the cell
  * and at the end go through all the cells, and if two shapes are in the same cell, then put them in the
  * list of possibly intersecting shapes.
  *
@@ -54,7 +54,14 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public List<ShapePair> domesticCalculateAabbCollisions() {
+    public SpatialHashingMethod newInstance() {
+        SpatialHashingMethod spatialHashingMethod = new SpatialHashingMethod();
+        spatialHashingMethod.setShapes(shapes);
+        return spatialHashingMethod;
+    }
+
+    @Override
+    protected List<ShapePair> domesticCalculateAabbCollisions() {
         // The complexity is O(n), if the minimum and maximum size of the objects are not very different,
         // but if very different, then the complexity tends to O(n^2)
         calculateCellSize();
@@ -75,14 +82,14 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     private int generateKey(float x, float y) {
-        return ((MathPIE.fastFloor(x / cellSize) * 73856093) ^ (MathPIE.fastFloor(y / cellSize) * 19349663));
+        return ((MathPie.fastFloor(x / cellSize) * 73856093) ^ (MathPie.fastFloor(y / cellSize) * 19349663));
     }
 
     private void insert(IShape shape) {
-        AABB aabb = shape.aabb;
+        Aabb aabb = shape.aabb;
         int key;
-        int cellX = MathPIE.fastFloor(aabb.max.x / cellSize) - MathPIE.fastFloor(aabb.min.x / cellSize);
-        int cellY = MathPIE.fastFloor(aabb.max.y / cellSize) - MathPIE.fastFloor(aabb.min.y / cellSize);
+        int cellX = MathPie.fastFloor(aabb.max.x / cellSize) - MathPie.fastFloor(aabb.min.x / cellSize);
+        int cellY = MathPie.fastFloor(aabb.max.y / cellSize) - MathPie.fastFloor(aabb.min.y / cellSize);
         // Increment the values of cellX and cellY so that the ends of the shape entering the other cells are also processed
         cellX++;
         cellY++;

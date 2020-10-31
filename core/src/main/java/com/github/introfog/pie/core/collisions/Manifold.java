@@ -17,7 +17,7 @@ package com.github.introfog.pie.core.collisions;
 
 import com.github.introfog.pie.core.Body;
 import com.github.introfog.pie.core.Context;
-import com.github.introfog.pie.core.math.MathPIE;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.Polygon;
@@ -56,7 +56,7 @@ public class Manifold {
     }
 
     public void initializeCollision() {
-        if (MathPIE.areEqual(a.invertedMass + b.invertedMass, 0f)) {
+        if (MathPie.areEqual(a.invertedMass + b.invertedMass, 0f)) {
             a.velocity.set(0f, 0f);
             b.velocity.set(0f, 0f);
             areBodiesCollision = false;
@@ -177,7 +177,7 @@ public class Manifold {
             jt /= contactCount;
 
             // If jt is very small then do not apply and do return
-            if (MathPIE.areEqual(jt, 0f)) {
+            if (MathPie.areEqual(jt, 0f)) {
                 return;
             }
 

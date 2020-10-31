@@ -16,8 +16,8 @@
 package com.github.introfog.pie.core.math;
 
 // TODO Change class to context or property class
-public final class MathPIE {
-    private MathPIE() {
+public final class MathPie {
+    private MathPie() {
         // Empty constructor
     }
 

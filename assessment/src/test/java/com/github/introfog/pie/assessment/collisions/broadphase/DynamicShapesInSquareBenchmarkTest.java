@@ -16,7 +16,7 @@
 package com.github.introfog.pie.assessment.collisions.broadphase;
 
 import com.github.introfog.pie.assessment.collisions.broadphase.applier.MoveShapesToPointAction;
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.BenchmarkTest;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ on the machines used in GitHub Action (this is most likely due to different mach
 planned to solve this problem, and add benchmark tests to the build action or other pipeline (TeamCity for example).
  */
 @Category(BenchmarkTest.class)
-public class DynamicShapesInSquareBenchmarkTest extends PIETest {
+public class DynamicShapesInSquareBenchmarkTest extends PieTest {
     private final static String PATH_TO_SOURCE_FOLDER = "./src/test/resources/com/github/introfog/pie/assessment/collisions/broadphase/Square/";
 
     @Test

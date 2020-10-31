@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.core.math;
 
-import com.github.introfog.pie.test.PIETest;
+import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
@@ -23,27 +23,27 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(UnitTest.class)
-public class Vector2fTest extends PIETest {
+public class Vector2fTest extends PieTest {
     @Test
     public void defaultConstructorTest() {
         Vector2f vec = new Vector2f();
-        Assert.assertEquals(0, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void paramConstructorTest() {
         Vector2f vec = new Vector2f(1.23f, 2.07f);
-        Assert.assertEquals(1.23f, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(2.07f, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.23f, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(2.07f, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void copyConstructorTest() {
         Vector2f vec = new Vector2f(1.23f, 2.07f);
         Vector2f copy = new Vector2f(vec);
-        Assert.assertEquals(1.23f, copy.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(2.07f, copy.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.23f, copy.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(2.07f, copy.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -59,17 +59,17 @@ public class Vector2fTest extends PIETest {
         Vector2f first = new Vector2f(0.1f, 0.2f);
         Vector2f second = new Vector2f(0.1f, 0.2f);
 
-        PIETest.checkEqualsAndHashCodeMethods(first, second, true);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, true);
     }
 
     @Test
     public void equalsAndHashCodeToAnotherNotEqualBodyTest() {
         Vector2f first = new Vector2f(0.1f, 0.2f);
         Vector2f second = new Vector2f(0.2f, 0.2f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
 
         second = new Vector2f(0.1f, 0.3f);
-        PIETest.checkEqualsAndHashCodeMethods(first, second, false);
+        PieTest.checkEqualsAndHashCodeMethods(first, second, false);
     }
 
     @Test
@@ -96,8 +96,8 @@ public class Vector2fTest extends PIETest {
     public void setCoordinatesTest() {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         vec.set(0.3f, 0.4f);
-        Assert.assertEquals(0.3f, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.4f, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.3f, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.4f, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -105,22 +105,22 @@ public class Vector2fTest extends PIETest {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         Vector2f temp = new Vector2f(0.3f, 0.4f);
         vec.set(temp);
-        Assert.assertEquals(0.3f, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.4f, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.3f, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.4f, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void lengthWithoutSqrtTest() {
         Vector2f vec = new Vector2f(1f, 2f);
-        Assert.assertEquals(5, vec.lengthWithoutSqrt(), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(5, vec.lengthWithoutSqrt(), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void mulByFloatTest() {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         vec.mul(10);
-        Assert.assertEquals(1, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(2, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(2, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -128,8 +128,8 @@ public class Vector2fTest extends PIETest {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         Vector2f temp = new Vector2f(10f, 20f);
         vec.mul(temp);
-        Assert.assertEquals(1, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(4, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(4, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -137,8 +137,8 @@ public class Vector2fTest extends PIETest {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         Vector2f temp = new Vector2f(0.3f, 0.5f);
         vec.sub(temp);
-        Assert.assertEquals(-0.2f, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(-0.3f, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-0.2f, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-0.3f, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -146,8 +146,8 @@ public class Vector2fTest extends PIETest {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         Vector2f temp = new Vector2f(0.3f, 0.5f);
         vec.add(temp, 2);
-        Assert.assertEquals(0.7f, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.2f, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.7f, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.2f, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -155,42 +155,42 @@ public class Vector2fTest extends PIETest {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         Vector2f temp = new Vector2f(0.3f, 0.5f);
         vec.add(temp);
-        Assert.assertEquals(0.4f, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.7f, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.4f, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.7f, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void normalizeTest() {
         Vector2f vec = new Vector2f(1, 0);
         vec.normalize();
-        Assert.assertEquals(1, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
 
         vec = new Vector2f(1, 1);
         vec.normalize();
-        Assert.assertEquals(1 / Math.sqrt(2), vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1 / Math.sqrt(2), vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1 / Math.sqrt(2), vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1 / Math.sqrt(2), vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
 
         vec = new Vector2f(0, 0);
         vec.normalize();
-        Assert.assertEquals(0, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void negativeTest() {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         vec.negative();
-        Assert.assertEquals(-0.1f, vec.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(-0.2f, vec.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-0.1f, vec.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-0.2f, vec.y, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void staticMulByFloatTest() {
         Vector2f vec = new Vector2f(0.1f, 0.2f);
         Vector2f res = Vector2f.mul(vec, 10);
-        Assert.assertEquals(1, res.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(2, res.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1, res.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(2, res.y, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertTrue(vec != res);
     }
 
@@ -199,8 +199,8 @@ public class Vector2fTest extends PIETest {
         Vector2f first = new Vector2f(0.1f, 0.2f);
         Vector2f second = new Vector2f(10f, 20f);
         Vector2f res = Vector2f.mul(first, second);
-        Assert.assertEquals(1, res.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(4, res.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1, res.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(4, res.y, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertTrue(res != first);
         Assert.assertTrue(res != second);
     }
@@ -211,8 +211,8 @@ public class Vector2fTest extends PIETest {
         Vector2f second = new Vector2f(10f, 20f);
         Vector2f res = Vector2f.sub(first, second);
 
-        Assert.assertEquals(-9.9, res.x, PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(-19.8, res.y, PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-9.9, res.x, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-19.8, res.y, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertTrue(res != first);
         Assert.assertTrue(res != second);
     }
@@ -221,20 +221,20 @@ public class Vector2fTest extends PIETest {
     public void staticDistanceWithoutSqrtBetweenVector2f() {
         Vector2f first = new Vector2f(0f, 3f);
         Vector2f second = new Vector2f(1f, 5f);
-        Assert.assertEquals(5, Vector2f.distanceWithoutSqrt(first, second), PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(5, Vector2f.distanceWithoutSqrt(second, first), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(5, Vector2f.distanceWithoutSqrt(first, second), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(5, Vector2f.distanceWithoutSqrt(second, first), PieTest.FLOAT_EPSILON_COMPARISON);
 
-        Assert.assertEquals(0, Vector2f.distanceWithoutSqrt(first, first), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, Vector2f.distanceWithoutSqrt(first, first), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void staticDotProductBetweenVector2f() {
         Vector2f first = new Vector2f(0f, 3f);
         Vector2f second = new Vector2f(1f, 5f);
-        Assert.assertEquals(15, Vector2f.dotProduct(first, second), PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(15, Vector2f.dotProduct(second, first), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(15, Vector2f.dotProduct(first, second), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(15, Vector2f.dotProduct(second, first), PieTest.FLOAT_EPSILON_COMPARISON);
 
-        Assert.assertEquals(9, Vector2f.dotProduct(first, first), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(9, Vector2f.dotProduct(first, first), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
@@ -242,10 +242,10 @@ public class Vector2fTest extends PIETest {
         Vector2f first = new Vector2f(0f, 3f);
         Vector2f second = new Vector2f(1f, 5f);
 
-        Assert.assertEquals(-3, Vector2f.crossProduct(first, second), PIETest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(3, Vector2f.crossProduct(second, first), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(-3, Vector2f.crossProduct(first, second), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(3, Vector2f.crossProduct(second, first), PieTest.FLOAT_EPSILON_COMPARISON);
 
-        Assert.assertEquals(0, Vector2f.crossProduct(first, first), PIETest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, Vector2f.crossProduct(first, first), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

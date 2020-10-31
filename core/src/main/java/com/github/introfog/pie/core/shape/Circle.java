@@ -25,19 +25,19 @@ public class Circle extends IShape {
     public Circle(float radius, float centreX, float centreY, float density, float restitution) {
         body = new Body(centreX, centreY, density, restitution);
         if (radius < 0) {
-            // TODO Create custom PIE exception
+            // TODO Create custom Pie exception
             throw new RuntimeException();
         }
         this.radius = radius;
 
         computeMassAndInertia();
-        computeAABB();
+        computeAabb();
 
         type = ShapeType.CIRCLE;
     }
 
     @Override
-    public void computeAABB() {
+    public void computeAabb() {
         aabb.min.set(body.position.x - radius, body.position.y - radius);
         aabb.max.set(body.position.x + radius, body.position.y + radius);
     }

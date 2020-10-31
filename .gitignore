@@ -13,6 +13,6 @@
 # Package Files
 *.jar
 
-# Util classes for creating .PIE files
+# Util classes for creating .pie files
 /assessment/src/main/java/com/github/introfog/pie/assessment/Display.java
 /assessment/src/main/java/com/github/introfog/pie/assessment/Main.java

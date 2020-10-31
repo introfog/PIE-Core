@@ -22,37 +22,38 @@ import com.github.introfog.pie.core.util.ShapePair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * The World is the main class in PIE library.
+ * The World is the main class in Pie library.
  * It controls the interaction and updating of the states of all bodies entering the world.
  */
 public final class World {
-    private int collisionSolveIterations;
     private float accumulator;
-    private Context context;
-    private List<ShapePair> mayBeCollision;
+    private final Context context;
+    private final List<ShapePair> mayBeCollision;
     private List<IShape> shapes;
-    private List<Manifold> collisions;
+    private final List<Manifold> manifolds;
 
     /**
-     * Instantiates a new {@link com.github.introfog.pie.core.World} instance based on
-     * {@link com.github.introfog.pie.core.Context} instance.
+     * Instantiates a new {@link com.github.introfog.pie.core.World} instance
+     * based on {@link com.github.introfog.pie.core.Context} instance.
+     *
+     * <p>
+     * Note that {@link Context} instance will be cloned by calling
+     * {@link Context#Context(Context)} copy constructor.
      *
      * @param context the {@link com.github.introfog.pie.core.Context} instance
      */
     public World(Context context) {
         this.context = new Context(context);
-        collisionSolveIterations = 1;
         shapes = new ArrayList<>();
         mayBeCollision = new ArrayList<>();
-        collisions = new ArrayList<>();
-        this.context.getBroadPhaseMethod().setShapes(shapes);
+        manifolds = new ArrayList<>();
     }
 
-    // TODO Create good JavaDoc
     /**
-     * Updating the physical condition of all bodies in the world.
+     * Updating the physical condition of all shapes in the world.
      *
      * The world will be updated after an equal period of time equal to the
      * {@link com.github.introfog.pie.core.Context#getFixedDeltaTime()} value.
@@ -76,22 +77,23 @@ public final class World {
     }
 
     /**
-     * Sets the number of collision solve iterations.
+     * The method returns the list of {@link Manifold} from the last run of the {@link #update} method.
+     * Each {@link #update} call clears this list.
      *
-     * @param collisionSolveIterations the number of iteration
+     * @return the current list of manifolds
      */
-    public void setCollisionSolveIterations(int collisionSolveIterations) {
-        this.collisionSolveIterations = collisionSolveIterations;
+    public List<Manifold> getManifolds() {
+        return manifolds;
     }
 
     /**
-     * The method returns collisions from the last run of the {@link #update} method.
-     * Each {@link #update} call clears collisions.
+     * The method returns the collision list of {@link ShapePair} from the last run of the {@link #update} method.
+     * Each {@link #update} call clears this list.
      *
-     * @return the current collisions
+     * @return the current collision list of shape pair
      */
-    public List<Manifold> getCollisions() {
-        return collisions;
+    public List<ShapePair> getCollisions() {
+        return getManifolds().stream().map(m -> new ShapePair(m.aShape, m.bShape)).collect(Collectors.toList());
     }
 
     /**
@@ -105,15 +107,6 @@ public final class World {
     }
 
     /**
-     * Gets the shapes in the world.
-     *
-     * @return the shapes
-     */
-    public List<IShape> getUnmodifiableShapes() {
-        return Collections.unmodifiableList(shapes);
-    }
-
-    /**
      * Sets the new shapes in the world.
      *
      * @param shapes the new shapes
@@ -123,14 +116,42 @@ public final class World {
         context.getBroadPhaseMethod().setShapes(shapes);
     }
 
+    /**
+     * Removes shape from the world.
+     *
+     * @param shape the shape to be removed from this world, if present
+     * @return {@code true} if this world contained the specified shape
+     */
+    public boolean remove(IShape shape) {
+        context.getBroadPhaseMethod().remove(shape);
+        return shapes.remove(shape);
+    }
+
+    /**
+     * Clears all shapes from the world.
+     */
+    public void clear() {
+        context.getBroadPhaseMethod().clear();
+        shapes.clear();
+    }
+
+    /**
+     * Gets the shapes in the world.
+     *
+     * @return the unmodifiable list of shapes in the world
+     */
+    public List<IShape> getUnmodifiableShapes() {
+        return Collections.unmodifiableList(shapes);
+    }
+
     private void narrowPhase() {
-        collisions.clear();
+        manifolds.clear();
         mayBeCollision.forEach(collision -> {
             if (collision.first.body.invertedMass != 0f || collision.second.body.invertedMass != 0f) {
                 Manifold manifold = new Manifold(collision.first, collision.second, context);
                 manifold.initializeCollision();
                 if (manifold.areBodiesCollision) {
-                    collisions.add(manifold);
+                    manifolds.add(manifold);
                 }
             }
         });
@@ -140,7 +161,7 @@ public final class World {
 
     private void step() {
         // Broad phase
-        mayBeCollision = context.getBroadPhaseMethod().calculateAabbCollisions();
+        mayBeCollision.addAll(context.getBroadPhaseMethod().calculateAabbCollisions());
 
         // Integrate forces
         // Hanna modification Euler's method is used!
@@ -150,8 +171,8 @@ public final class World {
         narrowPhase();
 
         // Solve collisions
-        for (int i = 0; i < collisionSolveIterations; i++) {
-            collisions.forEach(Manifold::solve);
+        for (int i = 0; i < context.getCollisionSolveIterations(); i++) {
+            manifolds.forEach(Manifold::solve);
         }
 
         // Integrate velocities
@@ -162,7 +183,7 @@ public final class World {
         shapes.forEach(this::integrateForces);
 
         // Correct positions
-        collisions.forEach(Manifold::correctPosition);
+        manifolds.forEach(Manifold::correctPosition);
 
         // Clear all forces
         shapes.forEach(shape -> shape.body.force.set(0f, 0f));

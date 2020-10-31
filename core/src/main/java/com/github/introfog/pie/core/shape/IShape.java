@@ -30,7 +30,7 @@ public abstract class IShape {
     /** The shape type. */
     public ShapeType type;
     /** The shape axis aligned bounding box. */
-    public AABB aabb;
+    public Aabb aabb;
     /** The body that stores shape physical parameters. */
     public Body body;
     /** The rotation matrix. */
@@ -43,7 +43,7 @@ public abstract class IShape {
      */
     public IShape() {
         shapeId = lastShapeId.incrementAndGet();
-        aabb = new AABB();
+        aabb = new Aabb();
         rotateMatrix = new RotationMatrix2x2();
         rotateMatrix.setAngle(0f);
     }
@@ -73,11 +73,11 @@ public abstract class IShape {
      * Calculates the current axis aligned bounding box for the shape.
      *
      * <p>
-     * The shapes in the world are constantly moving and rotating and hence their AABB changes,
-     * this method update the AABB. The update takes place in the broad phase of collision detection,
+     * The shapes in the world are constantly moving and rotating and hence their Aabb changes,
+     * this method update the Aabb. The update takes place in the broad phase of collision detection,
      * see {@link com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase}.
      */
-    public abstract void computeAABB();
+    public abstract void computeAabb();
 
     @Override
     public boolean equals(Object o) {
