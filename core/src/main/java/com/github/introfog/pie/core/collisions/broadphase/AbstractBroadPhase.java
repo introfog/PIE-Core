@@ -19,9 +19,9 @@ import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The abstract class that represents the basic methods for working with broad phase collision detection methods.
@@ -30,7 +30,7 @@ import java.util.List;
  * In the broad phase, collision tests are conservative — usually based on bounding volumes only (the Pie uses
  * the axis aligned bounding box Aabb) — but fast in order to quickly prune away pairs of shapes that do not
  * collide with each other. The output of the broad phase is the potentially colliding set of pairs of shapes
- * (the {@link ShapePair} list).
+ * (the {@link ShapePair} set).
  *
  * @see Aabb
  */
@@ -38,13 +38,13 @@ public abstract class AbstractBroadPhase {
     /**
      * The shapes among which collisions will be calculated.
      */
-    protected List<IShape> shapes;
+    protected Set<IShape> shapes;
 
     /**
      * Instantiates a new {@link AbstractBroadPhase} instance.
      */
     public AbstractBroadPhase() {
-        shapes = new ArrayList<>();
+        shapes = new HashSet<>();
     }
 
     /**
@@ -55,8 +55,8 @@ public abstract class AbstractBroadPhase {
      *
      * @param shapes the shapes among which collisions will be calculated
      */
-    public void setShapes(List<IShape> shapes) {
-        this.shapes = new ArrayList<>(shapes);
+    public void setShapes(Set<IShape> shapes) {
+        this.shapes = new HashSet<>(shapes);
     }
 
     /**
@@ -86,12 +86,12 @@ public abstract class AbstractBroadPhase {
     }
 
     /**
-     * Gets the unmodifiable list of all shapes from this broad phase method.
+     * Gets the unmodifiable set of all shapes from this broad phase method.
      *
-     * @return the unmodifiable list of all shapes
+     * @return the unmodifiable set of all shapes
      */
-    public List<IShape> getUnmodifiableShapes() {
-        return Collections.unmodifiableList(shapes);
+    public Set<IShape> getUnmodifiableShapes() {
+        return Collections.unmodifiableSet(shapes);
     }
 
     /**
@@ -110,10 +110,10 @@ public abstract class AbstractBroadPhase {
      * the {@link IShape#computeAabb()} method is called for all shapes from the {@link #shapes}, because the
      * broad phase needs the up-to-date Aabbs.
      *
-     * @return the {@link ShapePair} list in which each item represents
+     * @return the {@link ShapePair} set in which each item represents
      * a unique shape pair and the Aabb of those shapes intersect
      */
-    public final List<ShapePair> calculateAabbCollisions() {
+    public final Set<ShapePair> calculateAabbCollisions() {
         shapes.forEach(IShape::computeAabb);
         return domesticCalculateAabbCollisions();
     }
@@ -124,8 +124,8 @@ public abstract class AbstractBroadPhase {
      * <p>
      * Note, when this method is called, all shapes from {@link #shapes} have an up-to-date Aabb.
      *
-     * @return the {@link ShapePair} list in which each item represents
+     * @return the {@link ShapePair} set in which each item represents
      * a unique shape pair and the Aabb of those shapes intersect
      */
-    protected abstract List<ShapePair> domesticCalculateAabbCollisions();
+    protected abstract Set<ShapePair> domesticCalculateAabbCollisions();
 }

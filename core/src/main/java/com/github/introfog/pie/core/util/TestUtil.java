@@ -15,50 +15,73 @@
  */
 package com.github.introfog.pie.core.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import org.junit.Assert;
-
+/**
+ * Utility class for comparing tests result. It is helper class for internal usage only.
+ */
 public final class TestUtil {
     private TestUtil() {
+        // Empty constructor
     }
 
-    public static void assertEqualsShapePairsList(List<ShapePair> cmpShapes, List<ShapePair> outShapes, String messagePrefix) {
-        if (cmpShapes.size() != outShapes.size()) {
-            Assert.assertEquals(messagePrefix + "Different number of shape collisions", cmpShapes.size(), outShapes.size());
+    /**
+     * Checks that two set of the {@link ShapePair} are equals to each other.
+     *
+     * @param cmpShapePairs the expected set of the {@link ShapePair}
+     * @param outShapePairs the actual set of the {@link ShapePair}
+     * @param messagePrefix the message prefix
+     * @return the string message with exception, if the sets are not equal, null otherwise
+     */
+    public static String assertEqualsShapePairsList(Set<ShapePair> cmpShapePairs, Set<ShapePair> outShapePairs, String messagePrefix) {
+        if (cmpShapePairs.size() != outShapePairs.size()) {
+            return messagePrefix + "Different number of shape collisions. "
+                    + "Expected: " + cmpShapePairs.size() + "; actual: " + outShapePairs.size();
         }
 
-        Map<Integer, List<ShapePair>> cmpMap = new HashMap<>(cmpShapes.size());
-        for (ShapePair pair : cmpShapes) {
-            int hashCode = pair.hashCode();
-            cmpMap.putIfAbsent(hashCode, new ArrayList<>());
-            cmpMap.get(hashCode).add(pair);
-        }
+        Map<Integer, Set<ShapePair>> cmpMap = TestUtil.getHashCodeMap(cmpShapePairs);
 
-        Map<Integer, List<ShapePair>> outMap = new HashMap<>(cmpShapes.size());
-        for (ShapePair pair : outShapes) {
-            int hashCode = pair.hashCode();
-            outMap.putIfAbsent(hashCode, new ArrayList<>());
-            outMap.get(hashCode).add(pair);
-        }
+        Map<Integer, Set<ShapePair>> outMap = TestUtil.getHashCodeMap(outShapePairs);
 
         if (cmpMap.size() != outMap.size()) {
-            Assert.assertEquals(messagePrefix + "Different size of maps", cmpMap.size(), outMap.size());
+            return messagePrefix + "Different size of maps. Expected: " + cmpMap.size() + "; actual: " + outMap.size();
         }
 
         for (Integer hash : cmpMap.keySet()) {
-            List<ShapePair> cmpList = cmpMap.get(hash);
-            List<ShapePair> outList = outMap.get(hash);
+            Set<ShapePair> cmpList = cmpMap.get(hash);
+            Set<ShapePair> outList = outMap.get(hash);
 
-            Assert.assertNotNull(messagePrefix + "Out map does not contain hash " + hash + " from cmp map", outList);
-            Assert.assertTrue(messagePrefix + "Values cmp and out map for hash " + hash + " are different", cmpList.containsAll(outList));
+            if (outList == null) {
+                return messagePrefix + "Out map does not contain hash " + hash + " from cmp map.";
+            }
+            if (!cmpList.containsAll(outList)) {
+                return messagePrefix + "Values cmp and out map for hash " + hash + " are different.";
+            }
         }
+        return null;
     }
 
-    public static void assertEqualsShapePairsList(List<ShapePair> cmpShapes, List<ShapePair> outShapes) {
-        TestUtil.assertEqualsShapePairsList(cmpShapes, outShapes, "");
+    /**
+     * Checks that two set of the {@link ShapePair} are equals to each other.
+     *
+     * @param cmpShapePairs the expected set of the {@link ShapePair}
+     * @param outShapePairs the actual set of the {@link ShapePair}
+     * @return the string message with exception, if the sets are not equal, null otherwise
+     */
+    public static String assertEqualsShapePairsList(Set<ShapePair> cmpShapePairs, Set<ShapePair> outShapePairs) {
+        return TestUtil.assertEqualsShapePairsList(cmpShapePairs, outShapePairs, "");
+    }
+
+    private static Map<Integer, Set<ShapePair>> getHashCodeMap(Set<ShapePair> shapePairs) {
+        Map<Integer, Set<ShapePair>> hashCodeMap = new HashMap<>(shapePairs.size());
+        for (ShapePair pair : shapePairs) {
+            int hashCode = pair.hashCode();
+            hashCodeMap.putIfAbsent(hashCode, new HashSet<>());
+            hashCodeMap.get(hashCode).add(pair);
+        }
+        return hashCodeMap;
     }
 }

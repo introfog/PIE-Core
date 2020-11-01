@@ -31,7 +31,9 @@ import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class ShapeIOUtil {
     private ShapeIOUtil() {
@@ -42,10 +44,10 @@ public final class ShapeIOUtil {
         return Arrays.equals(Files.readAllBytes(Paths.get(cmpPath)), Files.readAllBytes(Paths.get(outPath)));
     }
 
-    public static List<IShape> readShapesFromFile(String path) throws IOException {
+    public static Set<IShape> readShapesFromFile(String path) throws IOException {
         String string = new String(Files.readAllBytes(Paths.get(path)));
         BufferedReader reader = new BufferedReader(new StringReader(string));
-        List<IShape> shapes = new ArrayList<>();
+        Set<IShape> shapes = new HashSet<>();
         String line;
         while ((line = reader.readLine()) != null) {
             shapes.add(convertStringToShape(line));
@@ -53,10 +55,10 @@ public final class ShapeIOUtil {
         return shapes;
     }
 
-    public static List<ShapePair> readShapePairsFromFile(String path) throws IOException {
+    public static Set<ShapePair> readShapePairsFromFile(String path) throws IOException {
         String string = new String(Files.readAllBytes(Paths.get(path)));
         BufferedReader reader = new BufferedReader(new StringReader(string));
-        List<ShapePair> shapePairs = new ArrayList<>();
+        Set<ShapePair> shapePairs = new HashSet<>();
         String line1;
         String line2;
         while (((line1 = reader.readLine()) != null) && ((line2 = reader.readLine()) != null)) {
@@ -66,7 +68,7 @@ public final class ShapeIOUtil {
         return shapePairs;
     }
 
-    public static void writeShapesToFile(List<IShape> shapes, String path) throws IOException {
+    public static void writeShapesToFile(Set<IShape> shapes, String path) throws IOException {
         StringWriter writer = new StringWriter();
         shapes.forEach(shape -> writer.write(convertShapeToString(shape)));
         writer.flush();

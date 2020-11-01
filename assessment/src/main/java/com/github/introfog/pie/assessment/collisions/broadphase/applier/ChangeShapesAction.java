@@ -19,20 +19,21 @@ import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
+import java.util.Set;
 
 public class ChangeShapesAction extends CallCountAction {
-    private final List<IShape> firstShapes;
-    private final List<IShape> secondShapes;
+    private final Set<IShape> firstShapes;
+    private final Set<IShape> secondShapes;
     private final int iterationCalls;
 
-    public ChangeShapesAction(List<IShape> firstShapes, List<IShape> secondShapes, int iterationCalls) {
+    public ChangeShapesAction(Set<IShape> firstShapes, Set<IShape> secondShapes, int iterationCalls) {
         this.firstShapes = firstShapes;
         this.secondShapes = secondShapes;
         this.iterationCalls = iterationCalls;
     }
 
     @Override
-    protected void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
+    protected void domesticApplyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes) {
         long temp = callCounter % iterationCalls;
         if (temp < (iterationCalls / 2)) {
             methods.forEach(method -> method.setShapes(firstShapes));

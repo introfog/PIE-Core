@@ -21,7 +21,9 @@ import com.github.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -31,8 +33,8 @@ import java.util.stream.Collectors;
 public final class World {
     private float accumulator;
     private final Context context;
-    private final List<ShapePair> mayBeCollision;
-    private List<IShape> shapes;
+    private final Set<ShapePair> mayBeCollision;
+    private Set<IShape> shapes;
     private final List<Manifold> manifolds;
 
     /**
@@ -47,8 +49,8 @@ public final class World {
      */
     public World(Context context) {
         this.context = new Context(context);
-        shapes = new ArrayList<>();
-        mayBeCollision = new ArrayList<>();
+        shapes = new HashSet<>();
+        mayBeCollision = new HashSet<>();
         manifolds = new ArrayList<>();
     }
 
@@ -87,13 +89,13 @@ public final class World {
     }
 
     /**
-     * The method returns the collision list of {@link ShapePair} from the last run of the {@link #update} method.
-     * Each {@link #update} call clears this list.
+     * The method returns the collision set of {@link ShapePair} from the last run of the {@link #update} method.
+     * Each {@link #update} call clears this set.
      *
-     * @return the current collision list of shape pair
+     * @return the current collision set of shape pair
      */
-    public List<ShapePair> getCollisions() {
-        return getManifolds().stream().map(m -> new ShapePair(m.aShape, m.bShape)).collect(Collectors.toList());
+    public Set<ShapePair> getCollisions() {
+        return getManifolds().stream().map(m -> new ShapePair(m.aShape, m.bShape)).collect(Collectors.toSet());
     }
 
     /**
@@ -111,8 +113,8 @@ public final class World {
      *
      * @param shapes the new shapes
      */
-    public void setShapes(List<IShape> shapes) {
-        this.shapes = new ArrayList<>(shapes);
+    public void setShapes(Set<IShape> shapes) {
+        this.shapes = new HashSet<>(shapes);
         context.getBroadPhaseMethod().setShapes(shapes);
     }
 
@@ -138,10 +140,10 @@ public final class World {
     /**
      * Gets the shapes in the world.
      *
-     * @return the unmodifiable list of shapes in the world
+     * @return the unmodifiable set of shapes in the world
      */
-    public List<IShape> getUnmodifiableShapes() {
-        return Collections.unmodifiableList(shapes);
+    public Set<IShape> getUnmodifiableShapes() {
+        return Collections.unmodifiableSet(shapes);
     }
 
     private void narrowPhase() {
@@ -155,12 +157,11 @@ public final class World {
                 }
             }
         });
-
-        mayBeCollision.clear();
     }
 
     private void step() {
         // Broad phase
+        mayBeCollision.clear();
         mayBeCollision.addAll(context.getBroadPhaseMethod().calculateAabbCollisions());
 
         // Integrate forces

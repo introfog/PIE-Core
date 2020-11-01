@@ -19,7 +19,7 @@ import com.github.introfog.pie.core.collisions.broadphase.aabbtree.AabbTreeNode;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * The class is a Aabb (or R) tree method that stores shapes in a binary Aabb tree, which means that each internal
@@ -42,7 +42,7 @@ public class AabbTreeMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public void setShapes(List<IShape> shapes) {
+    public void setShapes(Set<IShape> shapes) {
         this.shapes.clear();
         root = null;
         shapes.forEach(this::addShape);
@@ -110,7 +110,7 @@ public class AabbTreeMethod extends AbstractBroadPhase {
     }
 
     @Override
-    protected List<ShapePair> domesticCalculateAabbCollisions() {
+    protected Set<ShapePair> domesticCalculateAabbCollisions() {
         root = AabbTreeNode.updateTree(root);
         return AabbTreeNode.calculateAabbCollisions(root);
     }

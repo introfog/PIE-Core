@@ -25,8 +25,9 @@ import com.github.introfog.pie.core.util.TestUtil;
 import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.IntegrationTest;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -46,13 +47,13 @@ public class WorldTest extends PieTest {
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
-        List<IShape> shapes = new ArrayList<>(2);
+        Set<IShape> shapes = new HashSet<>(2);
         shapes.add(c1);
         shapes.add(c2);
         world.setShapes(shapes);
 
         world.update(6f);
-        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs,  world.getCollisions());
 
@@ -72,13 +73,13 @@ public class WorldTest extends PieTest {
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
-        List<IShape> shapes = new ArrayList<>(2);
+        Set<IShape> shapes = new HashSet<>(2);
         shapes.add(c1);
         shapes.add(c2);
         world.setShapes(shapes);
 
         world.update(1.5f);
-        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs,  world.getCollisions());
 
@@ -101,19 +102,19 @@ public class WorldTest extends PieTest {
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
-        List<IShape> shapes = new ArrayList<>(2);
+        Set<IShape> shapes = new HashSet<>(2);
         shapes.add(c1);
         shapes.add(c2);
         world.setShapes(shapes);
 
         IShape c3 = new Circle(10, 25, 0, 1f, 0.2f);
         world.addShape(c3);
-        shapes = new ArrayList<>(3);
+        shapes = new HashSet<>(3);
         shapes.add(c1);
         shapes.add(c2);
         shapes.add(c3);
 
-        List<IShape> worldShapes = world.getUnmodifiableShapes();
+        Set<IShape> worldShapes = world.getUnmodifiableShapes();
         Assert.assertEquals(shapes, worldShapes);
 
         junitExpectedException.expect(UnsupportedOperationException.class);
@@ -127,14 +128,14 @@ public class WorldTest extends PieTest {
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
-        List<IShape> shapes = new ArrayList<>(2);
+        Set<IShape> shapes = new HashSet<>(2);
         shapes.add(c1);
         shapes.add(c2);
         world.setShapes(shapes);
         shapes.clear();
 
         world.update(1.5f);
-        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs,  world.getCollisions());
 
@@ -162,9 +163,24 @@ public class WorldTest extends PieTest {
         world.addShape(c2);
 
         world.update(1.5f);
-        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs,  world.getCollisions());
+    }
+
+    @Test
+    public void addEqualShapesTest() {
+        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(context);
+
+        IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
+        IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
+        world.addShape(c1);
+        world.addShape(c2);
+        world.addShape(c1);
+        world.addShape(c2);
+
+        Assert.assertEquals(2, world.getUnmodifiableShapes().size());
     }
 
     @Test
@@ -179,7 +195,7 @@ public class WorldTest extends PieTest {
         Assert.assertEquals(2, world.getUnmodifiableShapes().size());
 
         world.update(1.5f);
-        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs,  world.getCollisions());
 
@@ -187,14 +203,14 @@ public class WorldTest extends PieTest {
         Assert.assertFalse(world.remove(c1));
         Assert.assertEquals(1, world.getUnmodifiableShapes().size());
         world.update(1.5f);
-        TestUtil.assertEqualsShapePairsList(new ArrayList<>(),  world.getCollisions());
+        TestUtil.assertEqualsShapePairsList(new HashSet<>(),  world.getCollisions());
 
         Assert.assertTrue(world.remove(c2));
         Assert.assertEquals(0, world.getUnmodifiableShapes().size());
 
         Assert.assertFalse(world.remove(c2));
         world.update(1.5f);
-        TestUtil.assertEqualsShapePairsList(new ArrayList<>(),  world.getCollisions());
+        TestUtil.assertEqualsShapePairsList(new HashSet<>(),  world.getCollisions());
     }
 
     @Test
@@ -209,14 +225,14 @@ public class WorldTest extends PieTest {
         Assert.assertEquals(2, world.getUnmodifiableShapes().size());
 
         world.update(1.5f);
-        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        Set<ShapePair> cmpShapePairs = new HashSet<>(3);
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs,  world.getCollisions());
 
         world.clear();
         Assert.assertTrue(world.getUnmodifiableShapes().isEmpty());
         world.update(1.5f);
-        TestUtil.assertEqualsShapePairsList(new ArrayList<>(),  world.getCollisions());
+        TestUtil.assertEqualsShapePairsList(new HashSet<>(),  world.getCollisions());
     }
 
     @Test
@@ -286,9 +302,9 @@ public class WorldTest extends PieTest {
         Assert.assertEquals(2, world.getUnmodifiableShapes().size());
 
         world.update(1.5f);
-        List<ShapePair> collisions = world.getCollisions();
-        Assert.assertEquals(1, collisions.size());
-        Assert.assertEquals(c1, collisions.get(0).first);
-        Assert.assertEquals(c2, collisions.get(0).second);
+        ShapePair[] arrayShapePairs = world.getCollisions().toArray(new ShapePair[]{});
+        Assert.assertEquals(1, arrayShapePairs.length);
+        Assert.assertEquals(c1, arrayShapePairs[0].first);
+        Assert.assertEquals(c2, arrayShapePairs[0].second);
     }
 }

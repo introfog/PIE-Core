@@ -23,7 +23,9 @@ import com.github.introfog.pie.core.util.ShapePair;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The class is an Aabb node of a Aabb tree that is binary (each non-leaf element has
@@ -119,8 +121,8 @@ public class AabbTreeNode {
      * @return the {@link ShapePair} list in which each item represents
      * a unique shape pair and the Aabb of those shapes intersect
      */
-    public static List<ShapePair> calculateAabbCollisions(AabbTreeNode treeRoot) {
-        List<ShapePair> collisions = new ArrayList<>();
+    public static Set<ShapePair> calculateAabbCollisions(AabbTreeNode treeRoot) {
+        Set<ShapePair> collisions = new HashSet<>();
         if (treeRoot == null || treeRoot.parent != null) {
             // TODO add log message
             // It is necessary to start from tree root, otherwise the inherited cost will be calculated incorrectly
@@ -325,14 +327,14 @@ public class AabbTreeNode {
         }
     }
 
-    private static void checkChild(AabbTreeNode node, List<ShapePair> collisions) {
+    private static void checkChild(AabbTreeNode node, Set<ShapePair> collisions) {
         if (!node.checked) {
             calculateAabbCollisionsHelper(node.children[0], node.children[1], collisions);
             node.checked = true;
         }
     }
 
-    private static void calculateAabbCollisionsHelper(AabbTreeNode first, AabbTreeNode second, List<ShapePair> collisions) {
+    private static void calculateAabbCollisionsHelper(AabbTreeNode first, AabbTreeNode second, Set<ShapePair> collisions) {
         if (first.isLeaf()) {
             if (second.isLeaf()) {
                 if (Aabb.isIntersected(first.shape.aabb, second.shape.aabb)) {

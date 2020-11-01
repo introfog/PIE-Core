@@ -19,8 +19,8 @@ import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The class is a brute force method that iterates over all possible pairs of shapes and checks to see if their Aabbs are intersected.
@@ -39,7 +39,7 @@ public class BruteForceMethod extends AbstractBroadPhase {
     }
 
     @Override
-    protected List<ShapePair> domesticCalculateAabbCollisions() {
+    protected Set<ShapePair> domesticCalculateAabbCollisions() {
         return BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(shapes);
     }
 
@@ -51,22 +51,23 @@ public class BruteForceMethod extends AbstractBroadPhase {
      * @return the {@link ShapePair} list in which each item represents
      * a unique shape pair and the Aabb of those shapes intersect
      */
-    public static List<ShapePair> calculateAabbCollisionsWithoutAabbUpdating(List<IShape> shapes) {
+    public static Set<ShapePair> calculateAabbCollisionsWithoutAabbUpdating(Set<IShape> shapes) {
         IShape a;
         IShape b;
-        List<ShapePair> collisionsList = new ArrayList<>();
+        Set<ShapePair> collisionsSet = new HashSet<>();
 
-        for (int i = 0; i < shapes.size(); i++) {
-            for (int j = i + 1; j < shapes.size(); j++) {
-                a = shapes.get(i);
-                b = shapes.get(j);
+        IShape[] arrayShapes = shapes.toArray(new IShape[]{});
+        for (int i = 0; i < arrayShapes.length; i++) {
+            for (int j = i + 1; j < arrayShapes.length; j++) {
+                a = arrayShapes[i];
+                b = arrayShapes[j];
 
                 if (Aabb.isIntersected(a.aabb, b.aabb)) {
-                    collisionsList.add(new ShapePair(a, b));
+                    collisionsSet.add(new ShapePair(a, b));
                 }
             }
         }
 
-        return collisionsList;
+        return collisionsSet;
     }
 }

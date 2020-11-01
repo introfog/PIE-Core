@@ -19,6 +19,7 @@ import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
+import java.util.Set;
 
 public abstract class CallCountAction implements IAction {
     protected long callCounter;
@@ -27,10 +28,10 @@ public abstract class CallCountAction implements IAction {
         callCounter = 0;
     }
 
-    public void applyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
+    public void applyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes) {
         domesticApplyAction(methods, methodShapes);
         callCounter++;
     }
 
-    protected abstract void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes);
+    protected abstract void domesticApplyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes);
 }
