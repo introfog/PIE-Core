@@ -17,6 +17,7 @@
 
     <properties>
         <junit.version>4.13.1</junit.version>
+        <sonar.skip>true</sonar.skip>
     </properties>
 
     <dependencies>

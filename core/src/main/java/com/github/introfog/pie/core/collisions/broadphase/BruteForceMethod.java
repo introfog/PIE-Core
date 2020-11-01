@@ -17,7 +17,7 @@ package com.github.introfog.pie.core.collisions.broadphase;
 
 import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
-import com.github.introfog.pie.core.util.ShapePair;
+import com.github.introfog.pie.core.shape.ShapePair;
 
 import java.util.HashSet;
 import java.util.Set;

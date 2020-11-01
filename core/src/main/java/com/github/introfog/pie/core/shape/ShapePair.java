@@ -13,9 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.core.util;
-
-import com.github.introfog.pie.core.shape.IShape;
+package com.github.introfog.pie.core.shape;
 
 import java.util.Objects;
 
@@ -34,7 +32,7 @@ public class ShapePair {
     public final IShape second;
 
     /**
-     * Instantiates a new {@link com.github.introfog.pie.core.util.ShapePair} instance based
+     * Instantiates a new {@link ShapePair} instance based
      * on two {@link com.github.introfog.pie.core.shape.IShape} objects.
      *
      * The {@link #first} variable always stores a shape with a smaller hash code, this is necessary for
