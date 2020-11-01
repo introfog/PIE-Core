@@ -22,6 +22,7 @@ import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
+import java.util.Set;
 
 public class AddShapesAction extends CallCountAction {
     private final float circleDiameter;
@@ -37,7 +38,7 @@ public class AddShapesAction extends CallCountAction {
     }
 
     @Override
-    protected void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
+    protected void domesticApplyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes) {
         for (int i = 0; i < 10; i++) {
             Circle circle;
             if (isHorizontalAdder) {

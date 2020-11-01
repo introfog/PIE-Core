@@ -20,10 +20,8 @@ import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +29,7 @@ import java.util.Set;
  * The class is a spatial hashing method that divides space into cells, which are stored in a hash table.
  * Further, if the shape Aabb intersects with a cell, then the reference to this shape is placed in the cell
  * and at the end go through all the cells, and if two shapes are in the same cell, then put them in the
- * list of possibly intersecting shapes.
+ * set of possibly intersecting shapes.
  *
  * <p>
  * Note, the calculation of the size of the cells and filling the hash table occurs every iteration a new.
@@ -43,7 +41,7 @@ import java.util.Set;
  */
 public class SpatialHashingMethod extends AbstractBroadPhase {
     private int cellSize;
-    private final Map<Integer, List<IShape>> cells;
+    private final Map<Integer, Set<IShape>> cells;
 
     /**
      * Instantiates a new {@link SpatialHashingMethod} instance.
@@ -61,14 +59,14 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     @Override
-    protected List<ShapePair> domesticCalculateAabbCollisions() {
+    protected Set<ShapePair> domesticCalculateAabbCollisions() {
         // The complexity is O(n), if the minimum and maximum size of the objects are not very different,
         // but if very different, then the complexity tends to O(n^2)
         calculateCellSize();
         cells.clear();
         shapes.forEach(this::insert);
 
-        return new ArrayList<>(computePossibleAabbIntersections());
+        return computePossibleAabbIntersections();
     }
 
     private void calculateCellSize() {
@@ -98,7 +96,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
                 key = generateKey(aabb.min.x + i * cellSize, aabb.min.y + j * cellSize);
 
                 if (!cells.containsKey(key)) {
-                    cells.put(key, new ArrayList<>());
+                    cells.put(key, new HashSet<>());
                 }
                 cells.get(key).add(shape);
             }
@@ -109,8 +107,8 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
         // HashSet is used because requires the uniqueness of pairs,
         // for example, two shapes can intersect in several cells at once
         Set<ShapePair> possibleIntersect = new HashSet<>();
-        cells.forEach((cell, list) ->
-                possibleIntersect.addAll(BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(list)));
+        cells.forEach((cell, set) ->
+                possibleIntersect.addAll(BruteForceMethod.calculateAabbCollisionsWithoutAabbUpdating(set)));
         return possibleIntersect;
     }
 }

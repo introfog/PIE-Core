@@ -27,7 +27,7 @@ import com.github.introfog.pie.test.annotations.BenchmarkTest;
 
 import java.io.IOException;
 
-import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -128,8 +128,8 @@ public class DynamicShapesInLineBenchmarkTest extends PieTest {
     @Test
     // This test shows how the SweepAndPrune method can analyze which axis is best used to determine possible intersections.
     public void horizontal500x5With8487CollisionsAnd5x500With22443ChangesTest() throws IOException {
-        List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
-        List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_8487collision.pie");
+        Set<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
+        Set<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_8487collision.pie");
         IAction applier = new ChangeShapesAction(firstShapes, secondShapes, 20);
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_8487collision",
                 PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.08, 0.15, 0.05}, applier);
@@ -139,8 +139,8 @@ public class DynamicShapesInLineBenchmarkTest extends PieTest {
     @Test
     // This test shows how the SweepAndPrune method can analyze which axis is best used to determine possible intersections.
     public void horizontal500x5With22443CollisionsAnd5x500With8487ChangesTest() throws IOException {
-        List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_8487collision.pie");
-        List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
+        Set<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_8487collision.pie");
+        Set<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
         IAction applier = new ChangeShapesAction(firstShapes, secondShapes, 20);
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_22443collision",
                 PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.09, 0.15, 0.05}, applier);
@@ -150,8 +150,8 @@ public class DynamicShapesInLineBenchmarkTest extends PieTest {
     @Test
     // This test shows how the SweepAndPrune method can analyze which axis is best used to determine possible intersections.
     public void horizontal500x5With22443CollisionsAnd5x500With22443ChangesTest() throws IOException {
-        List<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
-        List<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
+        Set<IShape> firstShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "500x5line_22443collision.pie");
+        Set<IShape> secondShapes = ShapeIOUtil.readShapesFromFile(PATH_TO_SOURCE_FOLDER + "5x500line_22443collision.pie");
         IAction applier = new ChangeShapesAction(firstShapes, secondShapes, 20);
         BenchmarkTestConfig testConfig = new BenchmarkTestConfig("500x5line_22443collision",
                 PATH_TO_SOURCE_FOLDER, 20, 100, new double[]{1.0, 0.11, 0.17, 0.06}, applier);

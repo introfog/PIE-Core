@@ -23,8 +23,8 @@ import com.github.introfog.pie.core.shape.Polygon;
 import com.github.introfog.pie.core.util.ShapePair;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,14 +45,14 @@ public class SpatialHashingMethodTest extends AbstractBroadPhaseTest {
         IShape r2 = Polygon.generateRectangle(240, 140, 60, 40, MathPie.STATIC_BODY_DENSITY, 0.2f);
         // Auxiliary shape to make the cells size equal to 100
         IShape r3 = Polygon.generateRectangle(1000, 1000, 160, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
-        List<IShape> shapes = new ArrayList<>(3);
+        Set<IShape> shapes = new HashSet<>(3);
         shapes.add(r1);
         shapes.add(r2);
         shapes.add(r3);
         AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
         broadPhaseMethod.setShapes(shapes);
 
-        List<ShapePair> cmpShapePairs = new ArrayList<>(1);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
 
         cmpShapePairs.add(new ShapePair(r1, r2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
@@ -65,7 +65,7 @@ public class SpatialHashingMethodTest extends AbstractBroadPhaseTest {
         IShape c2 = new Circle(0f, 11, 11, MathPie.STATIC_BODY_DENSITY, 0f);
         IShape c3 = new Circle(0f, 10, 10, MathPie.STATIC_BODY_DENSITY, 0f);
         IShape c4 = new Circle(0f, 10.00001f, 10, MathPie.STATIC_BODY_DENSITY, 0f);
-        List<IShape> shapes = new ArrayList<>(3);
+        Set<IShape> shapes = new HashSet<>(3);
         shapes.add(c1);
         shapes.add(c2);
         shapes.add(c3);
@@ -73,7 +73,7 @@ public class SpatialHashingMethodTest extends AbstractBroadPhaseTest {
         AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
         broadPhaseMethod.setShapes(shapes);
 
-        List<ShapePair> cmpShapePairs = new ArrayList<>(1);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
 
         cmpShapePairs.add(new ShapePair(c1, c3));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());

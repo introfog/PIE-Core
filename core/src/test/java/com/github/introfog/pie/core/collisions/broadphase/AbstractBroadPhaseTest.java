@@ -23,8 +23,8 @@ import com.github.introfog.pie.core.util.ShapePair;
 import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -45,7 +45,7 @@ public abstract class AbstractBroadPhaseTest extends PieTest {
         broadPhaseMethod.addShape(c1);
         broadPhaseMethod.addShape(c2);
 
-        List<ShapePair> cmpShapePairs = new ArrayList<>(3);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
 
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
@@ -58,18 +58,31 @@ public abstract class AbstractBroadPhaseTest extends PieTest {
     }
 
     @Test
+    public void addEqualShapesTest() {
+        AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
+        IShape c1 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        IShape c2 = new Circle(10, 15, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
+        broadPhaseMethod.addShape(c1);
+        broadPhaseMethod.addShape(c2);
+        broadPhaseMethod.addShape(c2);
+        broadPhaseMethod.addShape(c1);
+
+        Assert.assertEquals(2, broadPhaseMethod.getUnmodifiableShapes().size());
+    }
+
+    @Test
     public void setShapesMethodTest() {
         AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
         IShape c1 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         IShape c2 = new Circle(10, 15, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
-        List<IShape> shapes = new ArrayList<>(2);
+        Set<IShape> shapes = new HashSet<>();
         shapes.add(c1);
         shapes.add(c2);
         broadPhaseMethod.setShapes(shapes);
         // Verify that the list of shapes was copied in method setShapes
         shapes.clear();
 
-        List<ShapePair> cmpShapePairs = new ArrayList<>(1);
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
 
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
@@ -93,32 +106,33 @@ public abstract class AbstractBroadPhaseTest extends PieTest {
         IShape c1 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         IShape c2 = new Circle(10, 15, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         IShape c3 = new Circle(10, 30, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
-        List<IShape> shapes = new ArrayList<>();
+        Set<IShape> shapes = new HashSet<>();
         shapes.add(c1);
         shapes.add(c2);
         shapes.add(c3);
         broadPhaseMethod.setShapes(shapes);
 
-        List<ShapePair> cmpShapePairs = new ArrayList<>();
-        cmpShapePairs.add(new ShapePair(c1, c2));
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
+        ShapePair shapePair = new ShapePair(c1, c2);
+        cmpShapePairs.add(shapePair);
         cmpShapePairs.add(new ShapePair(c2, c3));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
 
         Assert.assertTrue(broadPhaseMethod.remove(c1));
         Assert.assertEquals(3, shapes.size());
         Assert.assertEquals(2, broadPhaseMethod.getUnmodifiableShapes().size());
-        cmpShapePairs.remove(0);
+        cmpShapePairs.remove(shapePair);
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
 
         Assert.assertTrue(broadPhaseMethod.remove(c3));
         Assert.assertEquals(3, shapes.size());
         Assert.assertEquals(1, broadPhaseMethod.getUnmodifiableShapes().size());
-        TestUtil.assertEqualsShapePairsList(new ArrayList<>(), broadPhaseMethod.calculateAabbCollisions());
+        TestUtil.assertEqualsShapePairsList(new HashSet<>(), broadPhaseMethod.calculateAabbCollisions());
 
         Assert.assertFalse(broadPhaseMethod.remove(c3));
         Assert.assertEquals(3, shapes.size());
         Assert.assertEquals(1, broadPhaseMethod.getUnmodifiableShapes().size());
-        TestUtil.assertEqualsShapePairsList(new ArrayList<>(), broadPhaseMethod.calculateAabbCollisions());
+        TestUtil.assertEqualsShapePairsList(new HashSet<>(), broadPhaseMethod.calculateAabbCollisions());
 
         Assert.assertTrue(broadPhaseMethod.remove(c2));
         Assert.assertEquals(3, shapes.size());
@@ -127,7 +141,7 @@ public abstract class AbstractBroadPhaseTest extends PieTest {
         Assert.assertFalse(broadPhaseMethod.remove(c1));
         Assert.assertFalse(broadPhaseMethod.remove(c2));
         Assert.assertFalse(broadPhaseMethod.remove(c3));
-        TestUtil.assertEqualsShapePairsList(new ArrayList<>(), broadPhaseMethod.calculateAabbCollisions());
+        TestUtil.assertEqualsShapePairsList(new HashSet<>(), broadPhaseMethod.calculateAabbCollisions());
     }
 
     @Test
@@ -135,19 +149,19 @@ public abstract class AbstractBroadPhaseTest extends PieTest {
         AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
         IShape c1 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         IShape c2 = new Circle(10, 15, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
-        List<IShape> shapes = new ArrayList<>();
+        Set<IShape> shapes = new HashSet<>();
         shapes.add(c1);
         shapes.add(c2);
         broadPhaseMethod.setShapes(shapes);
 
-        List<ShapePair> cmpShapePairs = new ArrayList<>();
+        Set<ShapePair> cmpShapePairs = new HashSet<>();
         cmpShapePairs.add(new ShapePair(c1, c2));
         TestUtil.assertEqualsShapePairsList(cmpShapePairs, broadPhaseMethod.calculateAabbCollisions());
 
         broadPhaseMethod.clear();
         Assert.assertEquals(2, shapes.size());
         Assert.assertEquals(0, broadPhaseMethod.getUnmodifiableShapes().size());
-        TestUtil.assertEqualsShapePairsList(new ArrayList<>(), broadPhaseMethod.calculateAabbCollisions());
+        TestUtil.assertEqualsShapePairsList(new HashSet<>(), broadPhaseMethod.calculateAabbCollisions());
 
         broadPhaseMethod.addShape(c2);
         broadPhaseMethod.addShape(c1);
@@ -159,12 +173,12 @@ public abstract class AbstractBroadPhaseTest extends PieTest {
         AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
         IShape c1 = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
         IShape c2 = new Circle(10, 15, 0, MathPie.STATIC_BODY_DENSITY, 0.2f);
-        List<IShape> shapes = new ArrayList<>();
+        Set<IShape> shapes = new HashSet<>();
         shapes.add(c1);
         shapes.add(c2);
         broadPhaseMethod.setShapes(shapes);
 
-        List<IShape> methodShapes = broadPhaseMethod.getUnmodifiableShapes();
+        Set<IShape> methodShapes = broadPhaseMethod.getUnmodifiableShapes();
         Assert.assertEquals(2, methodShapes.size());
         Assert.assertTrue(methodShapes.contains(c1));
         Assert.assertTrue(methodShapes.contains(c2));

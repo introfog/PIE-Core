@@ -21,12 +21,14 @@ import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapePair;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The class is a sweep and prune method that sorts shapes along a certain axis with the highest variance at
  * the previous iteration of collision calculation. Further, if the projections of the shapes Aabb on this
- * axis intersect, check if their Aabb intersect, if so, put them in the list of possibly intersecting shapes.
+ * axis intersect, check if their Aabb intersect, if so, put them in the set of possibly intersecting shapes.
  *
  * <p>
  * This method is effective in most cases.
@@ -54,7 +56,7 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     }
 
     @Override
-    public void setShapes(List<IShape> shapes) {
+    public void setShapes(Set<IShape> shapes) {
         super.setShapes(shapes);
         xAxisProjection = new ArrayList<>(shapes);
         yAxisProjection = new ArrayList<>(shapes);
@@ -92,11 +94,11 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
     }
 
     @Override
-    protected List<ShapePair> domesticCalculateAabbCollisions() {
+    protected Set<ShapePair> domesticCalculateAabbCollisions() {
         // The best case is O(n*logn) or O(k*n), in the worst O(n^2)
         // Looking for possible intersections along the current axis, and then use brute force algorithm
         // Each time using variance select the next axis
-        List<ShapePair> possibleCollisionList = new ArrayList<>();
+        Set<ShapePair> possibleCollisionSet = new HashSet<>();
 
         // TODO use insertion sorting (effective when the list is almost sorted)
         if (currentSweepAndPruneAxis == 0) {
@@ -132,9 +134,9 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
 
 
                 if (currentSweepAndPruneAxis == 0 && Aabb.isIntersected(xAxisProjection.get(j).aabb, currAabb)) {
-                    possibleCollisionList.add(new ShapePair(xAxisProjection.get(j), xAxisProjection.get(i)));
+                    possibleCollisionSet.add(new ShapePair(xAxisProjection.get(j), xAxisProjection.get(i)));
                 } else if (currentSweepAndPruneAxis == 1 && Aabb.isIntersected(yAxisProjection.get(j).aabb, currAabb)) {
-                    possibleCollisionList.add(new ShapePair(yAxisProjection.get(j), yAxisProjection.get(i)));
+                    possibleCollisionSet.add(new ShapePair(yAxisProjection.get(j), yAxisProjection.get(i)));
                 }
             }
         }
@@ -151,6 +153,6 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
             currentSweepAndPruneAxis = 1;
         }
 
-        return possibleCollisionList;
+        return possibleCollisionSet;
     }
 }

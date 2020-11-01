@@ -19,7 +19,8 @@ import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IAction {
-    void applyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes);
+    void applyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes);
 }

@@ -27,7 +27,9 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 import org.junit.Assert;
 
 /*
@@ -37,7 +39,7 @@ planned to solve this problem, and add benchmark tests to the build action or ot
  */
 public class BroadPhaseBenchmarkTestRunner {
     public static void runBroadPhaseBenchmarkTest(BenchmarkTestConfig config) throws IOException {
-        List<IShape> methodShapes = ShapeIOUtil.readShapesFromFile(config.sourceFolder + config.fileName + ".pie");
+        Set<IShape> methodShapes = ShapeIOUtil.readShapesFromFile(config.sourceFolder + config.fileName + ".pie");
         List<AbstractBroadPhase> methods = BroadPhaseBenchmarkTestRunner.initializeBroadPhaseMethods(methodShapes);
 
         config.outputTestConfig();
@@ -62,7 +64,7 @@ public class BroadPhaseBenchmarkTestRunner {
         Assert.assertTrue(methodResults.stream().allMatch(BenchmarkTestMethodResult::isPassed));
     }
 
-    private static List<AbstractBroadPhase> initializeBroadPhaseMethods(List<IShape> shapes) {
+    private static List<AbstractBroadPhase> initializeBroadPhaseMethods(Set<IShape> shapes) {
         List<AbstractBroadPhase> methods = new ArrayList<>();
         methods.add(new BruteForceMethod());
         methods.add(new SpatialHashingMethod());
@@ -73,7 +75,7 @@ public class BroadPhaseBenchmarkTestRunner {
     }
 
     // TODO Make the method universal using reflection
-    private static double[] runBroadPhaseMethod(List<AbstractBroadPhase> methods, List<IShape> methodShapes,
+    private static double[] runBroadPhaseMethod(List<AbstractBroadPhase> methods, Set<IShape> methodShapes,
             BenchmarkTestConfig config) {
         for (int i = 0; i < config.warm; i++) {
             methods.forEach(AbstractBroadPhase::calculateAabbCollisions);

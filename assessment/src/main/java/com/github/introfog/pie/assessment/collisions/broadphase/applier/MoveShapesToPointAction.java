@@ -20,6 +20,7 @@ import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MoveShapesToPointAction extends CallCountAction {
@@ -32,7 +33,7 @@ public class MoveShapesToPointAction extends CallCountAction {
     }
 
     @Override
-    protected void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
+    protected void domesticApplyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes) {
         if (callCounter >= iterationOneWay) {
             callCounter = -iterationOneWay;
         }

@@ -20,6 +20,7 @@ import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
+import java.util.Set;
 
 public class MoveShapesAction extends CallCountAction {
     private final int iterationOneWay;
@@ -40,7 +41,7 @@ public class MoveShapesAction extends CallCountAction {
     }
 
     @Override
-    protected void domesticApplyAction(List<AbstractBroadPhase> methods, List<IShape> methodShapes) {
+    protected void domesticApplyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes) {
         if (callCounter >= iterationOneWay) {
             callCounter = -iterationOneWay;
         }
@@ -51,8 +52,9 @@ public class MoveShapesAction extends CallCountAction {
         } else {
             offset = new Vector2f(0, callCounter >= 0 ? offsetValue : -offsetValue);
         }
-        for (int i = 0; i < methodShapes.size(); i += oneMovingBodyOfBodies) {
-            methodShapes.get(i).body.position.add(offset, i % 2 == 0 ? -1 : 1);
+        IShape[] arrayMethodShapes = methodShapes.toArray(new IShape[] {});
+        for (int i = 0; i < arrayMethodShapes.length; i += oneMovingBodyOfBodies) {
+            arrayMethodShapes[i].body.position.add(offset, i % 2 == 0 ? -1 : 1);
         }
     }
 }
