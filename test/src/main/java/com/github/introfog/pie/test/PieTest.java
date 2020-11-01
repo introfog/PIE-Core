@@ -15,6 +15,8 @@
  */
 package com.github.introfog.pie.test;
 
+import java.io.File;
+
 import org.junit.Assert;
 
 /**
@@ -24,6 +26,17 @@ import org.junit.Assert;
 public abstract class PieTest {
     /** The constant for comparing float variables for equality. */
     public static final float FLOAT_EPSILON_COMPARISON = 1E-6f;
+
+    /**
+     * Creates a folder with a given path, including all necessary nonexistent parent directories.
+     * If a folder is already present, no action is performed.
+     *
+     * @param path the path of the folder to create
+     */
+    public static void createDestinationFolder(String path) {
+        File filePath = new File(path);
+        filePath.mkdirs();
+    }
 
     /**
      * If checkEqual is true, then the method checks that the objects are symmetrically equal and

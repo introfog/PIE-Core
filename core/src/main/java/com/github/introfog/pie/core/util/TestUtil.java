@@ -15,6 +15,8 @@
  */
 package com.github.introfog.pie.core.util;
 
+import com.github.introfog.pie.core.shape.ShapePair;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

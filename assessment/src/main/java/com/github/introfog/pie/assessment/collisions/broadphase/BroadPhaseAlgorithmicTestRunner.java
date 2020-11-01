@@ -23,7 +23,7 @@ import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
 import com.github.introfog.pie.core.collisions.broadphase.AabbTreeMethod;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.util.ShapeIOUtil;
-import com.github.introfog.pie.core.util.ShapePair;
+import com.github.introfog.pie.core.shape.ShapePair;
 import com.github.introfog.pie.core.util.TestUtil;
 
 import java.io.IOException;

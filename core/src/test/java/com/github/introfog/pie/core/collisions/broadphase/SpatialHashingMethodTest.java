@@ -20,7 +20,7 @@ import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.Polygon;
-import com.github.introfog.pie.core.util.ShapePair;
+import com.github.introfog.pie.core.shape.ShapePair;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import java.util.HashSet;

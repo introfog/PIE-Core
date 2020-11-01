@@ -30,20 +30,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * utility class for input and output {@link IShape} from\to string or file.
+ */
 public final class ShapeIOUtil {
     private ShapeIOUtil() {
         // Empty private constructor
     }
 
-    public static boolean filesIdentical(String cmpPath, String outPath) throws IOException {
-        return Arrays.equals(Files.readAllBytes(Paths.get(cmpPath)), Files.readAllBytes(Paths.get(outPath)));
-    }
-
+    /**
+     * Reads {@link IShape} from file to set of shapes.
+     *
+     * @param path the path to file with shapes
+     * @return the set of read shapes
+     * @throws IOException if an I/O error occurs
+     * @see #writeShapesToFile(Set, String) 
+     */
     public static Set<IShape> readShapesFromFile(String path) throws IOException {
         String string = new String(Files.readAllBytes(Paths.get(path)));
         BufferedReader reader = new BufferedReader(new StringReader(string));
@@ -55,19 +61,14 @@ public final class ShapeIOUtil {
         return shapes;
     }
 
-    public static Set<ShapePair> readShapePairsFromFile(String path) throws IOException {
-        String string = new String(Files.readAllBytes(Paths.get(path)));
-        BufferedReader reader = new BufferedReader(new StringReader(string));
-        Set<ShapePair> shapePairs = new HashSet<>();
-        String line1;
-        String line2;
-        while (((line1 = reader.readLine()) != null) && ((line2 = reader.readLine()) != null)) {
-            ShapePair shapePair = new ShapePair(convertStringToShape(line1), convertStringToShape(line2));
-            shapePairs.add(shapePair);
-        }
-        return shapePairs;
-    }
-
+    /**
+     * Writes set of {@link IShape} to file.
+     *
+     * @param shapes the set of shapes to be written
+     * @param path the path to file in which set of shapes will written
+     * @throws IOException if an I/O error occurs
+     * @see #readShapesFromFile(String) 
+     */
     public static void writeShapesToFile(Set<IShape> shapes, String path) throws IOException {
         StringWriter writer = new StringWriter();
         shapes.forEach(shape -> writer.write(convertShapeToString(shape)));
@@ -77,19 +78,14 @@ public final class ShapeIOUtil {
         Files.write(Paths.get(path), writer.toString().getBytes());
     }
 
-    public static void writeShapePairsToFile(List<ShapePair> pairs, String path) throws IOException {
-        StringWriter writer = new StringWriter();
-        pairs.forEach(pair -> {
-            writer.write(convertShapeToString(pair.first));
-            writer.write(convertShapeToString(pair.second));
-        });
-        writer.flush();
-        writer.close();
-
-        Files.write(Paths.get(path), writer.toString().getBytes());
-    }
-
-    private static IShape convertStringToShape(String string) {
+    /**
+     * Converts the string representation of shape to {@link IShape} instance.
+     * 
+     * @param string the string representation of shape
+     * @return the {@link IShape} instance from string
+     * @see #convertShapeToString(IShape) 
+     */
+    public static IShape convertStringToShape(String string) {
         IShape shape = null;
 
         String[] strings = string.split(";");
@@ -116,7 +112,14 @@ public final class ShapeIOUtil {
         return shape;
     }
 
-    private static String convertShapeToString(IShape shape) {
+    /**
+     * Converts {@link IShape} to string.
+     * 
+     * @param shape the shape for representation
+     * @return the string representation of passed shape
+     * @see #convertStringToShape(String) 
+     */
+    public static String convertShapeToString(IShape shape) {
         StringBuilder str = new StringBuilder();
         str.append(shape.type).append(";");
         if (shape instanceof Circle) {

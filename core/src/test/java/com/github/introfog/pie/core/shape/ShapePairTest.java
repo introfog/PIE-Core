@@ -13,11 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.core.util;
+package com.github.introfog.pie.core.shape;
 
 import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
+import com.github.introfog.pie.core.shape.ShapePair;
 import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
