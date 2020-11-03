@@ -18,6 +18,7 @@ package com.github.introfog.pie.core.shape;
 import com.github.introfog.pie.core.Body;
 import com.github.introfog.pie.core.math.RotationMatrix2x2;
 import com.github.introfog.pie.core.math.Vector2f;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**

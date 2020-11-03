@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -49,7 +50,7 @@ public class ShapeIOUtilTest extends PieTest {
         String destPath = DESTINATION_FOLDER + "writeShapesTest.pie";
         String cmpPath = SOURCE_FOLDER + "cmp_writeShapesTest.pie";
 
-        Set<IShape> shapes = new HashSet<>();
+        Set<IShape> shapes = new LinkedHashSet<>();
         shapes.add(new Circle(10, 1, 2, 0.23f, 0.124f));
         shapes.add(Polygon.generateRectangle(20, 23, 15, 17, 0.17f, 1.23f));
         shapes.add(new Circle(2.456467f, 5, 2, 0.23f, 0.124f));

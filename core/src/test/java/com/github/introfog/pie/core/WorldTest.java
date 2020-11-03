@@ -22,6 +22,7 @@ import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.ShapePair;
 import com.github.introfog.pie.core.util.TestUtil;
+import com.github.introfog.pie.test.AssertUtil;
 import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.IntegrationTest;
 
@@ -261,15 +262,17 @@ public class WorldTest extends PieTest {
         lowIterWorld.addShape(cLow2);
         lowIterWorld.addShape(cLow3);
 
-        highIterWorld.update(context.getFixedDeltaTime() + PieTest.FLOAT_EPSILON_COMPARISON);
-        lowIterWorld.update(context.getFixedDeltaTime() + PieTest.FLOAT_EPSILON_COMPARISON);
+        highIterWorld.update(context.getFixedDeltaTime() + MathPie.EPSILON);
+        lowIterWorld.update(context.getFixedDeltaTime() + MathPie.EPSILON);
+        Assert.assertEquals(2, highIterWorld.getCollisions().size());
+        Assert.assertEquals(2, lowIterWorld.getCollisions().size());
 
         // This assert checks that with a large value of the collision solve iterations number,
         // the calculation is more accurate, i.e. in our case, the penetration of one circle
         // into another is less, with a larger value of the collision solve iterations number
         float penetrationWithHigh = cHigh1.body.position.x - cHigh2.body.position.x;
         float penetrationWithLow = cLow1.body.position.x - cLow2.body.position.x;
-        Assert.assertTrue(penetrationWithLow - penetrationWithHigh > 1.7f);
+        Assert.assertTrue(penetrationWithLow - penetrationWithHigh > 0.02f);
     }
 
     @Test
@@ -304,7 +307,21 @@ public class WorldTest extends PieTest {
         world.update(1.5f);
         ShapePair[] arrayShapePairs = world.getCollisions().toArray(new ShapePair[]{});
         Assert.assertEquals(1, arrayShapePairs.length);
-        Assert.assertEquals(c1, arrayShapePairs[0].first);
-        Assert.assertEquals(c2, arrayShapePairs[0].second);
+        Assert.assertEquals(c1, arrayShapePairs[0].getFirst());
+        Assert.assertEquals(c2, arrayShapePairs[0].getSecond());
+    }
+
+    @Test
+    public void thereIsNoHandlerForPairTest() {
+        Context context = new Context();
+        context.getShapeCollisionMapping().putMapping(Circle.class, Circle.class, null);
+        Assert.assertNull(context.getShapeCollisionMapping().getMapping(Circle.class, Circle.class));
+        World world = new World(context);
+
+        IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
+        IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
+        world.addShape(c1);
+        world.addShape(c2);
+        AssertUtil.doesNotThrow(() -> world.update(1));
     }
 }

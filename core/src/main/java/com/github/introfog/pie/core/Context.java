@@ -18,9 +18,12 @@ package com.github.introfog.pie.core;
 import com.github.introfog.pie.core.collisions.Manifold;
 import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
+import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
+import com.github.introfog.pie.core.collisions.narrowphase.ShapeCollisionHandlersMapper;
 import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.Aabb;
+import com.github.introfog.pie.core.shape.IShape;
 
 /**
  * The class contains fields that specify the basic properties of the
@@ -34,9 +37,23 @@ public class Context {
     private int collisionSolveIterations;
     private Vector2f gravity;
     private AbstractBroadPhase broadPhaseMethod;
+    private ShapeCollisionHandlersMapper shapeCollisionHandlersMapper;
 
     /**
      * Instantiates a new {@link Context} instance with default values of fields (default constructor).
+     *
+     * <p>
+     * Default context values:
+     * <ul>
+     * <li>fixedDeltaTime = 1 / 60
+     * <li>deadLoopBorder = 20 / 60
+     * <li>correctPositionPercent = 0.5
+     * <li>minBorderSlop = 0.1
+     * <li>collisionSolveIterations = 1
+     * <li>gravity = (0, 50)
+     * <li>broadPhaseMethod = {@link BruteForceMethod}
+     * <li>narrowPhaseAdapter = {@link ShapeCollisionHandlersMapper#createAndGetDefaultMapping()}
+     * </ul>
      */
     public Context() {
         fixedDeltaTime = 1f / 60f;
@@ -47,38 +64,27 @@ public class Context {
         // Earth value is (0f, 9.807f)
         gravity = new Vector2f(0f, 50f);
         broadPhaseMethod = new BruteForceMethod();
+        shapeCollisionHandlersMapper = ShapeCollisionHandlersMapper.createAndGetDefaultMapping();
     }
 
     /**
      * Instantiates a new {@link Context} instance based on another {@link Context} instance (copy constructor).
      *
+     * <p>
+     * Note that this copy constructor create a deep copy of context. For example for
+     * broad phase field method {@link AbstractBroadPhase#newInstance()} is used.
+     *
      * @param other the other {@link Context} instance
      */
     public Context(Context other) {
-        this(other.getFixedDeltaTime(), other.getDeadLoopBorder(), other.getCorrectPositionPercent(),
-                other.getMinBorderSlop(), other.getCollisionSolveIterations(), other.getGravity(),
-                other.getBroadPhaseMethod());
-    }
-
-    /**
-     * Instantiates a new {@link Context} instance based on constructor argument values.
-     *
-     * @param fixedDeltaTime the fixed delta time
-     * @param deadLoopBorder the dead loop border
-     * @param correctPositionPercent the correct position percent
-     * @param minBorderSlop the minimal border slop
-     * @param gravity the world gravity
-     * @param broadPhase the broad phase algorithm
-     */
-    public Context(float fixedDeltaTime, float deadLoopBorder, float correctPositionPercent, float minBorderSlop,
-            int collisionSolveIterations, Vector2f gravity, AbstractBroadPhase broadPhase) {
-        this.setFixedDeltaTime(fixedDeltaTime);
-        this.setDeadLoopBorder(deadLoopBorder);
-        this.setCorrectPositionPercent(correctPositionPercent);
-        this.setMinBorderSlop(minBorderSlop);
-        this.setCollisionSolveIterations(collisionSolveIterations);
-        this.setGravity(gravity);
-        this.setBroadPhaseMethod(broadPhase);
+        this.setFixedDeltaTime(other.getFixedDeltaTime());
+        this.setDeadLoopBorder(other.getDeadLoopBorder());
+        this.setCorrectPositionPercent(other.getCorrectPositionPercent());
+        this.setMinBorderSlop(other.getMinBorderSlop());
+        this.setCollisionSolveIterations(other.getCollisionSolveIterations());
+        this.setGravity(new Vector2f(other.getGravity()));
+        this.setBroadPhaseMethod(other.getBroadPhaseMethod().newInstance());
+        this.setShapeCollisionMapping(new ShapeCollisionHandlersMapper(other.getShapeCollisionMapping()));
     }
 
     /**
@@ -92,6 +98,8 @@ public class Context {
      *
      * @param collisionSolveIterations the number of collision solve iterations
      * @return the {@link Context} instance
+     *
+     * @throws IllegalArgumentException if negative number passed
      */
     public Context setCollisionSolveIterations(int collisionSolveIterations) {
         if (collisionSolveIterations < 0) {
@@ -260,7 +268,7 @@ public class Context {
      * @return the {@link Context} instance
      */
     public Context setGravity(Vector2f gravity) {
-        this.gravity = new Vector2f(gravity);
+        this.gravity = gravity;
         return this;
     }
 
@@ -287,6 +295,34 @@ public class Context {
      */
     public Context setBroadPhaseMethod(AbstractBroadPhase broadPhaseMethod) {
         this.broadPhaseMethod = broadPhaseMethod;
+        return this;
+    }
+
+    /**
+     * Gets the narrow phase adapter.
+     *
+     * The narrow phase adapter is used to handle possible
+     * {@link IShape} collisions based on real shape form.
+     *
+     * @return the broad phase method
+     * @see IShapeCollisionHandler
+     */
+    public ShapeCollisionHandlersMapper getShapeCollisionMapping() {
+        return shapeCollisionHandlersMapper;
+    }
+
+    /**
+     * Gets the narrow phase adapter.
+     *
+     * The narrow phase adapter is used to handle possible
+     * {@link IShape} collisions based on real shape form.
+     *
+     * @param shapeCollisionHandlersMapper the broad phase method
+     * @return the {@link Context} instance
+     * @see IShapeCollisionHandler
+     */
+    public Context setShapeCollisionMapping(ShapeCollisionHandlersMapper shapeCollisionHandlersMapper) {
+        this.shapeCollisionHandlersMapper = shapeCollisionHandlersMapper;
         return this;
     }
 

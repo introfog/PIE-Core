@@ -16,9 +16,11 @@
 package com.github.introfog.pie.core;
 
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
-import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
+import com.github.introfog.pie.core.collisions.narrowphase.ShapeCollisionHandlersMapper;
 import com.github.introfog.pie.core.math.Vector2f;
+import com.github.introfog.pie.core.shape.Circle;
+import com.github.introfog.pie.core.shape.Polygon;
 import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
@@ -45,50 +47,40 @@ public class ContextTest extends PieTest {
         Assert.assertEquals(0f, context.getGravity().x, FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(50f, context.getGravity().y, FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(BruteForceMethod.class, context.getBroadPhaseMethod().getClass());
-    }
 
-    @Test
-    public void paramConstructorTest() {
-        Context context = new Context(0.1f, 0.2f, 0.3f,
-                0.4f, 23, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(0.1f, context.getFixedDeltaTime(), FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.2f, context.getDeadLoopBorder(), FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.3f, context.getCorrectPositionPercent(), FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.4f, context.getMinBorderSlop(), FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(23, context.getCollisionSolveIterations());
-        Assert.assertEquals(0.5f, context.getGravity().x, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.6f, context.getGravity().y, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(SpatialHashingMethod.class, context.getBroadPhaseMethod().getClass());
+        Assert.assertNotNull(context.getShapeCollisionMapping().getMapping(Circle.class, Circle.class));
+        Assert.assertNotNull(context.getShapeCollisionMapping().getMapping(Circle.class, Polygon.class));
+        Assert.assertNotNull(context.getShapeCollisionMapping().getMapping(Polygon.class, Polygon.class));
     }
 
     @Test
     public void copyConstructorTest() {
-        Context context = new Context(new Context(1.1f, 1.2f,
-                1.3f, 1.4f, 43, new Vector2f(1.5f, 1.6f), new SweepAndPruneMethod()));
+        Context context = new Context();
+        context.setFixedDeltaTime(1.1f);
+        context.setDeadLoopBorder(1.2f);
+        context.setCorrectPositionPercent(1.3f);
+        context.setMinBorderSlop(1.4f);
+        context.setCollisionSolveIterations(5);
+        context.setGravity(new Vector2f(1.6f, 1.7f));
+        SweepAndPruneMethod method = new SweepAndPruneMethod();
+        context.setBroadPhaseMethod(method);
+        ShapeCollisionHandlersMapper mapper = new ShapeCollisionHandlersMapper();
+        context.setShapeCollisionMapping(mapper);
 
         Assert.assertEquals(1.1f, context.getFixedDeltaTime(), FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(1.2f, context.getDeadLoopBorder(), FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(1.3f, context.getCorrectPositionPercent(), FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(1.4f, context.getMinBorderSlop(), FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(43, context.getCollisionSolveIterations());
-        Assert.assertEquals(1.5f, context.getGravity().x, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.6f, context.getGravity().y, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(SweepAndPruneMethod.class, context.getBroadPhaseMethod().getClass());
-    }
-
-    @Test
-    public void getCollisionSolveIterationsTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 17, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(17, context.getCollisionSolveIterations());
+        Assert.assertEquals(5, context.getCollisionSolveIterations());
+        Assert.assertEquals(1.6f, context.getGravity().x, FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1.7f, context.getGravity().y, FLOAT_EPSILON_COMPARISON);
+        Assert.assertSame(method, context.getBroadPhaseMethod());
+        Assert.assertSame(mapper, context.getShapeCollisionMapping());
     }
 
     @Test
     public void setCollisionSolveIterationsTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
+        Context context = new Context();
 
         Assert.assertEquals(context, context.setCollisionSolveIterations(19));
         Assert.assertEquals(19, context.getCollisionSolveIterations());
@@ -99,107 +91,65 @@ public class ContextTest extends PieTest {
     }
 
     @Test
-    public void getFixedDeltaTimeTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(0.1f, context.getFixedDeltaTime(), FLOAT_EPSILON_COMPARISON);
-    }
-
-    @Test
     public void setFixedDeltaTimeTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
+        Context context = new Context();
 
         Assert.assertEquals(context, context.setFixedDeltaTime(1.1f));
         Assert.assertEquals(1.1f, context.getFixedDeltaTime(), FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
-    public void getDeadLoopBorderTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(0.2f, context.getDeadLoopBorder(), FLOAT_EPSILON_COMPARISON);
-    }
-
-    @Test
     public void setDeadLoopBorderTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
+        Context context = new Context();
 
         Assert.assertEquals(context, context.setDeadLoopBorder(1.2f));
         Assert.assertEquals(1.2f, context.getDeadLoopBorder(), FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
-    public void getCorrectPositionPercentTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(0.3f, context.getCorrectPositionPercent(), FLOAT_EPSILON_COMPARISON);
-    }
-
-    @Test
     public void setCorrectPositionPercentTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
+        Context context = new Context();
 
         Assert.assertEquals(context, context.setCorrectPositionPercent(1.4f));
         Assert.assertEquals(1.4f, context.getCorrectPositionPercent(), FLOAT_EPSILON_COMPARISON);
     }
 
-    @Test
-    public void getMinBorderSlopTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(0.4f, context.getMinBorderSlop(), FLOAT_EPSILON_COMPARISON);
-    }
 
     @Test
     public void setMinBorderSlopTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
+        Context context = new Context();
 
         Assert.assertEquals(context, context.setMinBorderSlop(1.5f));
         Assert.assertEquals(1.5f, context.getMinBorderSlop(), FLOAT_EPSILON_COMPARISON);
     }
 
-    @Test
-    public void getGravityTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(0.5f, context.getGravity().x, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.6f, context.getGravity().y, FLOAT_EPSILON_COMPARISON);
-    }
 
     @Test
     public void setGravityTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
+        Context context = new Context();
 
-        Assert.assertEquals(context, context.setGravity(new Vector2f(1.6f, 1.7f)));
-        Assert.assertEquals(1.6f, context.getGravity().x, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1.7f, context.getGravity().y, FLOAT_EPSILON_COMPARISON);
-    }
-
-    @Test
-    public void getBroadPhaseMethodTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
-
-        Assert.assertEquals(SpatialHashingMethod.class, context.getBroadPhaseMethod().getClass());
+        Vector2f gravity2 = new Vector2f(1.6f, 1.7f);
+        Assert.assertEquals(context, context.setGravity(gravity2));
+        Assert.assertSame(gravity2, context.getGravity());
     }
 
     @Test
     public void setBroadPhaseMethodTest() {
-        Context context = new Context(0.1f, 0.2f,
-                0.3f, 0.4f, 2, new Vector2f(0.5f, 0.6f), new SpatialHashingMethod());
+        Context context = new Context();
 
-        Assert.assertEquals(context, context.setBroadPhaseMethod(new SweepAndPruneMethod()));
-        Assert.assertEquals(SweepAndPruneMethod.class, context.getBroadPhaseMethod().getClass());
+        SweepAndPruneMethod method = new SweepAndPruneMethod();
+        Assert.assertEquals(context, context.setBroadPhaseMethod(method));
+        Assert.assertSame(method, context.getBroadPhaseMethod());
+    }
+
+
+    @Test
+    public void setShapeCollisionMappingTest() {
+        Context context = new Context();
+
+        ShapeCollisionHandlersMapper mapper = ShapeCollisionHandlersMapper.createAndGetDefaultMapping();
+        Assert.assertSame(context, context.setShapeCollisionMapping(mapper));
+        Assert.assertSame(mapper, context.getShapeCollisionMapping());
     }
 
     @Test

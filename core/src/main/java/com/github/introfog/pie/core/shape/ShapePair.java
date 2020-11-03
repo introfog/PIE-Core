@@ -15,6 +15,7 @@
  */
 package com.github.introfog.pie.core.shape;
 
+import com.github.introfog.pie.core.PieExceptionMessage;
 import java.util.Objects;
 
 /**
@@ -24,16 +25,15 @@ public class ShapePair {
     /**
      * The shape of the pair with the smaller hash code.
      */
-    public final IShape first;
+    private final IShape first;
 
     /**
      * The shape of the pair with the bigger hash code.
      */
-    public final IShape second;
+    private final IShape second;
 
     /**
-     * Instantiates a new {@link ShapePair} instance based
-     * on two {@link com.github.introfog.pie.core.shape.IShape} objects.
+     * Instantiates a new {@link ShapePair} instance based on two different instance of {@link IShape} class.
      *
      * The {@link #first} variable always stores a shape with a smaller hash code, this is necessary for
      * the comparison of a pair of shapes and calculation of the hash code of the pair independent
@@ -41,8 +41,13 @@ public class ShapePair {
      *
      * @param first the shape
      * @param second the shape
+     *
+     * @throws IllegalArgumentException if the same shapes passed to constructor
      */
     public ShapePair(IShape first, IShape second) {
+        if (first == second) {
+            throw new IllegalArgumentException(PieExceptionMessage.SAME_SHAPES_PASSED_TO_SHAPE_PAIR_CONSTRUCTOR);
+        }
         if (first.hashCode() < second.hashCode()) {
             this.first = first;
             this.second = second;
@@ -68,5 +73,23 @@ public class ShapePair {
     @Override
     public int hashCode() {
         return Objects.hash(first, second);
+    }
+
+    /**
+     * Gets the first shape in the pair (which has a smaller hash code).
+     *
+     * @return the first shape in pair
+     */
+    public IShape getFirst() {
+        return first;
+    }
+
+    /**
+     * Gets the second shape in the pair (which has a biggest hash code).
+     *
+     * @return the second shape in pair
+     */
+    public IShape getSecond() {
+        return second;
     }
 }

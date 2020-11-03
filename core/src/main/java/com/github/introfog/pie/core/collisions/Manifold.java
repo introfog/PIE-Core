@@ -53,15 +53,6 @@ public class Manifold {
         areBodiesCollision = true;
         normal = new Vector2f();
         contacts = Vector2f.arrayOf(2);
-    }
-
-    public void initializeCollision() {
-        if (MathPie.areEqual(a.invertedMass + b.invertedMass, 0f)) {
-            a.velocity.set(0f, 0f);
-            b.velocity.set(0f, 0f);
-            areBodiesCollision = false;
-            return;
-        }
 
         if (aShape.type == ShapeType.CIRCLE && bShape.type == ShapeType.CIRCLE) {
             circleA = (Circle) aShape;
@@ -76,49 +67,11 @@ public class Manifold {
             circleA = (Circle) aShape;
             polygonB = (Polygon) bShape;
         }
-
-        Collisions.table[aShape.type.ordinal()][bShape.type.ordinal()].handleCollision(this);
-
-        // Static friction - is a value that shows how much energy need to apply to moving the body,
-        // i.e. this is the threshold, if the energy is lower, then the body is at rest, if higher, then the body moves
-        // Dynamic friction - friction in the usual sense, when bodies rub against each other,
-        // they lose part of their energy against each other
-        staticFriction = (float) StrictMath.sqrt(
-                a.staticFriction * a.staticFriction + b.staticFriction * b.staticFriction);
-        dynamicFriction = (float) StrictMath.sqrt(
-                a.dynamicFriction * a.dynamicFriction + b.dynamicFriction * b.dynamicFriction);
-
-        // Calculate the elasticity
-        e = Math.min(a.restitution, b.restitution);
-
-        for (int i = 0; i < contactCount; ++i) {
-            // Calculate radii from COM to contact
-            // Vec2 ra = contacts[i] - A->position;
-            // Vec2 rb = contacts[i] - B->position;
-            Vector2f radA = Vector2f.sub(contacts[i], a.position);
-            Vector2f radB = Vector2f.sub(contacts[i], b.position);
-
-            // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
-            // A->velocity - Cross( A->angularVelocity, ra );
-            // Calculate the relative speed
-            // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
-            // A->velocity - Cross( A->angularVelocity, ra );
-            //relativeVelocity
-            Vector2f rv = Vector2f.sub(b.velocity, a.velocity);
-            rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
-            rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
-
-            // Determine whether should perform a collision with a stop or not.
-            // The idea is that the only thing that moves this object is gravity,
-            // then the collision should be carried out without any restitution
-            // if(rv.LenSqr( ) < (dt * gravity).LenSqr( ) + EPSILON)
-            if (rv.lengthWithoutSqrt() < context.getResting()) {
-                e = 0.0f;
-            }
-        }
     }
 
     public void solve() {
+        initializeCollision();
+
         normal.normalize();
 
         for (int i = 0; i < contactCount; i++) {
@@ -204,5 +157,45 @@ public class Manifold {
                 context.getCorrectPositionPercent() / (a.invertedMass + b.invertedMass));
         a.position.sub(Vector2f.mul(correction, a.invertedMass));
         b.position.add(Vector2f.mul(correction, b.invertedMass));
+    }
+
+    private void initializeCollision() {
+        // Static friction - is a value that shows how much energy need to apply to moving the body,
+        // i.e. this is the threshold, if the energy is lower, then the body is at rest, if higher, then the body moves
+        // Dynamic friction - friction in the usual sense, when bodies rub against each other,
+        // they lose part of their energy against each other
+        staticFriction = (float) StrictMath.sqrt(
+                a.staticFriction * a.staticFriction + b.staticFriction * b.staticFriction);
+        dynamicFriction = (float) StrictMath.sqrt(
+                a.dynamicFriction * a.dynamicFriction + b.dynamicFriction * b.dynamicFriction);
+
+        // Calculate the elasticity
+        e = Math.min(a.restitution, b.restitution);
+
+        for (int i = 0; i < contactCount; ++i) {
+            // Calculate radii from COM to contact
+            // Vec2 ra = contacts[i] - A->position;
+            // Vec2 rb = contacts[i] - B->position;
+            Vector2f radA = Vector2f.sub(contacts[i], a.position);
+            Vector2f radB = Vector2f.sub(contacts[i], b.position);
+
+            // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
+            // A->velocity - Cross( A->angularVelocity, ra );
+            // Calculate the relative speed
+            // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
+            // A->velocity - Cross( A->angularVelocity, ra );
+            //relativeVelocity
+            Vector2f rv = Vector2f.sub(b.velocity, a.velocity);
+            rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
+            rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
+
+            // Determine whether should perform a collision with a stop or not.
+            // The idea is that the only thing that moves this object is gravity,
+            // then the collision should be carried out without any restitution
+            // if(rv.LenSqr( ) < (dt * gravity).LenSqr( ) + EPSILON)
+            if (rv.lengthWithoutSqrt() < context.getResting()) {
+                e = 0.0f;
+            }
+        }
     }
 }
