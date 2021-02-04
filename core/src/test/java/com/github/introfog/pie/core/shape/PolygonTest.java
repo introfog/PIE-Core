@@ -184,8 +184,8 @@ public class PolygonTest extends PieTest {
     public void getSupportTest() {
         Polygon polygon = Polygon.generateRectangle(0, 0, 10, 20, 0, 0);
 
-        Assert.assertEquals(new Vector2f(5, 10), polygon.getSupport(new Vector2f(100, 0.1f)));
-        Assert.assertEquals(new Vector2f(5, -10), polygon.getSupport(new Vector2f(100, -0.1f)));
+        Assert.assertEquals(new Vector2f(5, 10), polygon.calculateSupportVertex(new Vector2f(100, 0.1f)));
+        Assert.assertEquals(new Vector2f(5, -10), polygon.calculateSupportVertex(new Vector2f(100, -0.1f)));
     }
 
     @Test

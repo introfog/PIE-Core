@@ -15,14 +15,11 @@
  */
 package com.github.introfog.pie.core.collisions;
 
-import com.github.introfog.pie.core.Body;
+import com.github.introfog.pie.core.shape.Body;
 import com.github.introfog.pie.core.Context;
 import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
-import com.github.introfog.pie.core.shape.Circle;
-import com.github.introfog.pie.core.shape.Polygon;
 import com.github.introfog.pie.core.shape.IShape;
-import com.github.introfog.pie.core.shape.ShapeType;
 
 public class Manifold {
     public boolean areBodiesCollision;
@@ -34,10 +31,6 @@ public class Manifold {
     public int contactCount = 0;
     public Vector2f[] contacts;
     public Context context;
-    public Polygon polygonA;
-    public Polygon polygonB;
-    public Circle circleA;
-    public Circle circleB;
     public Body a;
     public Body b;
     public IShape aShape;
@@ -46,27 +39,13 @@ public class Manifold {
     public Manifold(IShape aShape, IShape bShape, Context context) {
         this.aShape = aShape;
         this.bShape = bShape;
-        this.a = aShape.body;
-        this.b = bShape.body;
+        this.a = aShape.getBody();
+        this.b = bShape.getBody();
         this.context = new Context(context);
 
         areBodiesCollision = true;
         normal = new Vector2f();
         contacts = Vector2f.arrayOf(2);
-
-        if (aShape.type == ShapeType.CIRCLE && bShape.type == ShapeType.CIRCLE) {
-            circleA = (Circle) aShape;
-            circleB = (Circle) bShape;
-        } else if (aShape.type == ShapeType.POLYGON && bShape.type == ShapeType.POLYGON) {
-            polygonA = (Polygon) aShape;
-            polygonB = (Polygon) bShape;
-        } else if (aShape.type == ShapeType.POLYGON && bShape.type == ShapeType.CIRCLE) {
-            polygonA = (Polygon) aShape;
-            circleB = (Circle) bShape;
-        } else if (aShape.type == ShapeType.CIRCLE && bShape.type == ShapeType.POLYGON) {
-            circleA = (Circle) aShape;
-            polygonB = (Polygon) bShape;
-        }
     }
 
     public void solve() {

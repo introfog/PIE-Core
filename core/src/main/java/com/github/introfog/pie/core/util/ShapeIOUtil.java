@@ -19,7 +19,6 @@ import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.Polygon;
-import com.github.introfog.pie.core.shape.ShapeType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -96,10 +95,11 @@ public final class ShapeIOUtil {
         float centerY = Float.parseFloat(strings[size - 3]);
         float centerX = Float.parseFloat(strings[size - 4]);
 
-        if (strings[0].equals(ShapeType.CIRCLE.toString())) {
+
+        if (strings[0].equals(Circle.class.getSimpleName())) {
             float radius = Float.parseFloat(strings[1]);
             shape = new Circle(radius, centerX, centerY, density, restitution);
-        } else if (strings[0].equals(ShapeType.POLYGON.toString())) {
+        } else if (strings[0].equals(Polygon.class.getSimpleName())) {
             int vertexCount = Integer.parseInt(strings[1]);
             List<Vector2f> vertices = new ArrayList<>(vertexCount);
             for (int i = 0; i < vertexCount; i++) {
@@ -121,21 +121,21 @@ public final class ShapeIOUtil {
      */
     public static String convertShapeToString(IShape shape) {
         StringBuilder str = new StringBuilder();
-        str.append(shape.type).append(";");
+        str.append(shape.getClass().getSimpleName()).append(";");
         if (shape instanceof Circle) {
             Circle circle = (Circle) shape;
-            str.append(circle.radius).append(";");
+            str.append(circle.getRadius()).append(";");
         } else if (shape instanceof Polygon) {
             Polygon polygon = (Polygon) shape;
-            str.append(polygon.vertexCount).append(";");
-            for (Vector2f vec : polygon.vertices) {
+            str.append(polygon.getVertexCount()).append(";");
+            for (Vector2f vec : polygon.getVertices()) {
                 str.append(vec.x).append(";").append(vec.y).append(";");
             }
         }
-        str.append(shape.body.position.x).append(";")
-                .append(shape.body.position.y).append(";")
-                .append(shape.body.density).append(";")
-                .append(shape.body.restitution).append("\n");
+        str.append(shape.getBody().position.x).append(";")
+                .append(shape.getBody().position.y).append(";")
+                .append(shape.getBody().density).append(";")
+                .append(shape.getBody().restitution).append("\n");
 
         return str.toString();
     }

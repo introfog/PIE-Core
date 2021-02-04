@@ -117,7 +117,7 @@ public class AabbTreeNodeTest extends PieTest {
         IShape circle = new Circle(10, 0, 0, MathPie.STATIC_BODY_DENSITY, 0);
         AabbTreeNode node = new AabbTreeNode(circle, 0.2f);
         Aabb aabb = node.aabb;
-        circle.body.position.add(new Vector2f(3.9f, 0));
+        circle.getBody().position.add(new Vector2f(3.9f, 0));
 
         AabbTreeNode outputNode = AabbTreeNode.updateTree(node);
         Aabb outputAabb = outputNode.aabb;
@@ -135,10 +135,10 @@ public class AabbTreeNodeTest extends PieTest {
         IShape c2 = new Circle(10, 10, 0, MathPie.STATIC_BODY_DENSITY, 0);
         root = AabbTreeNode.insertLeaf(root, c2);
 
-        c1.body.position.add(new Vector2f(15f, 0));
+        c1.getBody().position.add(new Vector2f(15f, 0));
         c1.computeAabb();
         // Additional bBox size equal to 2, and if we move circle for 1.9, leaf shouldn't update
-        c2.body.position.add(new Vector2f(1.9f, 0));
+        c2.getBody().position.add(new Vector2f(1.9f, 0));
         c2.computeAabb();
         AabbTreeNode newRoot = AabbTreeNode.updateTree(root);
 
@@ -164,7 +164,7 @@ public class AabbTreeNodeTest extends PieTest {
         root = AabbTreeNode.insertLeaf(root, c3);
 
         // Additional bBox size equal to 2, and if we move circle for 3, leaf should update
-        c2.body.position.add(new Vector2f(3f, 0));
+        c2.getBody().position.add(new Vector2f(3f, 0));
         c2.computeAabb();
         AabbTreeNode newRoot = AabbTreeNode.updateTree(root);
 
@@ -192,7 +192,7 @@ public class AabbTreeNodeTest extends PieTest {
         root = AabbTreeNode.insertLeaf(root, c4);
 
         // Additional bBox size equal to 2, and if we move circle for 5, leaf should update
-        c4.body.position.add(new Vector2f(5f, 0));
+        c4.getBody().position.add(new Vector2f(5f, 0));
         c4.computeAabb();
         AabbTreeNode newRoot = AabbTreeNode.updateTree(root);
 
@@ -245,7 +245,7 @@ public class AabbTreeNodeTest extends PieTest {
         Assert.assertNotNull(root.children[1].children);
         Assert.assertSame(c2, root.children[1].children[1].shape);
         Assert.assertNotNull(root.children[1].children[0].shape);
-        Assert.assertEquals(new Vector2f(20, 0), root.children[1].children[0].shape.body.position);
+        Assert.assertEquals(new Vector2f(20, 0), root.children[1].children[0].shape.getBody().position);
     }
 
     @Test

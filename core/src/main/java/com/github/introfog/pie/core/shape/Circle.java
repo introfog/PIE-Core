@@ -15,13 +15,24 @@
  */
 package com.github.introfog.pie.core.shape;
 
-import com.github.introfog.pie.core.Body;
-
 import java.util.StringJoiner;
 
+/**
+ * This class represent circle shape. Circle is defined by {@link #radius} field.
+ */
 public class Circle extends IShape {
-    public float radius;
+    /** The radius of circle. */
+    protected final float radius;
 
+    /**
+     * Instantiates a new {@link Circle} instance based on radius, coordinates of center, density and restitution.
+     *
+     * @param radius the radius of circle
+     * @param centreX the X coordinate of center of circle
+     * @param centreY the Y coordinate of center of circle
+     * @param density the density of circle
+     * @param restitution the restitution of circle
+     */
     public Circle(float radius, float centreX, float centreY, float density, float restitution) {
         body = new Body(centreX, centreY, density, restitution);
         if (radius < 0) {
@@ -32,8 +43,15 @@ public class Circle extends IShape {
 
         computeMassAndInertia();
         computeAabb();
+    }
 
-        type = ShapeType.CIRCLE;
+    /**
+     * Gets the radius of circle.
+     *
+     * @return the radius
+     */
+    public float getRadius() {
+        return radius;
     }
 
     @Override

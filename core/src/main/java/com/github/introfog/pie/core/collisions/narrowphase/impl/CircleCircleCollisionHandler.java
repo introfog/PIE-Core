@@ -22,7 +22,6 @@ import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandle
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.IShape;
-import com.github.introfog.pie.core.shape.ShapeType;
 
 /**
  * Class is used to handle possible collision between two {@link Circle}.
@@ -30,7 +29,7 @@ import com.github.introfog.pie.core.shape.ShapeType;
 public class CircleCircleCollisionHandler implements IShapeCollisionHandler {
     @Override
     public Manifold handleCollision(IShape aShape, IShape bShape, Context context) {
-        if (aShape.type != ShapeType.CIRCLE || bShape.type != ShapeType.CIRCLE) {
+        if (!Circle.class.equals(aShape.getClass()) || !Circle.class.equals(bShape.getClass())) {
             throw new IllegalArgumentException(PieExceptionMessage.INVALID_SHAPES_TYPE_FOR_NARROW_PHASE_HANDLER);
         }
 
@@ -38,7 +37,7 @@ public class CircleCircleCollisionHandler implements IShapeCollisionHandler {
         Circle circleB = (Circle) bShape;
 
         Manifold manifold = new Manifold(circleA, circleB, context);
-        manifold.normal = Vector2f.sub(circleB.body.position, circleA.body.position);
+        manifold.normal = Vector2f.sub(circleB.getBody().position, circleA.getBody().position);
         final float distanceWithoutSqrt = manifold.normal.lengthWithoutSqrt();
 
         if (!CircleCircleCollisionHandler.areIntersected(circleA, circleB, distanceWithoutSqrt)) {
@@ -46,24 +45,24 @@ public class CircleCircleCollisionHandler implements IShapeCollisionHandler {
         }
 
         manifold.contactCount = 1;
-        manifold.penetration = circleA.radius + circleB.radius - (float) Math.sqrt(distanceWithoutSqrt);
+        manifold.penetration = circleA.getRadius() + circleB.getRadius() - (float) Math.sqrt(distanceWithoutSqrt);
         // m->contacts[0] = m->normal * A->radius + a->position;
         manifold.normal.normalize();
         manifold.contacts[0].set(manifold.normal);
-        manifold.contacts[0].mul(circleA.radius);
-        manifold.contacts[0].add(circleA.body.position);
+        manifold.contacts[0].mul(circleA.getRadius());
+        manifold.contacts[0].add(circleA.getBody().position);
 
         if (distanceWithoutSqrt == 0) {
             manifold.normal.set(1f, 0f);
-            manifold.penetration = circleA.radius;
-            manifold.contacts[0].set(circleA.body.position);
+            manifold.penetration = circleA.getRadius();
+            manifold.contacts[0].set(circleA.getBody().position);
         }
 
         return manifold;
     }
 
     private static boolean areIntersected(Circle a, Circle b, float distanceWithoutSqrt) {
-        float sumRadius = a.radius + b.radius;
+        float sumRadius = a.getRadius() + b.getRadius();
         sumRadius *= sumRadius;
         return sumRadius > distanceWithoutSqrt;
     }

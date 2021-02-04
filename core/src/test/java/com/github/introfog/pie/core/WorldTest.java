@@ -245,19 +245,19 @@ public class WorldTest extends PieTest {
         World lowIterWorld = new World(context);
 
         IShape cHigh1 = new Circle(10, 0, 0, 1f, 0.2f);
-        cHigh1.body.velocity.add(new Vector2f(0.1f, 0));
+        cHigh1.getBody().velocity.add(new Vector2f(0.1f, 0));
         IShape cHigh2 = new Circle(10, 15, 0, 1f, 0.2f);
         IShape cHigh3 = new Circle(10, 25, 0, 1f, 0.2f);
-        cHigh3.body.velocity.add(new Vector2f(-0.1f, 0));
+        cHigh3.getBody().velocity.add(new Vector2f(-0.1f, 0));
         highIterWorld.addShape(cHigh1);
         highIterWorld.addShape(cHigh2);
         highIterWorld.addShape(cHigh3);
 
         IShape cLow1 = new Circle(10, 0, 0, 1f, 0.2f);
-        cLow1.body.velocity.add(new Vector2f(0.1f, 0));
+        cLow1.getBody().velocity.add(new Vector2f(0.1f, 0));
         IShape cLow2 = new Circle(10, 15, 0, 1f, 0.2f);
         IShape cLow3 = new Circle(10, 25, 0, 1f, 0.2f);
-        cLow3.body.velocity.add(new Vector2f(-0.1f, 0));
+        cLow3.getBody().velocity.add(new Vector2f(-0.1f, 0));
         lowIterWorld.addShape(cLow1);
         lowIterWorld.addShape(cLow2);
         lowIterWorld.addShape(cLow3);
@@ -270,8 +270,8 @@ public class WorldTest extends PieTest {
         // This assert checks that with a large value of the collision solve iterations number,
         // the calculation is more accurate, i.e. in our case, the penetration of one circle
         // into another is less, with a larger value of the collision solve iterations number
-        float penetrationWithHigh = cHigh1.body.position.x - cHigh2.body.position.x;
-        float penetrationWithLow = cLow1.body.position.x - cLow2.body.position.x;
+        float penetrationWithHigh = cHigh1.getBody().position.x - cHigh2.getBody().position.x;
+        float penetrationWithLow = cLow1.getBody().position.x - cLow2.getBody().position.x;
         Assert.assertTrue(penetrationWithLow - penetrationWithHigh > 0.02f);
     }
 

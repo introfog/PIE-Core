@@ -54,7 +54,7 @@ public class MoveShapesAction extends CallCountAction {
         }
         IShape[] arrayMethodShapes = methodShapes.toArray(new IShape[] {});
         for (int i = 0; i < arrayMethodShapes.length; i += oneMovingBodyOfBodies) {
-            arrayMethodShapes[i].body.position.add(offset, i % 2 == 0 ? -1 : 1);
+            arrayMethodShapes[i].getBody().position.add(offset, i % 2 == 0 ? -1 : 1);
         }
     }
 }
