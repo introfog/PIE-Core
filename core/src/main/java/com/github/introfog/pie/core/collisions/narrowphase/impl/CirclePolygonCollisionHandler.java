@@ -13,21 +13,45 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.core.collisions;
+package com.github.introfog.pie.core.collisions.narrowphase.impl;
 
+import com.github.introfog.pie.core.Context;
+import com.github.introfog.pie.core.PieExceptionMessage;
+import com.github.introfog.pie.core.collisions.Manifold;
+import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
 import com.github.introfog.pie.core.shape.Circle;
+import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.Polygon;
 import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
+import com.github.introfog.pie.core.shape.ShapeType;
 
-public class CollisionCirclePolygon implements CollisionCallback {
-    public static final CollisionCirclePolygon instance = new CollisionCirclePolygon();
-
+/**
+ * Class is used to handle possible collision between {@link Circle} and {@link Polygon}.
+ */
+public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
+    /**
+     * Handles a collision between {@link Circle} and {@link Polygon}. It doesn't matter what order the parameters
+     * are in, circle and polygon or polygon and circle. In the course of this method, it is determined whether
+     * shapes collide, and if so, the basic information about the collision is calculated (see {@link Manifold}).
+     *
+     * @param aShape the first shape
+     * @param bShape the second shape
+     * @param context the world context
+     * @return the {@link Manifold} instance with main collision information if the shapes collide, otherwise null
+     *
+     * @throws IllegalArgumentException if wrong shape types passed
+     */
     @Override
-    public void handleCollision(Manifold manifold) {
-        Circle circleA = manifold.circleA;
-        Polygon polygonB = manifold.polygonB;
+    public Manifold handleCollision(IShape aShape, IShape bShape, Context context) {
+        if (aShape.type == bShape.type) {
+            throw new IllegalArgumentException(PieExceptionMessage.INVALID_SHAPES_TYPE_FOR_NARROW_PHASE_HANDLER);
+        }
 
+        Circle circleA = aShape.type == ShapeType.CIRCLE ? (Circle) aShape : (Circle) bShape;
+        Polygon polygonB = aShape.type == ShapeType.POLYGON ? (Polygon) aShape : (Polygon) bShape;
+
+        Manifold manifold = new Manifold(circleA, polygonB, context);
         // Translate center coordinates to polygon coordinates
         // center = B->u.Transpose( ) * (center - b->position);
         Vector2f centerA = new Vector2f(circleA.body.position);
@@ -53,8 +77,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
 
             // The sign of the scalar product indicates whether the center is on the opposite side of the line from the normal
             if (dotProduct > 0f && projection.lengthWithoutSqrt() > circleA.radius * circleA.radius) {
-                manifold.areBodiesCollision = false;
-                return;
+                return null;
             }
 
             if (dotProduct > separation) {
@@ -84,7 +107,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
             manifold.contacts[0].mul(circleA.radius);
             manifold.contacts[0].add(circleA.body.position);
             manifold.penetration = circleA.radius;
-            return;
+            return manifold;
         }
 
         // Found the nearest edge to the center of the circle, and the center of the circle lies outside the polygon.
@@ -98,8 +121,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
         if (dot1 <= 0f) {
             // Closer to the first vertex
             if (Vector2f.distanceWithoutSqrt(centerA, v1) > circleA.radius * circleA.radius) {
-                manifold.areBodiesCollision = false;
-                return;
+                return null;
             }
 
             manifold.penetration = circleA.radius - (float) Math.sqrt(Vector2f.distanceWithoutSqrt(centerA, v1));
@@ -121,8 +143,7 @@ public class CollisionCirclePolygon implements CollisionCallback {
         } else if (dot2 <= 0f) {
             // Closer to the second vertex
             if (Vector2f.distanceWithoutSqrt(centerA, v2) > circleA.radius * circleA.radius) {
-                manifold.areBodiesCollision = false;
-                return;
+                return null;
             }
 
             manifold.penetration = circleA.radius - (float) Math.sqrt(Vector2f.distanceWithoutSqrt(centerA, v2));
@@ -158,5 +179,6 @@ public class CollisionCirclePolygon implements CollisionCallback {
             manifold.contacts[0].mul(circleA.radius);
             manifold.contacts[0].add(circleA.body.position);
         }
+        return manifold;
     }
 }

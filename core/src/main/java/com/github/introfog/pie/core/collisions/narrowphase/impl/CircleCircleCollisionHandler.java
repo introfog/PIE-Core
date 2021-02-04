@@ -13,31 +13,36 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.core.collisions;
+package com.github.introfog.pie.core.collisions.narrowphase.impl;
 
+import com.github.introfog.pie.core.Context;
+import com.github.introfog.pie.core.PieExceptionMessage;
+import com.github.introfog.pie.core.collisions.Manifold;
+import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
 import com.github.introfog.pie.core.shape.Circle;
 import com.github.introfog.pie.core.math.Vector2f;
+import com.github.introfog.pie.core.shape.IShape;
+import com.github.introfog.pie.core.shape.ShapeType;
 
-public class CollisionCircleCircle implements CollisionCallback {
-    public static final CollisionCircleCircle instance = new CollisionCircleCircle();
-
-    private boolean areIntersected(Circle a, Circle b, float distanceWithoutSqrt) {
-        float sumRadius = a.radius + b.radius;
-        sumRadius *= sumRadius;
-        return sumRadius > distanceWithoutSqrt;
-    }
-
+/**
+ * Class is used to handle possible collision between two {@link Circle}.
+ */
+public class CircleCircleCollisionHandler implements IShapeCollisionHandler {
     @Override
-    public void handleCollision(Manifold manifold) {
-        Circle circleA = manifold.circleA;
-        Circle circleB = manifold.circleB;
+    public Manifold handleCollision(IShape aShape, IShape bShape, Context context) {
+        if (aShape.type != ShapeType.CIRCLE || bShape.type != ShapeType.CIRCLE) {
+            throw new IllegalArgumentException(PieExceptionMessage.INVALID_SHAPES_TYPE_FOR_NARROW_PHASE_HANDLER);
+        }
 
+        Circle circleA = (Circle) aShape;
+        Circle circleB = (Circle) bShape;
+
+        Manifold manifold = new Manifold(circleA, circleB, context);
         manifold.normal = Vector2f.sub(circleB.body.position, circleA.body.position);
         final float distanceWithoutSqrt = manifold.normal.lengthWithoutSqrt();
 
-        if (!areIntersected(circleA, circleB, distanceWithoutSqrt)) {
-            manifold.areBodiesCollision = false;
-            return;
+        if (!CircleCircleCollisionHandler.areIntersected(circleA, circleB, distanceWithoutSqrt)) {
+            return null;
         }
 
         manifold.contactCount = 1;
@@ -53,5 +58,13 @@ public class CollisionCircleCircle implements CollisionCallback {
             manifold.penetration = circleA.radius;
             manifold.contacts[0].set(circleA.body.position);
         }
+
+        return manifold;
+    }
+
+    private static boolean areIntersected(Circle a, Circle b, float distanceWithoutSqrt) {
+        float sumRadius = a.radius + b.radius;
+        sumRadius *= sumRadius;
+        return sumRadius > distanceWithoutSqrt;
     }
 }

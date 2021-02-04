@@ -191,7 +191,7 @@ public class Vector2fTest extends PieTest {
         Vector2f res = Vector2f.mul(vec, 10);
         Assert.assertEquals(1, res.x, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(2, res.y, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertTrue(vec != res);
+        Assert.assertNotSame(vec, res);
     }
 
     @Test
@@ -201,8 +201,8 @@ public class Vector2fTest extends PieTest {
         Vector2f res = Vector2f.mul(first, second);
         Assert.assertEquals(1, res.x, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(4, res.y, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertTrue(res != first);
-        Assert.assertTrue(res != second);
+        Assert.assertNotSame(res, first);
+        Assert.assertNotSame(res, second);
     }
 
     @Test
@@ -213,8 +213,8 @@ public class Vector2fTest extends PieTest {
 
         Assert.assertEquals(-9.9, res.x, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(-19.8, res.y, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertTrue(res != first);
-        Assert.assertTrue(res != second);
+        Assert.assertNotSame(res, first);
+        Assert.assertNotSame(res, second);
     }
 
     @Test
@@ -266,6 +266,6 @@ public class Vector2fTest extends PieTest {
         Assert.assertEquals(expected, vectors[0]);
         Assert.assertEquals(expected, vectors[1]);
 
-        Assert.assertTrue(vectors[0] != vectors[1]);
+        Assert.assertNotSame(vectors[0], vectors[1]);
     }
 }

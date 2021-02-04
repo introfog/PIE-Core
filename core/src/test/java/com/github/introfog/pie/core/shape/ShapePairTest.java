@@ -15,19 +15,30 @@
  */
 package com.github.introfog.pie.core.shape;
 
+import com.github.introfog.pie.core.PieExceptionMessage;
 import com.github.introfog.pie.core.math.MathPie;
-import com.github.introfog.pie.core.shape.Circle;
-import com.github.introfog.pie.core.shape.IShape;
-import com.github.introfog.pie.core.shape.ShapePair;
 import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
 public class ShapePairTest extends PieTest {
+    @Rule
+    public ExpectedException junitExpectedException = ExpectedException.none();
+
+    @Test
+    public void tryToCreateShapePairWithSameShapesTest() {
+        IShape c1 = new Circle(0, 0, 0, 0, 0);
+        junitExpectedException.expect(IllegalArgumentException.class);
+        junitExpectedException.expectMessage(PieExceptionMessage.SAME_SHAPES_PASSED_TO_SHAPE_PAIR_CONSTRUCTOR);
+        new ShapePair(c1, c1);
+    }
+
     @Test
     public void fieldStoringTest() {
         IShape c1 = new Circle(10, 10, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
@@ -37,11 +48,13 @@ public class ShapePairTest extends PieTest {
         boolean c1First = c1.hashCode() < c2.hashCode();
 
         Assert.assertTrue("First shape in pair should be have smaller hash code",
-                c1First ? shapePair.first == c1 : shapePair.first == c2);
+                c1First ? shapePair.getFirst() == c1 : shapePair.getFirst() == c2);
+        Assert.assertSame(c2, c1First ? shapePair.getSecond() : shapePair.getFirst());
 
         shapePair = new ShapePair(c2, c1);
         Assert.assertTrue("First shape in pair should be have smaller hash code",
-                c1First ? shapePair.first == c1 : shapePair.first == c2);
+                c1First ? shapePair.getFirst() == c1 : shapePair.getFirst() == c2);
+        Assert.assertSame(c2, c1First ? shapePair.getSecond() : shapePair.getFirst());
     }
 
     @Test

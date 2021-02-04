@@ -16,6 +16,8 @@
 package com.github.introfog.pie.core;
 
 import com.github.introfog.pie.core.collisions.Manifold;
+import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
+import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.ShapePair;
 
@@ -33,7 +35,7 @@ import java.util.stream.Collectors;
 public final class World {
     private float accumulator;
     private final Context context;
-    private final Set<ShapePair> mayBeCollision;
+    private Set<ShapePair> mayBeCollision;
     private Set<IShape> shapes;
     private final List<Manifold> manifolds;
 
@@ -146,30 +148,30 @@ public final class World {
         return Collections.unmodifiableSet(shapes);
     }
 
-    private void narrowPhase() {
-        manifolds.clear();
-        mayBeCollision.forEach(collision -> {
-            if (collision.first.body.invertedMass != 0f || collision.second.body.invertedMass != 0f) {
-                Manifold manifold = new Manifold(collision.first, collision.second, context);
-                manifold.initializeCollision();
-                if (manifold.areBodiesCollision) {
-                    manifolds.add(manifold);
-                }
-            }
-        });
-    }
-
     private void step() {
         // Broad phase
-        mayBeCollision.clear();
-        mayBeCollision.addAll(context.getBroadPhaseMethod().calculateAabbCollisions());
+        mayBeCollision = context.getBroadPhaseMethod().calculateAabbCollisions();
 
         // Integrate forces
         // Hanna modification Euler's method is used!
         shapes.forEach(this::integrateForces);
 
         // Narrow phase
-        narrowPhase();
+        manifolds.clear();
+        for (final ShapePair pair : mayBeCollision) {
+            if (!MathPie.areEqual(pair.getFirst().body.invertedMass + pair.getSecond().body.invertedMass, 0f)) {
+
+                final IShapeCollisionHandler handler = context.getShapeCollisionMapping().getMapping(pair);
+                if (handler == null) {
+                    // TODO #18 Add logging about this situation
+                } else {
+                    final Manifold manifold = handler.handleCollision(pair.getFirst(), pair.getSecond(), context);
+                    if (manifold != null) {
+                        manifolds.add(manifold);
+                    }
+                }
+            }
+        }
 
         // Solve collisions
         for (int i = 0; i < context.getCollisionSolveIterations(); i++) {
