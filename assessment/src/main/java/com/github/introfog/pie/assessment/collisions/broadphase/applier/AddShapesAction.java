@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.assessment.collisions.broadphase.applier;
 
-import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
+import com.github.introfog.pie.core.collisions.broadphase.IBroadPhase;
 import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 import com.github.introfog.pie.core.shape.Circle;
@@ -38,7 +38,7 @@ public class AddShapesAction extends CallCountAction {
     }
 
     @Override
-    protected void domesticApplyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes) {
+    protected void domesticApplyAction(List<IBroadPhase> methods, Set<IShape> methodShapes) {
         for (int i = 0; i < 10; i++) {
             Circle circle;
             if (isHorizontalAdder) {

@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.assessment.collisions.broadphase.applier;
 
-import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
+import com.github.introfog.pie.core.collisions.broadphase.IBroadPhase;
 import com.github.introfog.pie.core.shape.IShape;
 
 import java.util.List;
@@ -28,10 +28,10 @@ public abstract class CallCountAction implements IAction {
         callCounter = 0;
     }
 
-    public void applyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes) {
+    public void applyAction(List<IBroadPhase> methods, Set<IShape> methodShapes) {
         domesticApplyAction(methods, methodShapes);
         callCounter++;
     }
 
-    protected abstract void domesticApplyAction(List<AbstractBroadPhase> methods, Set<IShape> methodShapes);
+    protected abstract void domesticApplyAction(List<IBroadPhase> methods, Set<IShape> methodShapes);
 }

@@ -15,7 +15,6 @@
  */
 package com.github.introfog.pie.core.collisions.broadphase;
 
-import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.ShapePair;
 
@@ -24,17 +23,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The abstract class that represents the basic methods for working with broad phase collision detection methods.
- *
- * <p>
- * In the broad phase, collision tests are conservative — usually based on bounding volumes only (the Pie uses
- * the axis aligned bounding box Aabb) — but fast in order to quickly prune away pairs of shapes that do not
- * collide with each other. The output of the broad phase is the potentially colliding set of pairs of shapes
- * (the {@link ShapePair} set).
- *
- * @see Aabb
+ * The abstract class that represents the basic methods and fields
+ * for working with broad phase collision detection methods.
  */
-public abstract class AbstractBroadPhase {
+public abstract class AbstractBroadPhase implements IBroadPhase {
     /**
      * The shapes among which collisions will be calculated.
      */
@@ -55,52 +47,30 @@ public abstract class AbstractBroadPhase {
      *
      * @param shapes the shapes among which collisions will be calculated
      */
+    @Override
     public void setShapes(Set<IShape> shapes) {
         this.shapes = new HashSet<>(shapes);
     }
 
-    /**
-     * Adds the shape to broad phase method.
-     *
-     * @param shape the shape
-     */
+    @Override
     public void addShape(IShape shape){
         shapes.add(shape);
     }
 
-    /**
-     * Removes shape from broad phase method.
-     *
-     * @param shape the shape to be removed from this broad phase method, if present
-     * @return {@code true} if this broad phase method contained the specified shape
-     */
+    @Override
     public boolean remove(IShape shape) {
         return shapes.remove(shape);
     }
 
-    /**
-     * Clears all shapes from broad phase method.
-     */
+    @Override
     public void clear() {
         shapes.clear();
     }
 
-    /**
-     * Gets the unmodifiable set of all shapes from this broad phase method.
-     *
-     * @return the unmodifiable set of all shapes
-     */
+    @Override
     public Set<IShape> getUnmodifiableShapes() {
         return Collections.unmodifiableSet(shapes);
     }
-
-    /**
-     * Create a new instance of corresponding broad phase method.
-     * New instance is a deep copy of original broad phase method.
-     *
-     * @return the new instance of broad phase method
-     */
-    public abstract AbstractBroadPhase newInstance();
 
     /**
      * Calculates the shape Aabb collisions.
@@ -113,6 +83,7 @@ public abstract class AbstractBroadPhase {
      * @return the {@link ShapePair} set in which each item represents
      * a unique shape pair and the Aabb of those shapes intersect
      */
+    @Override
     public final Set<ShapePair> calculateAabbCollisions() {
         shapes.forEach(IShape::computeAabb);
         return domesticCalculateAabbCollisions();

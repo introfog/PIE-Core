@@ -16,7 +16,7 @@
 package com.github.introfog.pie.core;
 
 import com.github.introfog.pie.core.collisions.Manifold;
-import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
+import com.github.introfog.pie.core.collisions.broadphase.IBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
 import com.github.introfog.pie.core.collisions.narrowphase.ShapeCollisionHandlersMapper;
@@ -36,7 +36,7 @@ public class Context {
     private float minBorderSlop;
     private int collisionSolveIterations;
     private Vector2f gravity;
-    private AbstractBroadPhase broadPhaseMethod;
+    private IBroadPhase broadPhaseMethod;
     private ShapeCollisionHandlersMapper shapeCollisionHandlersMapper;
 
     /**
@@ -72,7 +72,7 @@ public class Context {
      *
      * <p>
      * Note that this copy constructor create a deep copy of context. For example for
-     * broad phase field method {@link AbstractBroadPhase#newInstance()} is used.
+     * broad phase field method {@link IBroadPhase#newInstance()} is used.
      *
      * @param other the other {@link Context} instance
      */
@@ -280,7 +280,7 @@ public class Context {
      *
      * @return the broad phase method
      */
-    public AbstractBroadPhase getBroadPhaseMethod() {
+    public IBroadPhase getBroadPhaseMethod() {
         return broadPhaseMethod;
     }
 
@@ -293,7 +293,7 @@ public class Context {
      * @param broadPhaseMethod the broad phase method
      * @return the {@link Context} instance
      */
-    public Context setBroadPhaseMethod(AbstractBroadPhase broadPhaseMethod) {
+    public Context setBroadPhaseMethod(IBroadPhase broadPhaseMethod) {
         this.broadPhaseMethod = broadPhaseMethod;
         return this;
     }
