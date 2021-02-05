@@ -15,7 +15,7 @@
  */
 package com.github.introfog.pie.assessment.collisions.broadphase;
 
-import com.github.introfog.pie.core.collisions.broadphase.AbstractBroadPhase;
+import com.github.introfog.pie.core.collisions.broadphase.IBroadPhase;
 import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SpatialHashingMethod;
 import com.github.introfog.pie.core.collisions.broadphase.SweepAndPruneMethod;
@@ -40,7 +40,7 @@ planned to solve this problem, and add benchmark tests to the build action or ot
 public class BroadPhaseBenchmarkTestRunner {
     public static void runBroadPhaseBenchmarkTest(BenchmarkTestConfig config) throws IOException {
         Set<IShape> methodShapes = ShapeIOUtil.readShapesFromFile(config.sourceFolder + config.fileName + ".pie");
-        List<AbstractBroadPhase> methods = BroadPhaseBenchmarkTestRunner.initializeBroadPhaseMethods(methodShapes);
+        List<IBroadPhase> methods = BroadPhaseBenchmarkTestRunner.initializeBroadPhaseMethods(methodShapes);
 
         config.outputTestConfig();
 
@@ -64,8 +64,8 @@ public class BroadPhaseBenchmarkTestRunner {
         Assert.assertTrue(methodResults.stream().allMatch(BenchmarkTestMethodResult::isPassed));
     }
 
-    private static List<AbstractBroadPhase> initializeBroadPhaseMethods(Set<IShape> shapes) {
-        List<AbstractBroadPhase> methods = new ArrayList<>();
+    private static List<IBroadPhase> initializeBroadPhaseMethods(Set<IShape> shapes) {
+        List<IBroadPhase> methods = new ArrayList<>();
         methods.add(new BruteForceMethod());
         methods.add(new SpatialHashingMethod());
         methods.add(new SweepAndPruneMethod());
@@ -75,10 +75,10 @@ public class BroadPhaseBenchmarkTestRunner {
     }
 
     // TODO Make the method universal using reflection
-    private static double[] runBroadPhaseMethod(List<AbstractBroadPhase> methods, Set<IShape> methodShapes,
+    private static double[] runBroadPhaseMethod(List<IBroadPhase> methods, Set<IShape> methodShapes,
             BenchmarkTestConfig config) {
         for (int i = 0; i < config.warm; i++) {
-            methods.forEach(AbstractBroadPhase::calculateAabbCollisions);
+            methods.forEach(IBroadPhase::calculateAabbCollisions);
         }
 
         long[] totalNanoTime = new long[methods.size()];
