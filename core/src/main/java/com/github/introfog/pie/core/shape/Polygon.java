@@ -15,7 +15,6 @@
  */
 package com.github.introfog.pie.core.shape;
 
-import com.github.introfog.pie.core.Body;
 import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
 
@@ -24,23 +23,33 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
+/**
+ * This class represent convex polygon shape. Polygon is defined by array of vertices
+ * and array of normals (calculated when creating an object to improve performance).
+ */
 public class Polygon extends IShape {
-    public int vertexCount;
-    public Vector2f[] vertices;
-    public Vector2f[] normals;
+    /** The count of polygon vertices. */
+    protected final int vertexCount;
+    /** The array of polygon vertices. */
+    protected final Vector2f[] vertices;
+    /** The array of polygon normals. */
+    protected final Vector2f[] normals;
 
-    public static Polygon generateRectangle(float centerX, float centerY, float width, float height, float density,
-            float restitution) {
-        List<Vector2f> vertices = new ArrayList<>(4);
-        vertices.add(new Vector2f(-width / 2f, -height / 2f));
-        vertices.add(new Vector2f(width / 2f, -height / 2f));
-        vertices.add(new Vector2f(width / 2f, height / 2f));
-        vertices.add(new Vector2f(-width / 2f, height / 2f));
-        return new Polygon(density, restitution, centerX, centerY, vertices);
-    }
-
-    // TODO Search for the minimum convex hull (Jarvis algorithm) works for O(n*h) where h is the number of vertices in the MCH
+    /**
+     * Instantiates a new {@link Polygon} instance based on density,
+     * restitution, coordinates of center and list of vertices.
+     *
+     * <p>
+     * Important note, the coordinates of vertices are specified relative to the passed coordinates of center.
+     *
+     * @param density the density of polygon
+     * @param restitution the restitution of polygon
+     * @param centreX the X coordinate of center of polygon
+     * @param centreY the Y coordinate of center of polygon
+     * @param vertices the list of polygon vertices (relative to the passed center)
+     */
     public Polygon(float density, float restitution, float centreX, float centreY, List<Vector2f> vertices) {
+        // TODO Search for the minimum convex hull (Jarvis algorithm) works for O(n*h) where h is the number of vertices in the MCH
         body = new Body(centreX, centreY, density, restitution);
 
         for (int i = vertices.size() - 1; i > -1; i--) {
@@ -79,8 +88,54 @@ public class Polygon extends IShape {
 
         computeMassAndInertia();
         computeAabb();
+    }
 
-        type = ShapeType.POLYGON;
+    /**
+     * Generates rectangle based on coordinates of center, width and height, density and restitution.
+     *
+     * @param centerX the X coordinate of center of rectangle
+     * @param centerY the Y coordinate of center of rectangle
+     * @param width the width of rectangle
+     * @param height the height of rectangle
+     * @param density the density of rectangle
+     * @param restitution the restitution of rectangle
+     * @return the rectangle
+     */
+    public static Polygon generateRectangle(float centerX, float centerY, float width, float height, float density,
+            float restitution) {
+        List<Vector2f> vertices = new ArrayList<>(4);
+        vertices.add(new Vector2f(-width / 2f, -height / 2f));
+        vertices.add(new Vector2f(width / 2f, -height / 2f));
+        vertices.add(new Vector2f(width / 2f, height / 2f));
+        vertices.add(new Vector2f(-width / 2f, height / 2f));
+        return new Polygon(density, restitution, centerX, centerY, vertices);
+    }
+
+    /**
+     * Gets the count of polygon vertices.
+     *
+     * @return the count of vertices
+     */
+    public int getVertexCount() {
+        return vertexCount;
+    }
+
+    /**
+     * Gets the copy of array of polygon vertices.
+     *
+     * @return the array of vertices
+     */
+    public Vector2f[] getVertices() {
+        return Arrays.copyOf(vertices, vertices.length);
+    }
+
+    /**
+     * Gets the copy of array of polygon normals.
+     *
+     * @return the array of normals
+     */
+    public Vector2f[] getNormals() {
+        return Arrays.copyOf(normals, normals.length);
     }
 
     @Override
@@ -121,14 +176,21 @@ public class Polygon extends IShape {
                 .toString();
     }
 
-    public Vector2f getSupport(Vector2f dir) {
+    /**
+     * Calculates and return the most distant polygon vertex in a passed direction.
+     *
+     * @param direction the direction in which the search for the most distant vertex will occur
+     * @return a new vector object that coincides in coordinates with the most
+     * distant polygon vertex in the given direction
+     */
+    public Vector2f calculateSupportVertex(Vector2f direction) {
         // Looking for the most distant vertex in a given direction
         float bestProjection = -Float.MAX_VALUE;
-        Vector2f bestVertex = new Vector2f();
+        final Vector2f bestVertex = new Vector2f();
 
         for (int i = 0; i < vertexCount; ++i) {
             Vector2f v = vertices[i];
-            float projection = Vector2f.dotProduct(v, dir);
+            float projection = Vector2f.dotProduct(v, direction);
 
             if (projection > bestProjection) {
                 bestVertex.set(v);

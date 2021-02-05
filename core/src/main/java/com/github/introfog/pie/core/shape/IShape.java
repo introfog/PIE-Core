@@ -15,7 +15,6 @@
  */
 package com.github.introfog.pie.core.shape;
 
-import com.github.introfog.pie.core.Body;
 import com.github.introfog.pie.core.math.RotationMatrix2x2;
 import com.github.introfog.pie.core.math.Vector2f;
 
@@ -26,16 +25,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * {@link com.github.introfog.pie.core.World} that has a shape and body.
  */
 public abstract class IShape {
-    private static final AtomicInteger lastShapeId = new AtomicInteger();
+    private static final AtomicInteger lastShapeId = new AtomicInteger(Integer.MIN_VALUE);
 
-    /** The shape type. */
-    public ShapeType type;
     /** The shape axis aligned bounding box. */
-    public Aabb aabb;
+    protected Aabb aabb;
     /** The body that stores shape physical parameters. */
-    public Body body;
+    protected Body body;
     /** The rotation matrix. */
-    public RotationMatrix2x2 rotateMatrix;
+    protected RotationMatrix2x2 rotateMatrix;
 
     private final int shapeId;
 
@@ -54,7 +51,7 @@ public abstract class IShape {
      *
      * @param radian the angle in radians that the shape will have in space
      */
-    public final void setOrientation(float radian) {
+    public void setOrientation(float radian) {
         body.orientation = radian;
         rotateMatrix.setAngle(radian);
     }
@@ -65,9 +62,36 @@ public abstract class IShape {
      * @param impulse the impulse vector
      * @param contactVector the point of impulse application (coordinates are set relative to the center of the shape)
      */
-    public final void applyImpulse(Vector2f impulse, Vector2f contactVector) {
+    public void applyImpulse(Vector2f impulse, Vector2f contactVector) {
         body.velocity.add(impulse, body.invertedMass);
         body.angularVelocity += body.invertedInertia * Vector2f.crossProduct(contactVector, impulse);
+    }
+
+    /**
+     * Gets the shape axis aligned bounding box.
+     *
+     * @return the axis aligned bounding box
+     */
+    public Aabb getAabb() {
+        return aabb;
+    }
+
+    /**
+     * Gets the body of shape.
+     *
+     * @return the body
+     */
+    public Body getBody() {
+        return body;
+    }
+
+    /**
+     * Gets rotation matrix of shape.
+     *
+     * @return the rotation matrix
+     */
+    public RotationMatrix2x2 getRotateMatrix() {
+        return rotateMatrix;
     }
 
     /**
@@ -80,13 +104,25 @@ public abstract class IShape {
      */
     public abstract void computeAabb();
 
+    /**
+     * Checks that some other object is equal to this shape. Equality in our case consider that the links
+     * point to the same object in the computer's memory, because there is no situation in which different
+     * shapes are equals even though they may have the same coordinates and other parameters.
+     *
+     * @param o {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
-        // In general, consider shapes the same only when they refer to the
-        // same object in memory, this is provided by the shapeId variable
         return this == o;
     }
 
+    /**
+     * Returns a shape id that is unique for any shape. This approach is used because there is no situation
+     * in which different shapes are equals even though they may have the same coordinates and other parameters.
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return shapeId;

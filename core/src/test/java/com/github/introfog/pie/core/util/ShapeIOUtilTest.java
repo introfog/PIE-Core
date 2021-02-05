@@ -70,39 +70,39 @@ public class ShapeIOUtilTest extends PieTest {
 
         Circle circle = new Circle(10, 1, 2, 0.23f, 0.124f);
         Circle actCircle = (Circle) (shapes[0] instanceof Circle ? shapes[0] : shapes[1]);
-        Assert.assertEquals(circle.radius, actCircle.radius, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(circle.body, actCircle.body);
+        Assert.assertEquals(circle.getRadius(), actCircle.getRadius(), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(circle.getBody(), actCircle.getBody());
 
         Polygon polygon = Polygon.generateRectangle(20, 23, 15, 17, 0.17f, 1.23f);
         Polygon actPolygon = (Polygon) (shapes[0] instanceof Polygon ? shapes[0] : shapes[1]);
-        Assert.assertEquals(polygon.vertexCount, actPolygon.vertexCount);
-        Assert.assertArrayEquals(polygon.vertices, actPolygon.vertices);
-        Assert.assertEquals(polygon.body, actPolygon.body);
+        Assert.assertEquals(polygon.getVertexCount(), actPolygon.getVertexCount());
+        Assert.assertArrayEquals(polygon.getVertices(), actPolygon.getVertices());
+        Assert.assertEquals(polygon.getBody(), actPolygon.getBody());
     }
 
     @Test
     public void convertStringToShapeTest() {
-        String strCircle = "CIRCLE;10.0;1.0;2.0;0.23123;0.1";
+        String strCircle = "Circle;10.0;1.0;2.0;0.23123;0.1";
         Circle circle = new Circle(10, 1, 2, 0.23123f, 0.1f);
         Circle actCircle = (Circle) ShapeIOUtil.convertStringToShape(strCircle);
-        Assert.assertEquals(circle.radius, actCircle.radius, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(circle.body, actCircle.body);
+        Assert.assertEquals(circle.getRadius(), actCircle.getRadius(), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(circle.getBody(), actCircle.getBody());
 
-        String strPolygon = "POLYGON;4;7.5;-8.5;7.5;8.5;-7.5;8.5;-7.5;-8.5;20.0;23.0;0.17;1.23";
+        String strPolygon = "Polygon;4;7.5;-8.5;7.5;8.5;-7.5;8.5;-7.5;-8.5;20.0;23.0;0.17;1.23";
         Polygon polygon = Polygon.generateRectangle(20, 23, 15, 17, 0.17f, 1.23f);
         Polygon actPolygon = (Polygon) ShapeIOUtil.convertStringToShape(strPolygon);
-        Assert.assertEquals(polygon.vertexCount, actPolygon.vertexCount);
-        Assert.assertArrayEquals(polygon.vertices, actPolygon.vertices);
-        Assert.assertEquals(polygon.body, actPolygon.body);
+        Assert.assertEquals(polygon.getVertexCount(), actPolygon.getVertexCount());
+        Assert.assertArrayEquals(polygon.getVertices(), actPolygon.getVertices());
+        Assert.assertEquals(polygon.getBody(), actPolygon.getBody());
     }
 
     @Test
     public void convertShapeToStringTest() {
-        String expectCircle = "CIRCLE;10.0;1.0;2.0;0.23123;0.1\n";
+        String expectCircle = "Circle;10.0;1.0;2.0;0.23123;0.1\n";
         Circle circle = new Circle(10, 1, 2, 0.23123f, 0.1f);
         Assert.assertEquals(expectCircle, ShapeIOUtil.convertShapeToString(circle));
 
-        String expectPolygon = "POLYGON;4;7.5;-8.5;7.5;8.5;-7.5;8.5;-7.5;-8.5;20.0;23.0;0.17;1.23\n";
+        String expectPolygon = "Polygon;4;7.5;-8.5;7.5;8.5;-7.5;8.5;-7.5;-8.5;20.0;23.0;0.17;1.23\n";
         Polygon polygon = Polygon.generateRectangle(20, 23, 15, 17, 0.17f, 1.23f);
         Assert.assertEquals(expectPolygon, ShapeIOUtil.convertShapeToString(polygon));
     }

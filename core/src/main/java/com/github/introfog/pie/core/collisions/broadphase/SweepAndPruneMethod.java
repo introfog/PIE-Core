@@ -102,9 +102,9 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
 
         // TODO use insertion sorting (effective when the list is almost sorted)
         if (currentSweepAndPruneAxis == 0) {
-            xAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.x, b.aabb.min.x));
+            xAxisProjection.sort((a, b) -> Float.compare(a.getAabb().min.x, b.getAabb().min.x));
         } else {
-            yAxisProjection.sort((a, b) -> Float.compare(a.aabb.min.y, b.aabb.min.y));
+            yAxisProjection.sort((a, b) -> Float.compare(a.getAabb().min.y, b.getAabb().min.y));
         }
 
         p.set(0f, 0f);
@@ -114,9 +114,9 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
         Aabb currAabb;
         for (int i = 0; i < shapes.size(); i++) {
             if (currentSweepAndPruneAxis == 0) {
-                currAabb = xAxisProjection.get(i).aabb;
+                currAabb = xAxisProjection.get(i).getAabb();
             } else {
-                currAabb = yAxisProjection.get(i).aabb;
+                currAabb = yAxisProjection.get(i).getAabb();
             }
 
             p.set(currAabb.min.x + currAabb.max.x, currAabb.min.y + currAabb.max.y);
@@ -126,16 +126,16 @@ public class SweepAndPruneMethod extends AbstractBroadPhase {
             s2.add(p);
 
             for (int j = i + 1; j < shapes.size(); j++) {
-                if (currentSweepAndPruneAxis == 0 && xAxisProjection.get(j).aabb.min.x > currAabb.max.x) {
+                if (currentSweepAndPruneAxis == 0 && xAxisProjection.get(j).getAabb().min.x > currAabb.max.x) {
                     break;
-                } else if (currentSweepAndPruneAxis == 1 && yAxisProjection.get(j).aabb.min.y > currAabb.max.y) {
+                } else if (currentSweepAndPruneAxis == 1 && yAxisProjection.get(j).getAabb().min.y > currAabb.max.y) {
                     break;
                 }
 
 
-                if (currentSweepAndPruneAxis == 0 && Aabb.isIntersected(xAxisProjection.get(j).aabb, currAabb)) {
+                if (currentSweepAndPruneAxis == 0 && Aabb.isIntersected(xAxisProjection.get(j).getAabb(), currAabb)) {
                     possibleCollisionSet.add(new ShapePair(xAxisProjection.get(j), xAxisProjection.get(i)));
-                } else if (currentSweepAndPruneAxis == 1 && Aabb.isIntersected(yAxisProjection.get(j).aabb, currAabb)) {
+                } else if (currentSweepAndPruneAxis == 1 && Aabb.isIntersected(yAxisProjection.get(j).getAabb(), currAabb)) {
                     possibleCollisionSet.add(new ShapePair(yAxisProjection.get(j), yAxisProjection.get(i)));
                 }
             }

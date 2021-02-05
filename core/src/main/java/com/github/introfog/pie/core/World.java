@@ -18,6 +18,7 @@ package com.github.introfog.pie.core;
 import com.github.introfog.pie.core.collisions.Manifold;
 import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
 import com.github.introfog.pie.core.math.MathPie;
+import com.github.introfog.pie.core.shape.Body;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.ShapePair;
 
@@ -159,7 +160,7 @@ public final class World {
         // Narrow phase
         manifolds.clear();
         for (final ShapePair pair : mayBeCollision) {
-            if (!MathPie.areEqual(pair.getFirst().body.invertedMass + pair.getSecond().body.invertedMass, 0f)) {
+            if (!MathPie.areEqual(pair.getFirst().getBody().invertedMass + pair.getSecond().getBody().invertedMass, 0f)) {
 
                 final IShapeCollisionHandler handler = context.getShapeCollisionMapping().getMapping(pair);
                 if (handler == null) {
@@ -189,11 +190,11 @@ public final class World {
         manifolds.forEach(Manifold::correctPosition);
 
         // Clear all forces
-        shapes.forEach(shape -> shape.body.force.set(0f, 0f));
+        shapes.forEach(shape -> shape.getBody().force.set(0f, 0f));
     }
 
     private void integrateForces(IShape shape) {
-        Body body = shape.body;
+        final Body body = shape.getBody();
         if (body.invertedMass == 0.0f) {
             return;
         }
@@ -204,7 +205,7 @@ public final class World {
     }
 
     private void integrateVelocity(IShape shape) {
-        Body body = shape.body;
+        final Body body = shape.getBody();
         if (body.invertedMass == 0.0f) {
             return;
         }

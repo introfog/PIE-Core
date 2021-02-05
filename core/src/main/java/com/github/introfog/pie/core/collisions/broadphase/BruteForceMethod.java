@@ -62,7 +62,7 @@ public class BruteForceMethod extends AbstractBroadPhase {
                 a = arrayShapes[i];
                 b = arrayShapes[j];
 
-                if (Aabb.isIntersected(a.aabb, b.aabb)) {
+                if (Aabb.isIntersected(a.getAabb(), b.getAabb())) {
                     collisionsSet.add(new ShapePair(a, b));
                 }
             }

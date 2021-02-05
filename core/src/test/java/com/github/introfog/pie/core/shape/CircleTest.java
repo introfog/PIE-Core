@@ -34,7 +34,6 @@ public class CircleTest extends PieTest {
     public void paramConstructorTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        Assert.assertEquals(ShapeType.CIRCLE, circle.type);
         Assert.assertEquals(new Vector2f(1, 3), circle.body.position);
         Assert.assertEquals(0.1f, circle.body.density, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(0.2f, circle.body.restitution, PieTest.FLOAT_EPSILON_COMPARISON);
@@ -44,8 +43,8 @@ public class CircleTest extends PieTest {
     public void computeAabbTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        Assert.assertEquals(new Vector2f(-9, -7), circle.aabb.min);
-        Assert.assertEquals(new Vector2f(11, 13), circle.aabb.max);
+        Assert.assertEquals(new Vector2f(-9, -7), circle.getAabb().min);
+        Assert.assertEquals(new Vector2f(11, 13), circle.getAabb().max);
     }
 
     @Test

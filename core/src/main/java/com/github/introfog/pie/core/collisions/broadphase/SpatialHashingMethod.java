@@ -72,7 +72,8 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     private void calculateCellSize() {
         float averageMaxBodiesSize = 0;
         for (IShape shape : shapes) {
-            averageMaxBodiesSize += Math.max(shape.aabb.max.x - shape.aabb.min.x, shape.aabb.max.y - shape.aabb.min.y);
+            averageMaxBodiesSize += Math.max(shape.getAabb().max.x - shape.getAabb().min.x,
+                    shape.getAabb().max.y - shape.getAabb().min.y);
         }
         averageMaxBodiesSize /= shapes.size();
 
@@ -84,7 +85,7 @@ public class SpatialHashingMethod extends AbstractBroadPhase {
     }
 
     private void insert(IShape shape) {
-        Aabb aabb = shape.aabb;
+        final Aabb aabb = shape.getAabb();
         int key;
         int cellX = MathPie.fastFloor(aabb.max.x / cellSize) - MathPie.fastFloor(aabb.min.x / cellSize);
         int cellY = MathPie.fastFloor(aabb.max.y / cellSize) - MathPie.fastFloor(aabb.min.y / cellSize);

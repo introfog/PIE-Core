@@ -337,7 +337,7 @@ public class AabbTreeNode {
     private static void calculateAabbCollisionsHelper(AabbTreeNode first, AabbTreeNode second, Set<ShapePair> collisions) {
         if (first.isLeaf()) {
             if (second.isLeaf()) {
-                if (Aabb.isIntersected(first.shape.aabb, second.shape.aabb)) {
+                if (Aabb.isIntersected(first.shape.getAabb(), second.shape.getAabb())) {
                     collisions.add(new ShapePair(first.shape, second.shape));
                 }
             } else {
@@ -374,7 +374,7 @@ public class AabbTreeNode {
         while (!nodes.isEmpty()) {
             AabbTreeNode currentNode = nodes.pop();
             if (currentNode.isLeaf()) {
-                if (!Aabb.isContained(currentNode.aabb, currentNode.shape.aabb)) {
+                if (!Aabb.isContained(currentNode.aabb, currentNode.shape.getAabb())) {
                     invalidNodes.add(currentNode);
                 }
             } else {
@@ -460,11 +460,11 @@ public class AabbTreeNode {
 
     private static void calculateEnlargedAabb(AabbTreeNode node, IShape shape) {
         node.aabb = new Aabb();
-        float width = shape.aabb.max.x - shape.aabb.min.x;
-        float height = shape.aabb.max.y - shape.aabb.min.y;
-        node.aabb.min.set(shape.aabb.min.x - node.enlargedAabbCoefficient * width,
-                shape.aabb.min.y - node.enlargedAabbCoefficient * height);
-        node.aabb.max.set(shape.aabb.max.x + node.enlargedAabbCoefficient * width,
-                shape.aabb.max.y + node.enlargedAabbCoefficient * height);
+        float width = shape.getAabb().max.x - shape.getAabb().min.x;
+        float height = shape.getAabb().max.y - shape.getAabb().min.y;
+        node.aabb.min.set(shape.getAabb().min.x - node.enlargedAabbCoefficient * width,
+                shape.getAabb().min.y - node.enlargedAabbCoefficient * height);
+        node.aabb.max.set(shape.getAabb().max.x + node.enlargedAabbCoefficient * width,
+                shape.getAabb().max.y + node.enlargedAabbCoefficient * height);
     }
 }

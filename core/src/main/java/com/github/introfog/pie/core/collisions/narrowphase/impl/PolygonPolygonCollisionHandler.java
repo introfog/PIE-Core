@@ -23,7 +23,6 @@ import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.Polygon;
 import com.github.introfog.pie.core.math.MathPie;
 import com.github.introfog.pie.core.math.Vector2f;
-import com.github.introfog.pie.core.shape.ShapeType;
 
 /**
  * Class is used to handle possible collision between two {@link Polygon}.
@@ -31,7 +30,7 @@ import com.github.introfog.pie.core.shape.ShapeType;
 public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
     @Override
     public Manifold handleCollision(IShape aShape, IShape bShape, Context context) {
-        if (aShape.type != ShapeType.POLYGON || bShape.type != ShapeType.POLYGON) {
+        if (!Polygon.class.equals(aShape.getClass()) || !Polygon.class.equals(bShape.getClass())) {
             throw new IllegalArgumentException(PieExceptionMessage.INVALID_SHAPES_TYPE_FOR_NARROW_PHASE_HANDLER);
         }
         Polygon polygonA = (Polygon) aShape;
@@ -93,17 +92,17 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         // n : incident normal
 
         // Setup reference face vertices
-        Vector2f v1 = new Vector2f(refPoly.vertices[referenceIndex]);
-        referenceIndex = referenceIndex + 1 == refPoly.vertexCount ? 0 : referenceIndex + 1;
-        Vector2f v2 = new Vector2f(refPoly.vertices[referenceIndex]);
+        Vector2f v1 = new Vector2f(refPoly.getVertices()[referenceIndex]);
+        referenceIndex = referenceIndex + 1 == refPoly.getVertexCount() ? 0 : referenceIndex + 1;
+        Vector2f v2 = new Vector2f(refPoly.getVertices()[referenceIndex]);
 
         // Transform vectors to world coordinates
         // v1 = RefPoly->u * v1 + RefPoly->body->position;
         // v2 = RefPoly->u * v2 + RefPoly->body->position;
-        refPoly.rotateMatrix.mul(v1, v1);
-        v1.add(refPoly.body.position);
-        refPoly.rotateMatrix.mul(v2, v2);
-        v2.add(refPoly.body.position);
+        refPoly.getRotateMatrix().mul(v1, v1);
+        v1.add(refPoly.getBody().position);
+        refPoly.getRotateMatrix().mul(v2, v2);
+        v2.add(refPoly.getBody().position);
 
         // Calculate reference face side normal in world space
         // Vec2 sidePlaneNormal = (v2 - v1);
@@ -175,14 +174,14 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
     }
 
     private void findIncidentFace(Vector2f[] v, Polygon refPoly, Polygon incPoly, int referenceIndex) {
-        Vector2f referenceNormal = new Vector2f(refPoly.normals[referenceIndex]);
+        Vector2f referenceNormal = new Vector2f(refPoly.getNormals()[referenceIndex]);
 
         // Calculate normal in incident's frame of reference
         // referenceNormal = RefPoly->u * referenceNormal; // To world space
         // referenceNormal = IncPoly->u.Transpose( ) * referenceNormal; // To
         // incident's model space
-        refPoly.rotateMatrix.mul(referenceNormal, referenceNormal); // To world space
-        incPoly.rotateMatrix.transposeMul(referenceNormal, referenceNormal);// To
+        refPoly.getRotateMatrix().mul(referenceNormal, referenceNormal); // To world space
+        incPoly.getRotateMatrix().transposeMul(referenceNormal, referenceNormal);// To
         // incident's
         // model
         // space
@@ -190,9 +189,9 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         // Find most anti-normal face on incident polygon
         int incidentFace = 0;
         float minDot = Float.MAX_VALUE;
-        for (int i = 0; i < incPoly.vertexCount; ++i) {
+        for (int i = 0; i < incPoly.getVertexCount(); ++i) {
             // real dot = Dot( referenceNormal, IncPoly->m_normals[i] );
-            float dotProduct = Vector2f.dotProduct(referenceNormal, incPoly.normals[i]);
+            float dotProduct = Vector2f.dotProduct(referenceNormal, incPoly.getNormals()[i]);
 
             if (dotProduct < minDot) {
                 minDot = dotProduct;
@@ -207,11 +206,11 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         // incidentFace + 1;
         // v[1] = IncPoly->u * IncPoly->m_vertices[incidentFace] +
         // IncPoly->body->position;
-        incPoly.rotateMatrix.mul(incPoly.vertices[incidentFace], v[0]);
-        v[0].add(incPoly.body.position);
-        incidentFace = incidentFace + 1 >= incPoly.vertexCount ? 0 : incidentFace + 1;
-        incPoly.rotateMatrix.mul(incPoly.vertices[incidentFace], v[1]);
-        v[1].add(incPoly.body.position);
+        incPoly.getRotateMatrix().mul(incPoly.getVertices()[incidentFace], v[0]);
+        v[0].add(incPoly.getBody().position);
+        incidentFace = incidentFace + 1 >= incPoly.getVertexCount() ? 0 : incidentFace + 1;
+        incPoly.getRotateMatrix().mul(incPoly.getVertices()[incidentFace], v[1]);
+        v[1].add(incPoly.getBody().position);
     }
 
     private int clip(Vector2f n, float c, Vector2f[] face) {
@@ -262,23 +261,23 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         float bestDistance = -Float.MAX_VALUE;
         int bestIndex = 0;
 
-        for (int i = 0; i < polygonA.vertexCount; ++i) {
+        for (int i = 0; i < polygonA.getVertexCount(); ++i) {
             // Retrieve a face normal from A
             // Vec2 n = A->m_normals[i];
             // Vec2 nw = A->u * n;
             Vector2f nw = new Vector2f();
-            polygonA.rotateMatrix.mul(polygonA.normals[i], nw);
+            polygonA.getRotateMatrix().mul(polygonA.getNormals()[i], nw);
 
             // Transform face normal into B's model space
             // Mat2 buT = B->u.Transpose( );
             // n = buT * nw;
             Vector2f n = new Vector2f();
-            polygonB.rotateMatrix.transposeMul(nw, n);
+            polygonB.getRotateMatrix().transposeMul(nw, n);
 
             // Retrieve support point from B along -n
             // Vector2f s = B->GetSupport( -n );
             n.negative();
-            Vector2f s = polygonB.getSupport(n);
+            Vector2f s = polygonB.calculateSupportVertex(n);
             n.negative();
 
             // Translate the face A to the local coordinates of B
@@ -286,11 +285,11 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
             // v = A->u * v + A->body->position;
             // v -= B->body->position;
             // v = buT * v;
-            Vector2f v = new Vector2f(polygonA.vertices[i]);
-            polygonA.rotateMatrix.mul(v, v);
-            v.add(polygonA.body.position);
-            v.sub(polygonB.body.position);
-            polygonB.rotateMatrix.transposeMul(v, v);
+            Vector2f v = new Vector2f(polygonA.getVertices()[i]);
+            polygonA.getRotateMatrix().mul(v, v);
+            v.add(polygonA.getBody().position);
+            v.sub(polygonB.getBody().position);
+            polygonB.getRotateMatrix().transposeMul(v, v);
 
             // Calculate penetration (in local coordinates B)
             // real d = Dot( n, s - v );

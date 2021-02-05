@@ -15,6 +15,7 @@
  */
 package com.github.introfog.pie.core;
 
+import com.github.introfog.pie.core.shape.Body;
 import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
