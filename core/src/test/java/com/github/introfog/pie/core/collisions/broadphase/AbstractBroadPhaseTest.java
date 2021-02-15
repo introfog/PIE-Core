@@ -27,16 +27,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
 public abstract class AbstractBroadPhaseTest extends PieTest {
-    @Rule
-    public ExpectedException junitExpectedException = ExpectedException.none();
-
     @Test
     public void addShapeMethodTest() {
         AbstractBroadPhase broadPhaseMethod = getBroadPhaseMethod();
@@ -183,8 +178,7 @@ public abstract class AbstractBroadPhaseTest extends PieTest {
         Assert.assertTrue(methodShapes.contains(c1));
         Assert.assertTrue(methodShapes.contains(c2));
 
-        junitExpectedException.expect(UnsupportedOperationException.class);
-        methodShapes.remove(c1);
+        Assert.assertThrows(UnsupportedOperationException.class, () -> methodShapes.remove(c1));
     }
 
     protected abstract AbstractBroadPhase getBroadPhaseMethod();

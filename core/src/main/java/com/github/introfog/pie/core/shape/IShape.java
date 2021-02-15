@@ -28,20 +28,21 @@ public abstract class IShape {
     private static final AtomicInteger lastShapeId = new AtomicInteger(Integer.MIN_VALUE);
 
     /** The shape axis aligned bounding box. */
-    protected Aabb aabb;
+    protected final Aabb aabb;
     /** The body that stores shape physical parameters. */
-    protected Body body;
+    protected final Body body;
     /** The rotation matrix. */
-    protected RotationMatrix2x2 rotateMatrix;
+    protected final RotationMatrix2x2 rotateMatrix;
 
     private final int shapeId;
 
     /**
      * Instantiates a new {@link IShape} instance.
      */
-    public IShape() {
+    public IShape(float centreX, float centreY, float density, float restitution) {
         shapeId = lastShapeId.incrementAndGet();
         aabb = new Aabb();
+        body = new Body(centreX, centreY, density, restitution);
         rotateMatrix = new RotationMatrix2x2();
         rotateMatrix.setAngle(0f);
     }

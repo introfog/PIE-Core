@@ -50,7 +50,7 @@ public class Polygon extends IShape {
      */
     public Polygon(float density, float restitution, float centreX, float centreY, List<Vector2f> vertices) {
         // TODO Search for the minimum convex hull (Jarvis algorithm) works for O(n*h) where h is the number of vertices in the MCH
-        body = new Body(centreX, centreY, density, restitution);
+        super(centreX, centreY, density, restitution);
 
         for (int i = vertices.size() - 1; i > -1; i--) {
             for (int j = i - 1; j > -1; j--) {
@@ -66,7 +66,7 @@ public class Polygon extends IShape {
 
         if (vertexCount > MathPie.MAX_POLY_VERTEX_COUNT) {
             // TODO create Pie custom exception
-            throw new RuntimeException("Error. Too many vertices in polygon.");
+            throw new IllegalArgumentException("Error. Too many vertices in polygon.");
         }
 
         this.vertices = Vector2f.arrayOf(vertexCount);

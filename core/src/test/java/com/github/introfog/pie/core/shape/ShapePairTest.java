@@ -21,22 +21,16 @@ import com.github.introfog.pie.test.PieTest;
 import com.github.introfog.pie.test.annotations.UnitTest;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
 public class ShapePairTest extends PieTest {
-    @Rule
-    public ExpectedException junitExpectedException = ExpectedException.none();
-
     @Test
     public void tryToCreateShapePairWithSameShapesTest() {
         IShape c1 = new Circle(0, 0, 0, 0, 0);
-        junitExpectedException.expect(IllegalArgumentException.class);
-        junitExpectedException.expectMessage(PieExceptionMessage.SAME_SHAPES_PASSED_TO_SHAPE_PAIR_CONSTRUCTOR);
-        new ShapePair(c1, c1);
+        Assert.assertThrows(PieExceptionMessage.SAME_SHAPES_PASSED_TO_SHAPE_PAIR_CONSTRUCTOR,
+                IllegalArgumentException.class, () -> new ShapePair(c1, c1));
     }
 
     @Test
