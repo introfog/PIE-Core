@@ -34,10 +34,10 @@ public class Circle extends IShape {
      * @param restitution the restitution of circle
      */
     public Circle(float radius, float centreX, float centreY, float density, float restitution) {
-        body = new Body(centreX, centreY, density, restitution);
+        super(centreX, centreY, density, restitution);
         if (radius < 0) {
             // TODO Create custom Pie exception
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
         this.radius = radius;
 

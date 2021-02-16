@@ -41,7 +41,7 @@ public class Manifold {
         this.bShape = bShape;
         this.a = aShape.getBody();
         this.b = bShape.getBody();
-        this.context = new Context(context);
+        this.context = context;
 
         areBodiesCollision = true;
         normal = new Vector2f();

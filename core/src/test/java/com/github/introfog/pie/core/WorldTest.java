@@ -31,20 +31,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 
 @Category(IntegrationTest.class)
 public class WorldTest extends PieTest {
-    @Rule
-    public ExpectedException junitExpectedException = ExpectedException.none();
-
     @Test
     public void deadLoopBorderTest() {
-        Context context = new Context().setFixedDeltaTime(2f).setDeadLoopBorder(3f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(2f).setDeadLoopBorder(3f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -69,8 +64,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void accumulatorTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -98,8 +93,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void getUnmodifiableShapesMethodTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -117,15 +112,13 @@ public class WorldTest extends PieTest {
 
         Set<IShape> worldShapes = world.getUnmodifiableShapes();
         Assert.assertEquals(shapes, worldShapes);
-
-        junitExpectedException.expect(UnsupportedOperationException.class);
-        worldShapes.add(c2);
+        Assert.assertThrows(UnsupportedOperationException.class, () -> worldShapes.add(c2));
     }
 
     @Test
     public void setShapesMethodTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -155,8 +148,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void addShapeMethodTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -171,8 +164,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void addEqualShapesTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -186,8 +179,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void removeMethodTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -216,8 +209,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void clearMethodTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -238,11 +231,11 @@ public class WorldTest extends PieTest {
 
     @Test
     public void highAndLowCollisionSolveIterationsTest() {
-        Context context = new Context().setFixedDeltaTime(1f / 3).setDeadLoopBorder(1).setCollisionSolveIterations(10);
-        World highIterWorld = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f / 3).setDeadLoopBorder(1).setCollisionSolveIterations(10);
+        World highIterWorld = new World(properties);
 
-        context.setCollisionSolveIterations(1);
-        World lowIterWorld = new World(context);
+        properties.setCollisionSolveIterations(1);
+        World lowIterWorld = new World(properties);
 
         IShape cHigh1 = new Circle(10, 0, 0, 1f, 0.2f);
         cHigh1.getBody().velocity.add(new Vector2f(0.1f, 0));
@@ -262,8 +255,8 @@ public class WorldTest extends PieTest {
         lowIterWorld.addShape(cLow2);
         lowIterWorld.addShape(cLow3);
 
-        highIterWorld.update(context.getFixedDeltaTime() + MathPie.EPSILON);
-        lowIterWorld.update(context.getFixedDeltaTime() + MathPie.EPSILON);
+        highIterWorld.update(properties.getFixedDeltaTime() + MathPie.EPSILON);
+        lowIterWorld.update(properties.getFixedDeltaTime() + MathPie.EPSILON);
         Assert.assertEquals(2, highIterWorld.getCollisions().size());
         Assert.assertEquals(2, lowIterWorld.getCollisions().size());
 
@@ -277,8 +270,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void getManifoldsAndCollisionsTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -295,8 +288,8 @@ public class WorldTest extends PieTest {
 
     @Test
     public void getCollisionsTest() {
-        Context context = new Context().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties().setFixedDeltaTime(1f).setDeadLoopBorder(10f);
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);
@@ -313,10 +306,10 @@ public class WorldTest extends PieTest {
 
     @Test
     public void thereIsNoHandlerForPairTest() {
-        Context context = new Context();
-        context.getShapeCollisionMapping().putMapping(Circle.class, Circle.class, null);
-        Assert.assertNull(context.getShapeCollisionMapping().getMapping(Circle.class, Circle.class));
-        World world = new World(context);
+        WorldProperties properties = new WorldProperties();
+        properties.getShapeCollisionMapping().putMapping(Circle.class, Circle.class, null);
+        Assert.assertNull(properties.getShapeCollisionMapping().getMapping(Circle.class, Circle.class));
+        World world = new World(properties);
 
         IShape c1 = new Circle(10, 0, 0, 1f, 0.2f);
         IShape c2 = new Circle(10, 15, 0, 1f, 0.2f);

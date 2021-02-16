@@ -24,16 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 
 @Category(UnitTest.class)
 public class PolygonTest extends PieTest {
-    @Rule
-    public ExpectedException junitExpectedException = ExpectedException.none();
-
     @Test
     public void staticGenerateRectangleTest() {
         Polygon rectangle = Polygon.generateRectangle(0, 0, 15, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
@@ -137,9 +132,8 @@ public class PolygonTest extends PieTest {
         vertices.add(new Vector2f(0, 0));
 
         // TODO use custom Pie exception
-        junitExpectedException.expect(RuntimeException.class);
-        junitExpectedException.expectMessage("Error. Too many vertices in polygon.");
-        new Polygon(0.1f, 0.2f, 0, 0, vertices);
+        Assert.assertThrows("Error. Too many vertices in polygon.",
+                RuntimeException.class, () -> new Polygon(0.1f, 0.2f, 0, 0, vertices));
     }
 
     @Test

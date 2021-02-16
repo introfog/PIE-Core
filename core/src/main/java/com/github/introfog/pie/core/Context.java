@@ -17,7 +17,6 @@ package com.github.introfog.pie.core;
 
 import com.github.introfog.pie.core.collisions.Manifold;
 import com.github.introfog.pie.core.collisions.broadphase.IBroadPhase;
-import com.github.introfog.pie.core.collisions.broadphase.BruteForceMethod;
 import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
 import com.github.introfog.pie.core.collisions.narrowphase.ShapeCollisionHandlersMapper;
 import com.github.introfog.pie.core.math.MathPie;
@@ -26,87 +25,33 @@ import com.github.introfog.pie.core.shape.Aabb;
 import com.github.introfog.pie.core.shape.IShape;
 
 /**
- * The class contains fields that specify the basic properties of the
- * physical engine, in particular the {@link World} class properties.
+ * The class stores the fields and methods that are needed between
+ * iterations of the {@link World} and for its different stages.
  */
 public class Context {
-    private float fixedDeltaTime;
-    private float deadLoopBorder;
-    private float correctPositionPercent;
-    private float minBorderSlop;
-    private int collisionSolveIterations;
-    private Vector2f gravity;
-    private IBroadPhase broadPhaseMethod;
-    private ShapeCollisionHandlersMapper shapeCollisionHandlersMapper;
+    private final float fixedDeltaTime;
+    private final float deadLoopBorder;
+    private final float correctPositionPercent;
+    private final float minBorderSlop;
+    private final int collisionSolveIterations;
+    private final Vector2f gravity;
+    private final IBroadPhase broadPhaseMethod;
+    private final ShapeCollisionHandlersMapper shapeCollisionHandlersMapper;
 
     /**
-     * Instantiates a new {@link Context} instance with default values of fields (default constructor).
+     * Instantiates a new {@link Context} instance based on passed {@link WorldProperties}.
      *
-     * <p>
-     * Default context values:
-     * <ul>
-     * <li>fixedDeltaTime = 1 / 60
-     * <li>deadLoopBorder = 20 / 60
-     * <li>correctPositionPercent = 0.5
-     * <li>minBorderSlop = 0.1
-     * <li>collisionSolveIterations = 1
-     * <li>gravity = (0, 50)
-     * <li>broadPhaseMethod = {@link BruteForceMethod}
-     * <li>narrowPhaseAdapter = {@link ShapeCollisionHandlersMapper#createAndGetDefaultMapping()}
-     * </ul>
+     * @param worldProperties the {@link WorldProperties} instance
      */
-    public Context() {
-        fixedDeltaTime = 1f / 60f;
-        deadLoopBorder = fixedDeltaTime * 20f;
-        correctPositionPercent = 0.5f;
-        minBorderSlop = 0.1f;
-        collisionSolveIterations = 1;
-        // Earth value is (0f, 9.807f)
-        gravity = new Vector2f(0f, 50f);
-        broadPhaseMethod = new BruteForceMethod();
-        shapeCollisionHandlersMapper = ShapeCollisionHandlersMapper.createAndGetDefaultMapping();
-    }
-
-    /**
-     * Instantiates a new {@link Context} instance based on another {@link Context} instance (copy constructor).
-     *
-     * <p>
-     * Note that this copy constructor create a deep copy of context. For example for
-     * broad phase field method {@link IBroadPhase#newInstance()} is used.
-     *
-     * @param other the other {@link Context} instance
-     */
-    public Context(Context other) {
-        this.setFixedDeltaTime(other.getFixedDeltaTime());
-        this.setDeadLoopBorder(other.getDeadLoopBorder());
-        this.setCorrectPositionPercent(other.getCorrectPositionPercent());
-        this.setMinBorderSlop(other.getMinBorderSlop());
-        this.setCollisionSolveIterations(other.getCollisionSolveIterations());
-        this.setGravity(new Vector2f(other.getGravity()));
-        this.setBroadPhaseMethod(other.getBroadPhaseMethod().newInstance());
-        this.setShapeCollisionMapping(new ShapeCollisionHandlersMapper(other.getShapeCollisionMapping()));
-    }
-
-    /**
-     * Sets the number of collision solve iterations.
-     *
-     * <p>
-     * Because collisions are resolved not absolutely, but in part, to speed up the performance,
-     * this number determines how many times the {@link Manifold#solve()} method will be called.
-     * The larger the number, the more accurate collision resolution will be, but the longer it
-     * will take to resolve collisions.
-     *
-     * @param collisionSolveIterations the number of collision solve iterations
-     * @return the {@link Context} instance
-     *
-     * @throws IllegalArgumentException if negative number passed
-     */
-    public Context setCollisionSolveIterations(int collisionSolveIterations) {
-        if (collisionSolveIterations < 0) {
-            throw new IllegalArgumentException(PieExceptionMessage.COLLISION_SOLVE_ITERATION_MUST_NOT_BE_NEGATIVE);
-        }
-        this.collisionSolveIterations = collisionSolveIterations;
-        return this;
+    public Context(WorldProperties worldProperties) {
+        this.fixedDeltaTime = worldProperties.getFixedDeltaTime();
+        this.deadLoopBorder = worldProperties.getDeadLoopBorder();
+        this.correctPositionPercent = worldProperties.getCorrectPositionPercent();
+        this.minBorderSlop = worldProperties.getMinBorderSlop();
+        this.collisionSolveIterations = worldProperties.getCollisionSolveIterations();
+        this.gravity = new Vector2f(worldProperties.getGravity());
+        this.broadPhaseMethod = worldProperties.getBroadPhaseMethod().newInstance();
+        this.shapeCollisionHandlersMapper = new ShapeCollisionHandlersMapper(worldProperties.getShapeCollisionMapping());
     }
 
     /**
@@ -139,22 +84,6 @@ public class Context {
     }
 
     /**
-     * Sets the dead loop border.
-     *
-     * The deadLoopBorder is the boundary that serves to prevent the dead loop, i.e. when the iteration of the engine
-     * takes longer than {@link Context#fixedDeltaTime}, and the World accumulator becomes very large, and the engine
-     * freezes until it performs the required number of steps.
-     * The recommended value is 20 times greater than the value of {@link Context#fixedDeltaTime}.
-     *
-     * @param deadLoopBorder the dead loop border
-     * @return the {@link Context} instance
-     */
-    public Context setDeadLoopBorder(float deadLoopBorder) {
-        this.deadLoopBorder = deadLoopBorder;
-        return this;
-    }
-
-    /**
      * Gets the fixed delta time.
      *
      * The fixedDeltaTime is a number that is defined as the difference between the unit and the desired engine
@@ -166,22 +95,6 @@ public class Context {
      */
     public float getFixedDeltaTime() {
         return fixedDeltaTime;
-    }
-
-    /**
-     * Sets the fixed delta time.
-     *
-     * The fixedDeltaTime is a number that is defined as the difference between the unit and the desired engine
-     * refresh rate. Desired refresh rate (DSR) - how many times per second the world and bodies in it will be updated,
-     * the higher the DSR, the smoother the physics in the world will be, but if you set the DSR too high,
-     * the engine may not have time to iterate and a dead loop may occur (see {@link Context#deadLoopBorder}).
-     *
-     * @param fixedDeltaTime the fixed delta time
-     * @return the {@link Context} instance
-     */
-    public Context setFixedDeltaTime(float fixedDeltaTime) {
-        this.fixedDeltaTime = fixedDeltaTime;
-        return this;
     }
 
     /**
@@ -200,23 +113,6 @@ public class Context {
     }
 
     /**
-     * Sets the correct position percent.
-     *
-     * The correctPositionPercent is used to prevent the situation of sinking objects, i.e. for example,
-     * when a body hits a wall with infinite mass (the reciprocal mass is 0, in this way static bodies are
-     * determined in Pie), due to a floating-point calculation, the error is accumulating and the body begins
-     * to sink in the wall. Therefore, at each iteration, the object is moving along the collision normal by
-     * a correctPositionPercent of penetration depth (usually 20-80 percent).
-     *
-     * @param correctPositionPercent the correct position percent
-     * @return the {@link Context} instance
-     */
-    public Context setCorrectPositionPercent(float correctPositionPercent) {
-        this.correctPositionPercent = correctPositionPercent;
-        return this;
-    }
-
-    /**
      * Gets the minimal border slop.
      *
      * The minBorderSlop serves to prevent the jittering of objects back and forth when they rest upon
@@ -227,21 +123,6 @@ public class Context {
      */
     public float getMinBorderSlop() {
         return minBorderSlop;
-    }
-
-    /**
-     * Sets the minimal border slop.
-     *
-     * The minBorderSlop serves to prevent the jittering of objects back and forth when they rest upon
-     * one another. Those, when the penetration is less than minBorderSlop, position correction is
-     * not performed (see {@link Context#correctPositionPercent}).
-     *
-     * @param minBorderSlop the minimal border slop
-     * @return the {@link Context} instance
-     */
-    public Context setMinBorderSlop(float minBorderSlop) {
-        this.minBorderSlop = minBorderSlop;
-        return this;
     }
 
     /**
@@ -258,21 +139,6 @@ public class Context {
     }
 
     /**
-     * Sets the world gravity.
-     *
-     * Note that in order to achieve object physics similar to real physics, it is necessary to set more
-     * gravity than on planet Earth, this is due to the fact that when you create an object 100x100 in
-     * Pie, in the real world it would be 100 per 100 meters.
-     *
-     * @param gravity the gravity
-     * @return the {@link Context} instance
-     */
-    public Context setGravity(Vector2f gravity) {
-        this.gravity = gravity;
-        return this;
-    }
-
-    /**
      * Gets the broad phase method.
      *
      * The broad phase method is used to determine possible collisions
@@ -282,20 +148,6 @@ public class Context {
      */
     public IBroadPhase getBroadPhaseMethod() {
         return broadPhaseMethod;
-    }
-
-    /**
-     * Sets the broad phase method.
-     *
-     * The broad phase method is used to determine possible collisions
-     * of bodies, through the definition of collisions {@link Aabb}.
-     *
-     * @param broadPhaseMethod the broad phase method
-     * @return the {@link Context} instance
-     */
-    public Context setBroadPhaseMethod(IBroadPhase broadPhaseMethod) {
-        this.broadPhaseMethod = broadPhaseMethod;
-        return this;
     }
 
     /**
@@ -309,21 +161,6 @@ public class Context {
      */
     public ShapeCollisionHandlersMapper getShapeCollisionMapping() {
         return shapeCollisionHandlersMapper;
-    }
-
-    /**
-     * Gets the narrow phase adapter.
-     *
-     * The narrow phase adapter is used to handle possible
-     * {@link IShape} collisions based on real shape form.
-     *
-     * @param shapeCollisionHandlersMapper the broad phase method
-     * @return the {@link Context} instance
-     * @see IShapeCollisionHandler
-     */
-    public Context setShapeCollisionMapping(ShapeCollisionHandlersMapper shapeCollisionHandlersMapper) {
-        this.shapeCollisionHandlersMapper = shapeCollisionHandlersMapper;
-        return this;
     }
 
     /**

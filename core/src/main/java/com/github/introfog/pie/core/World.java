@@ -41,20 +41,16 @@ public final class World {
     private final List<Manifold> manifolds;
 
     /**
-     * Instantiates a new {@link com.github.introfog.pie.core.World} instance
-     * based on {@link com.github.introfog.pie.core.Context} instance.
+     * Instantiates a new {@link World} instance based on {@link WorldProperties}.
      *
-     * <p>
-     * Note that {@link Context} instance will be cloned by calling
-     * {@link Context#Context(Context)} copy constructor.
      *
-     * @param context the {@link com.github.introfog.pie.core.Context} instance
+     * @param worldProperties the {@link WorldProperties} instance
      */
-    public World(Context context) {
-        this.context = new Context(context);
-        shapes = new HashSet<>();
-        mayBeCollision = new HashSet<>();
-        manifolds = new ArrayList<>();
+    public World(WorldProperties worldProperties) {
+        this.context = new Context(worldProperties);
+        this.shapes = new HashSet<>();
+        this.mayBeCollision = new HashSet<>();
+        this.manifolds = new ArrayList<>();
     }
 
     /**
