@@ -93,7 +93,7 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
 
         // Setup reference face vertices
         Vector2f v1 = new Vector2f(refPoly.getVertices()[referenceIndex]);
-        referenceIndex = referenceIndex + 1 == refPoly.getVertexCount() ? 0 : referenceIndex + 1;
+        referenceIndex = referenceIndex + 1 == refPoly.getVertices().length ? 0 : referenceIndex + 1;
         Vector2f v2 = new Vector2f(refPoly.getVertices()[referenceIndex]);
 
         // Transform vectors to world coordinates
@@ -189,7 +189,7 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         // Find most anti-normal face on incident polygon
         int incidentFace = 0;
         float minDot = Float.MAX_VALUE;
-        for (int i = 0; i < incPoly.getVertexCount(); ++i) {
+        for (int i = 0; i < incPoly.getVertices().length; ++i) {
             // real dot = Dot( referenceNormal, IncPoly->m_normals[i] );
             float dotProduct = Vector2f.dotProduct(referenceNormal, incPoly.getNormals()[i]);
 
@@ -208,7 +208,7 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         // IncPoly->body->position;
         incPoly.getRotateMatrix().mul(incPoly.getVertices()[incidentFace], v[0]);
         v[0].add(incPoly.getBody().position);
-        incidentFace = incidentFace + 1 >= incPoly.getVertexCount() ? 0 : incidentFace + 1;
+        incidentFace = incidentFace + 1 >= incPoly.getVertices().length ? 0 : incidentFace + 1;
         incPoly.getRotateMatrix().mul(incPoly.getVertices()[incidentFace], v[1]);
         v[1].add(incPoly.getBody().position);
     }
@@ -261,7 +261,7 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         float bestDistance = -Float.MAX_VALUE;
         int bestIndex = 0;
 
-        for (int i = 0; i < polygonA.getVertexCount(); ++i) {
+        for (int i = 0; i < polygonA.getVertices().length; ++i) {
             // Retrieve a face normal from A
             // Vec2 n = A->m_normals[i];
             // Vec2 nw = A->u * n;

@@ -32,32 +32,32 @@ public class PolygonTest extends PieTest {
     @Test
     public void staticGenerateRectangleTest() {
         Polygon rectangle = Polygon.generateRectangle(0, 0, 15, 10, MathPie.STATIC_BODY_DENSITY, 0.2f);
-        Assert.assertEquals(4, rectangle.vertexCount);
-        Assert.assertEquals(4, rectangle.normals.length);
-        Assert.assertEquals(4, rectangle.vertices.length);
+        Assert.assertEquals(4, rectangle.getVertices().length);
+        Assert.assertEquals(4, rectangle.getNormals().length);
+        Assert.assertEquals(4, rectangle.getVertices().length);
 
         Vector2f vec = new Vector2f(7.5f, -5.0f);
-        Assert.assertEquals(vec, rectangle.vertices[0]);
+        Assert.assertEquals(vec, rectangle.getVertices()[0]);
         vec.set(7.5f, 5.0f);
-        Assert.assertEquals(vec, rectangle.vertices[1]);
+        Assert.assertEquals(vec, rectangle.getVertices()[1]);
         vec.set(-7.5f, 5.0f);
-        Assert.assertEquals(vec, rectangle.vertices[2]);
+        Assert.assertEquals(vec, rectangle.getVertices()[2]);
         vec.set(-7.5f, -5.0f);
-        Assert.assertEquals(vec, rectangle.vertices[3]);
+        Assert.assertEquals(vec, rectangle.getVertices()[3]);
 
         vec.set(1, -0.0f);
-        Assert.assertEquals(vec, rectangle.normals[0]);
+        Assert.assertEquals(vec, rectangle.getNormals()[0]);
         vec.set(0, 1);
-        Assert.assertEquals(vec, rectangle.normals[1]);
+        Assert.assertEquals(vec, rectangle.getNormals()[1]);
         vec.set(-1, -0.0f);
-        Assert.assertEquals(vec, rectangle.normals[2]);
+        Assert.assertEquals(vec, rectangle.getNormals()[2]);
         vec.set(0, -1);
-        Assert.assertEquals(vec, rectangle.normals[3]);
+        Assert.assertEquals(vec, rectangle.getNormals()[3]);
 
         vec.set(-7.5f, -5.0f);
-        Assert.assertEquals(vec, rectangle.aabb.min);
+        Assert.assertEquals(vec, rectangle.getAabb().min);
         vec.set(7.5f, 5.0f);
-        Assert.assertEquals(vec, rectangle.aabb.max);
+        Assert.assertEquals(vec, rectangle.getAabb().max);
     }
 
     @Test
@@ -73,33 +73,33 @@ public class PolygonTest extends PieTest {
         vertices.add(new Vector2f(0, 4.99f));
 
         Polygon polygon = new Polygon(0.1f, 0.2f, 0, 0, vertices);
-        Assert.assertEquals(4, polygon.vertexCount);
-        Assert.assertEquals(4, polygon.normals.length);
-        Assert.assertEquals(4, polygon.vertices.length);
+        Assert.assertEquals(4, polygon.getVertices().length);
+        Assert.assertEquals(4, polygon.getNormals().length);
+        Assert.assertEquals(4, polygon.getVertices().length);
 
         // Check that the polygon has become convex (there are only 4 vertices)
         Vector2f vec = new Vector2f(7.5f, -5.0f);
-        Assert.assertEquals(vec, polygon.vertices[0]);
+        Assert.assertEquals(vec, polygon.getVertices()[0]);
         vec.set(7.5f, 5.0f);
-        Assert.assertEquals(vec, polygon.vertices[1]);
+        Assert.assertEquals(vec, polygon.getVertices()[1]);
         vec.set(-7.5f, 5.0f);
-        Assert.assertEquals(vec, polygon.vertices[2]);
+        Assert.assertEquals(vec, polygon.getVertices()[2]);
         vec.set(-7.5f, -5.0f);
-        Assert.assertEquals(vec, polygon.vertices[3]);
+        Assert.assertEquals(vec, polygon.getVertices()[3]);
 
         vec.set(1, -0.0f);
-        Assert.assertEquals(vec, polygon.normals[0]);
+        Assert.assertEquals(vec, polygon.getNormals()[0]);
         vec.set(0, 1);
-        Assert.assertEquals(vec, polygon.normals[1]);
+        Assert.assertEquals(vec, polygon.getNormals()[1]);
         vec.set(-1, -0.0f);
-        Assert.assertEquals(vec, polygon.normals[2]);
+        Assert.assertEquals(vec, polygon.getNormals()[2]);
         vec.set(0, -1);
-        Assert.assertEquals(vec, polygon.normals[3]);
+        Assert.assertEquals(vec, polygon.getNormals()[3]);
 
         vec.set(-7.5f, -5.0f);
-        Assert.assertEquals(vec, polygon.aabb.min);
+        Assert.assertEquals(vec, polygon.getAabb().min);
         vec.set(7.5f, 5.0f);
-        Assert.assertEquals(vec, polygon.aabb.max);
+        Assert.assertEquals(vec, polygon.getAabb().max);
     }
     
     @Test
@@ -115,7 +115,7 @@ public class PolygonTest extends PieTest {
         vertices.add(new Vector2f(0, 0));
 
         Polygon polygon = new Polygon(0.1f, 0.2f, 0, 0, vertices);
-        Assert.assertEquals(MathPie.MAX_POLY_VERTEX_COUNT, polygon.vertices.length);
+        Assert.assertEquals(MathPie.MAX_POLY_VERTEX_COUNT, polygon.getVertices().length);
     }
 
     @Test
@@ -170,8 +170,8 @@ public class PolygonTest extends PieTest {
     public void computeMassAndInertiaTest() {
         Polygon polygon = Polygon.generateRectangle(0, 0, 1, 2, 5, 0.2f);
 
-        Assert.assertEquals(1f / 10f, polygon.body.invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1f / 4.166666f, polygon.body.invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 10f, polygon.getBody().invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 4.166666f, polygon.getBody().invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

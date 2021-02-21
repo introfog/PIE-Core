@@ -22,7 +22,7 @@ import java.util.StringJoiner;
  */
 public class Circle extends IShape {
     /** The radius of circle. */
-    protected final float radius;
+    private final float radius;
 
     /**
      * Instantiates a new {@link Circle} instance based on radius, coordinates of center, density and restitution.
@@ -50,30 +50,30 @@ public class Circle extends IShape {
      *
      * @return the radius
      */
-    public float getRadius() {
+    public final float getRadius() {
         return radius;
     }
 
     @Override
     public void computeAabb() {
-        aabb.min.set(body.position.x - radius, body.position.y - radius);
-        aabb.max.set(body.position.x + radius, body.position.y + radius);
+        getAabb().min.set(getBody().position.x - radius, getBody().position.y - radius);
+        getAabb().max.set(getBody().position.x + radius, getBody().position.y + radius);
     }
 
     @Override
     public String toString() {
         return new StringJoiner("; ", "{", "}")
-                .add("center=" + body.position)
+                .add("center=" + getBody().position)
                 .add("radius=" + radius)
                 .toString();
     }
 
     @Override
     protected void computeMassAndInertia() {
-        float mass = (float) Math.PI * radius * radius * body.density;
-        body.invertedMass = (mass == 0f) ? 0f : 1f / mass;
+        float mass = (float) Math.PI * radius * radius * getBody().density;
+        getBody().invertedMass = (mass == 0f) ? 0f : 1f / mass;
 
-        float inertia = radius * radius / (body.invertedMass == 0 ? 1 : body.invertedMass);
-        body.invertedInertia = (inertia != 0.0f) ? 1.0f / inertia : 0.0f;
+        float inertia = radius * radius / (getBody().invertedMass == 0 ? 1 : getBody().invertedMass);
+        getBody().invertedInertia = (inertia != 0.0f) ? 1.0f / inertia : 0.0f;
     }
 }

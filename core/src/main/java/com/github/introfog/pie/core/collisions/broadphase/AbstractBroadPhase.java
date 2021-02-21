@@ -78,7 +78,7 @@ public abstract class AbstractBroadPhase implements IBroadPhase {
      * <p>
      * Note, before calling the {@link #domesticCalculateAabbCollisions()} method, which calculates collisions,
      * the {@link IShape#computeAabb()} method is called for all shapes from the {@link #shapes}, because the
-     * broad phase needs the up-to-date Aabbs.
+     * broad phase needs the up-to-date aabbs.
      *
      * @return the {@link ShapePair} set in which each item represents
      * a unique shape pair and the Aabb of those shapes intersect
@@ -93,7 +93,7 @@ public abstract class AbstractBroadPhase implements IBroadPhase {
      * Domestic method for calculating the shape Aabb collisions.
      *
      * <p>
-     * Note, when this method is called, all shapes from {@link #shapes} have an up-to-date Aabb.
+     * Note, when this method is called, all shapes from {@link #shapes} have an up-to-date aabb.
      *
      * @return the {@link ShapePair} set in which each item represents
      * a unique shape pair and the Aabb of those shapes intersect

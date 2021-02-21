@@ -25,17 +25,17 @@ import java.util.StringJoiner;
  */
 public class Body {
     /** The density. */
-    public float density;
+    public final float density;
     /** The restitution. */
-    public float restitution;
+    public final float restitution;
     /** The inverted mass. */
     public float invertedMass;
     /** The static friction. */
-    public float staticFriction;
+    public final float staticFriction;
     /** The dynamic friction. */
-    public float dynamicFriction;
+    public final float dynamicFriction;
     /** The torque. */
-    public float torque;
+    public final float torque;
     /** The body orientation in radians. */
     public float orientation;
     /** The angular velocity. */
@@ -43,11 +43,11 @@ public class Body {
     /** The inverted inertia. */
     public float invertedInertia;
     /** The position. */
-    public Vector2f position;
+    public final Vector2f position;
     /** The force. */
-    public Vector2f force;
+    public final Vector2f force;
     /** The velocity. */
-    public Vector2f velocity;
+    public final Vector2f velocity;
 
     /**
      * Instantiates a new {@link Body} instance.

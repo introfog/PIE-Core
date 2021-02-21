@@ -75,7 +75,7 @@ public class ShapeIOUtilTest extends PieTest {
 
         Polygon polygon = Polygon.generateRectangle(20, 23, 15, 17, 0.17f, 1.23f);
         Polygon actPolygon = (Polygon) (shapes[0] instanceof Polygon ? shapes[0] : shapes[1]);
-        Assert.assertEquals(polygon.getVertexCount(), actPolygon.getVertexCount());
+        Assert.assertEquals(polygon.getVertices().length, actPolygon.getVertices().length);
         Assert.assertArrayEquals(polygon.getVertices(), actPolygon.getVertices());
         Assert.assertEquals(polygon.getBody(), actPolygon.getBody());
     }
@@ -91,7 +91,7 @@ public class ShapeIOUtilTest extends PieTest {
         String strPolygon = "Polygon;4;7.5;-8.5;7.5;8.5;-7.5;8.5;-7.5;-8.5;20.0;23.0;0.17;1.23";
         Polygon polygon = Polygon.generateRectangle(20, 23, 15, 17, 0.17f, 1.23f);
         Polygon actPolygon = (Polygon) ShapeIOUtil.convertStringToShape(strPolygon);
-        Assert.assertEquals(polygon.getVertexCount(), actPolygon.getVertexCount());
+        Assert.assertEquals(polygon.getVertices().length, actPolygon.getVertices().length);
         Assert.assertArrayEquals(polygon.getVertices(), actPolygon.getVertices());
         Assert.assertEquals(polygon.getBody(), actPolygon.getBody());
     }

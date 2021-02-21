@@ -27,14 +27,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class IShape {
     private static final AtomicInteger lastShapeId = new AtomicInteger(Integer.MIN_VALUE);
 
-    /** The shape axis aligned bounding box. */
-    protected final Aabb aabb;
-    /** The body that stores shape physical parameters. */
-    protected final Body body;
-    /** The rotation matrix. */
-    protected final RotationMatrix2x2 rotateMatrix;
-
     private final int shapeId;
+    /** The shape axis aligned bounding box. */
+    private final Aabb aabb;
+    /** The body that stores shape physical parameters. */
+    private final Body body;
+    /** The rotation matrix. */
+    private final RotationMatrix2x2 rotateMatrix;
 
     /**
      * Instantiates a new {@link IShape} instance.
@@ -44,7 +43,6 @@ public abstract class IShape {
         aabb = new Aabb();
         body = new Body(centreX, centreY, density, restitution);
         rotateMatrix = new RotationMatrix2x2();
-        rotateMatrix.setAngle(0f);
     }
 
     /**
@@ -73,7 +71,7 @@ public abstract class IShape {
      *
      * @return the axis aligned bounding box
      */
-    public Aabb getAabb() {
+    public final Aabb getAabb() {
         return aabb;
     }
 
@@ -82,7 +80,7 @@ public abstract class IShape {
      *
      * @return the body
      */
-    public Body getBody() {
+    public final Body getBody() {
         return body;
     }
 
@@ -91,7 +89,7 @@ public abstract class IShape {
      *
      * @return the rotation matrix
      */
-    public RotationMatrix2x2 getRotateMatrix() {
+    public final RotationMatrix2x2 getRotateMatrix() {
         return rotateMatrix;
     }
 
@@ -114,7 +112,7 @@ public abstract class IShape {
      * @return {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         return this == o;
     }
 
@@ -125,7 +123,7 @@ public abstract class IShape {
      * @return {@inheritDoc}
      */
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return shapeId;
     }
 

@@ -17,11 +17,15 @@ package com.github.introfog.pie.core.math;
 
 import java.util.StringJoiner;
 
-public class RotationMatrix2x2 {
+public final class RotationMatrix2x2 {
     public float m00;
     public float m01;
     public float m10;
     public float m11;
+
+    public RotationMatrix2x2() {
+        setAngle(0);
+    }
 
     public void setAngle(float radian) {
         float cos = (float) Math.cos(radian);

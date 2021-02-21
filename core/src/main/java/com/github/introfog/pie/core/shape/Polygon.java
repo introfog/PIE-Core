@@ -28,12 +28,10 @@ import java.util.StringJoiner;
  * and array of normals (calculated when creating an object to improve performance).
  */
 public class Polygon extends IShape {
-    /** The count of polygon vertices. */
-    protected final int vertexCount;
     /** The array of polygon vertices. */
-    protected final Vector2f[] vertices;
+    private final Vector2f[] vertices;
     /** The array of polygon normals. */
-    protected final Vector2f[] normals;
+    private final Vector2f[] normals;
 
     /**
      * Instantiates a new {@link Polygon} instance based on density,
@@ -62,7 +60,7 @@ public class Polygon extends IShape {
         }
 
         List<Integer> hull = Polygon.calculateHullIndices(vertices);
-        vertexCount = hull.size();
+        final int vertexCount = hull.size();
 
         if (vertexCount > MathPie.MAX_POLY_VERTEX_COUNT) {
             // TODO create Pie custom exception
@@ -112,20 +110,11 @@ public class Polygon extends IShape {
     }
 
     /**
-     * Gets the count of polygon vertices.
-     *
-     * @return the count of vertices
-     */
-    public int getVertexCount() {
-        return vertexCount;
-    }
-
-    /**
      * Gets the copy of array of polygon vertices.
      *
      * @return the array of vertices
      */
-    public Vector2f[] getVertices() {
+    public final Vector2f[] getVertices() {
         return Arrays.copyOf(vertices, vertices.length);
     }
 
@@ -134,44 +123,44 @@ public class Polygon extends IShape {
      *
      * @return the array of normals
      */
-    public Vector2f[] getNormals() {
+    public final Vector2f[] getNormals() {
         return Arrays.copyOf(normals, normals.length);
     }
 
     @Override
     public void computeAabb() {
-        aabb.min.x = Float.MAX_VALUE;
-        aabb.min.y = Float.MAX_VALUE;
+        getAabb().min.x = Float.MAX_VALUE;
+        getAabb().min.y = Float.MAX_VALUE;
 
-        aabb.max.x = -Float.MAX_VALUE;
-        aabb.max.y = -Float.MAX_VALUE;
+        getAabb().max.x = -Float.MAX_VALUE;
+        getAabb().max.y = -Float.MAX_VALUE;
 
         Vector2f tmpV = new Vector2f();
-        for (int i = 0; i < vertexCount; i++) {
+        for (int i = 0; i < vertices.length; i++) {
             tmpV.set(vertices[i]);
-            rotateMatrix.mul(tmpV, tmpV);
-            if (tmpV.x < aabb.min.x) {
-                aabb.min.x = tmpV.x;
+            getRotateMatrix().mul(tmpV, tmpV);
+            if (tmpV.x < getAabb().min.x) {
+                getAabb().min.x = tmpV.x;
             }
-            if (tmpV.y < aabb.min.y) {
-                aabb.min.y = tmpV.y;
+            if (tmpV.y < getAabb().min.y) {
+                getAabb().min.y = tmpV.y;
             }
-            if (tmpV.x > aabb.max.x) {
-                aabb.max.x = tmpV.x;
+            if (tmpV.x > getAabb().max.x) {
+                getAabb().max.x = tmpV.x;
             }
-            if (tmpV.y > aabb.max.y) {
-                aabb.max.y = tmpV.y;
+            if (tmpV.y > getAabb().max.y) {
+                getAabb().max.y = tmpV.y;
             }
         }
 
-        aabb.min.add(body.position);
-        aabb.max.add(body.position);
+        getAabb().min.add(getBody().position);
+        getAabb().max.add(getBody().position);
     }
 
     @Override
     public String toString() {
         return new StringJoiner("; ", "{", "}")
-                .add("center=" + body.position)
+                .add("center=" + getBody().position)
                 .add("vertices=" + Arrays.toString(vertices))
                 .toString();
     }
@@ -183,12 +172,12 @@ public class Polygon extends IShape {
      * @return a new vector object that coincides in coordinates with the most
      * distant polygon vertex in the given direction
      */
-    public Vector2f calculateSupportVertex(Vector2f direction) {
+    public final Vector2f calculateSupportVertex(Vector2f direction) {
         // Looking for the most distant vertex in a given direction
         float bestProjection = -Float.MAX_VALUE;
         final Vector2f bestVertex = new Vector2f();
 
-        for (int i = 0; i < vertexCount; ++i) {
+        for (int i = 0; i < vertices.length; ++i) {
             Vector2f v = vertices[i];
             float projection = Vector2f.dotProduct(v, direction);
 
@@ -207,10 +196,10 @@ public class Polygon extends IShape {
         float I = 0f;
         final float k_inv3 = 1f / 3f;
 
-        for (int i = 0; i < vertexCount; ++i) {
+        for (int i = 0; i < vertices.length; ++i) {
             // Split the convex polygon into triangles for which one of the points (0, 0)
             Vector2f p1 = vertices[i];
-            Vector2f p2 = vertices[(i + 1) % vertexCount];
+            Vector2f p2 = vertices[(i + 1) % vertices.length];
 
             float D = Vector2f.crossProduct(p1, p2);
             float triangleArea = 0.5f * D;
@@ -222,10 +211,10 @@ public class Polygon extends IShape {
             I += (0.25f * k_inv3 * D) * (intX2 + intY2);
         }
 
-        float mass = body.density * area;
-        body.invertedMass = (mass != 0f) ? 1f / mass : 0f;
-        float inertia = I * body.density;
-        body.invertedInertia = (inertia != 0f) ? 1f / inertia : 0f;
+        float mass = getBody().density * area;
+        getBody().invertedMass = (mass != 0f) ? 1f / mass : 0f;
+        float inertia = I * getBody().density;
+        getBody().invertedInertia = (inertia != 0f) ? 1f / inertia : 0f;
     }
 
     private static List<Integer> calculateHullIndices(List<Vector2f> vertices) {

@@ -127,7 +127,7 @@ public final class ShapeIOUtil {
             str.append(circle.getRadius()).append(";");
         } else if (shape instanceof Polygon) {
             Polygon polygon = (Polygon) shape;
-            str.append(polygon.getVertexCount()).append(";");
+            str.append(polygon.getVertices().length).append(";");
             for (Vector2f vec : polygon.getVertices()) {
                 str.append(vec.x).append(";").append(vec.y).append(";");
             }

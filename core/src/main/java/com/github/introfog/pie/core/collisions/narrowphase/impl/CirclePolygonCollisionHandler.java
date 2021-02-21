@@ -68,7 +68,7 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
         Vector2f projection = new Vector2f();
         Vector2f realProjection = new Vector2f();
         Vector2f tmpV = new Vector2f();
-        for (int i = 0; i < polygonB.getVertexCount(); i++) {
+        for (int i = 0; i < polygonB.getVertices().length; i++) {
             tmpV.set(centerA);
             tmpV.sub(polygonB.getVertices()[i]);
             dotProduct = Vector2f.dotProduct(polygonB.getNormals()[i], tmpV);
@@ -113,7 +113,7 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
         // Found the nearest edge to the center of the circle, and the center of the circle lies outside the polygon.
         // Now define the Voronoi region in which the center of the circle is located relative to the nearest edge of the polygon
         Vector2f v1 = new Vector2f(polygonB.getVertices()[indexFaceNormal]);
-        Vector2f v2 = new Vector2f(polygonB.getVertices()[(indexFaceNormal + 1) % polygonB.getVertexCount()]);
+        Vector2f v2 = new Vector2f(polygonB.getVertices()[(indexFaceNormal + 1) % polygonB.getVertices().length]);
 
         float dot1 = Vector2f.dotProduct(Vector2f.sub(centerA, v1), Vector2f.sub(v2, v1));
         float dot2 = Vector2f.dotProduct(Vector2f.sub(centerA, v2), Vector2f.sub(v1, v2));
