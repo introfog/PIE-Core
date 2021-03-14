@@ -29,17 +29,17 @@ public class BodyTest extends PieTest {
     public void paramConstructorTest() {
         Body body = new Body(0.1f, 0.2f, 0.3f, 0.4f);
 
-        Assert.assertEquals(0.1f, body.position.x, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.2f, body.position.y, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.3f, body.density, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.4f, body.restitution, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.5f, body.staticFriction, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.3f, body.dynamicFriction, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, body.torque, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, body.force.x, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, body.force.y, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, body.velocity.x, FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, body.velocity.y, FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.1f, body.getPosition().x, FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.2f, body.getPosition().y, FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.3f, body.getDensity(), FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.4f, body.getRestitution(), FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.5f, body.getStaticFriction(), FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.3f, body.getDynamicFriction(), FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, body.getTorque(), FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, body.getForce().x, FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, body.getForce().y, FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, body.getVelocity().x, FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, body.getVelocity().y, FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

@@ -55,16 +55,16 @@ public class Manifold {
 
         for (int i = 0; i < contactCount; i++) {
             // Calculate the contact points regarding centers
-            Vector2f radA = Vector2f.sub(contacts[i], a.position);
-            Vector2f radB = Vector2f.sub(contacts[i], b.position);
+            Vector2f radA = Vector2f.sub(contacts[i], a.getPosition());
+            Vector2f radB = Vector2f.sub(contacts[i], b.getPosition());
 
             // Calculate the relative velocity
             // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
             // A->velocity - Cross( A->angularVelocity, ra );
             // relativeVelocity
-            Vector2f rv = Vector2f.sub(b.velocity, a.velocity);
-            rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
-            rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
+            Vector2f rv = Vector2f.sub(b.getVelocity(), a.getVelocity());
+            rv.add(Vector2f.crossProduct(b.getAngularVelocity(), radB));
+            rv.sub(Vector2f.crossProduct(a.getAngularVelocity(), radA));
 
             // Calculate the relative velocity relative to the normal direction
             float velAlongNormal = Vector2f.dotProduct(rv, normal);
@@ -94,9 +94,9 @@ public class Manifold {
             // Friction work
 
             // Recalculation relative speed after application of a normal impulse
-            rv = Vector2f.sub(b.velocity, a.velocity); //relativeVelocity
-            rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
-            rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
+            rv = Vector2f.sub(b.getVelocity(), a.getVelocity()); //relativeVelocity
+            rv.add(Vector2f.crossProduct(b.getAngularVelocity(), radB));
+            rv.sub(Vector2f.crossProduct(a.getAngularVelocity(), radA));
 
             // Calculate the tangent vector: tangent = rb - dotProduct (rv, normal) * normal
             // Vec2 t = rv - (normal * Dot( rv, normal ));
@@ -135,8 +135,8 @@ public class Manifold {
         }
         Vector2f correction = Vector2f.mul(normal, penetration *
                 context.getCorrectPositionPercent() / (a.getInvertedMass() + b.getInvertedMass()));
-        a.position.sub(Vector2f.mul(correction, a.getInvertedMass()));
-        b.position.add(Vector2f.mul(correction, b.getInvertedMass()));
+        a.getPosition().sub(Vector2f.mul(correction, a.getInvertedMass()));
+        b.getPosition().add(Vector2f.mul(correction, b.getInvertedMass()));
     }
 
     private void initializeCollision() {
@@ -144,20 +144,20 @@ public class Manifold {
         // i.e. this is the threshold, if the energy is lower, then the body is at rest, if higher,
         // then the body moves. Dynamic friction - friction in the usual sense, when bodies rub against
         // each other, they lose part of their energy against each other
-        staticFriction = (float) StrictMath.sqrt(
-                a.staticFriction * a.staticFriction + b.staticFriction * b.staticFriction);
-        dynamicFriction = (float) StrictMath.sqrt(
-                a.dynamicFriction * a.dynamicFriction + b.dynamicFriction * b.dynamicFriction);
+        staticFriction = (float) StrictMath.sqrt(a.getStaticFriction() * a.getStaticFriction() +
+                b.getStaticFriction() * b.getStaticFriction());
+        dynamicFriction = (float) StrictMath.sqrt(a.getDynamicFriction() * a.getDynamicFriction() +
+                b.getDynamicFriction() * b.getDynamicFriction());
 
         // Calculate the elasticity
-        e = Math.min(a.restitution, b.restitution);
+        e = Math.min(a.getRestitution(), b.getRestitution());
 
         for (int i = 0; i < contactCount; ++i) {
             // Calculate radii from COM to contact
             // Vec2 ra = contacts[i] - A->position;
             // Vec2 rb = contacts[i] - B->position;
-            Vector2f radA = Vector2f.sub(contacts[i], a.position);
-            Vector2f radB = Vector2f.sub(contacts[i], b.position);
+            Vector2f radA = Vector2f.sub(contacts[i], a.getPosition());
+            Vector2f radB = Vector2f.sub(contacts[i], b.getPosition());
 
             // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
             // A->velocity - Cross( A->angularVelocity, ra );
@@ -165,9 +165,9 @@ public class Manifold {
             // Vec2 rv = B->velocity + Cross( B->angularVelocity, rb ) -
             // A->velocity - Cross( A->angularVelocity, ra );
             //relativeVelocity
-            Vector2f rv = Vector2f.sub(b.velocity, a.velocity);
-            rv.add(Vector2f.crossProduct(b.angularVelocity, radB));
-            rv.sub(Vector2f.crossProduct(a.angularVelocity, radA));
+            Vector2f rv = Vector2f.sub(b.getVelocity(), a.getVelocity());
+            rv.add(Vector2f.crossProduct(b.getAngularVelocity(), radB));
+            rv.sub(Vector2f.crossProduct(a.getAngularVelocity(), radA));
 
             // Determine whether should perform a collision with a stop or not.
             // The idea is that the only thing that moves this object is gravity,

@@ -132,10 +132,10 @@ public final class ShapeIOUtil {
                 str.append(vec.x).append(";").append(vec.y).append(";");
             }
         }
-        str.append(shape.getBody().position.x).append(";")
-                .append(shape.getBody().position.y).append(";")
+        str.append(shape.getBody().getPosition().x).append(";")
+                .append(shape.getBody().getPosition().y).append(";")
                 .append(shape.getBody().getDensity()).append(";")
-                .append(shape.getBody().restitution).append("\n");
+                .append(shape.getBody().getRestitution()).append("\n");
 
         return str.toString();
     }

@@ -153,14 +153,14 @@ public class Polygon extends IShape {
             }
         }
 
-        getAabb().min.add(getBody().position);
-        getAabb().max.add(getBody().position);
+        getAabb().min.add(getBody().getPosition());
+        getAabb().max.add(getBody().getPosition());
     }
 
     @Override
     public String toString() {
         return new StringJoiner("; ", "{", "}")
-                .add("center=" + getBody().position)
+                .add("center=" + getBody().getPosition())
                 .add("vertices=" + Arrays.toString(vertices))
                 .toString();
     }
@@ -211,9 +211,9 @@ public class Polygon extends IShape {
             I += (0.25f * k_inv3 * D) * (intX2 + intY2);
         }
 
-        float mass = getBody().density * area;
+        float mass = getBody().getDensity() * area;
         getBody().invertedMass = (mass != 0f) ? 1f / mass : 0f;
-        float inertia = I * getBody().density;
+        float inertia = I * getBody().getDensity();
         getBody().invertedInertia = (inertia != 0f) ? 1f / inertia : 0f;
     }
 

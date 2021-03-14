@@ -49,12 +49,15 @@ public abstract class IShape {
         this.rotateMatrix = rotateMatrix;
     }
 
-    /**
-     * Sets the shape orientation in space.
-     *
-     * @param radian the angle in radians that the shape will have in space
-     */
-    public void setOrientation(float radian) {
+    public void integrateForce(float deltaTime, Vector2f gravity) {
+        body.getVelocity().add(body.getForce(), body.getInvertedMass() * deltaTime);
+        body.getVelocity().add(gravity, deltaTime);
+        body.angularVelocity += body.getTorque() * body.getInvertedInertia() * deltaTime;
+    }
+
+    public void integrateVelocity(float deltaTime) {
+        body.getPosition().add(body.getVelocity(), deltaTime);
+        final float radian = body.getOrientation() + body.getAngularVelocity() * deltaTime;
         body.orientation = radian;
         rotateMatrix.setAngle(radian);
     }
@@ -66,7 +69,7 @@ public abstract class IShape {
      * @param contactVector the point of impulse application (coordinates are set relative to the center of the shape)
      */
     public void applyImpulse(Vector2f impulse, Vector2f contactVector) {
-        body.velocity.add(impulse, body.getInvertedMass());
+        body.getVelocity().add(impulse, body.getInvertedMass());
         body.angularVelocity += body.getInvertedInertia() * Vector2f.crossProduct(contactVector, impulse);
     }
 

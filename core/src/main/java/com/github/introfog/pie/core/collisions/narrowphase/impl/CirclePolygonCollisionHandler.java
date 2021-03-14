@@ -54,8 +54,8 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
         Manifold manifold = new Manifold(circleA, polygonB, context);
         // Translate center coordinates to polygon coordinates
         // center = B->u.Transpose( ) * (center - b->position);
-        Vector2f centerA = new Vector2f(circleA.getBody().position);
-        centerA.sub(polygonB.getBody().position);
+        Vector2f centerA = new Vector2f(circleA.getBody().getPosition());
+        centerA.sub(polygonB.getBody().getPosition());
         polygonB.getRotateMatrix().transposeMul(centerA, centerA);
 
         // Looking for the nearest edge of the polygon to the center of the circle,
@@ -105,7 +105,7 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
 
             manifold.contacts[0].set(manifold.normal);
             manifold.contacts[0].mul(circleA.getRadius());
-            manifold.contacts[0].add(circleA.getBody().position);
+            manifold.contacts[0].add(circleA.getBody().getPosition());
             manifold.penetration = circleA.getRadius();
             return manifold;
         }
@@ -138,7 +138,7 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
             n.normalize();
             manifold.normal.set(n);
             polygonB.getRotateMatrix().mul(v1, v1);
-            v1.add(polygonB.getBody().position);
+            v1.add(polygonB.getBody().getPosition());
             manifold.contacts[0].set(v1);
         } else if (dot2 <= 0f) {
             // Closer to the second vertex
@@ -160,7 +160,7 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
             n.normalize();
             manifold.normal.set(n);
             polygonB.getRotateMatrix().mul(v2, v2);
-            v2.add(polygonB.getBody().position);
+            v2.add(polygonB.getBody().getPosition());
             manifold.contacts[0].set(v2);
         } else {
             // Closer to the front vertex
@@ -177,7 +177,7 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
             manifold.normal.set(n);
             manifold.contacts[0].set(manifold.normal);
             manifold.contacts[0].mul(circleA.getRadius());
-            manifold.contacts[0].add(circleA.getBody().position);
+            manifold.contacts[0].add(circleA.getBody().getPosition());
         }
         return manifold;
     }

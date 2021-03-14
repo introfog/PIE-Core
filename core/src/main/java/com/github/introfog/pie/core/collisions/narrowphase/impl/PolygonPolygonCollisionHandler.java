@@ -100,9 +100,9 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         // v1 = RefPoly->u * v1 + RefPoly->body->position;
         // v2 = RefPoly->u * v2 + RefPoly->body->position;
         refPoly.getRotateMatrix().mul(v1, v1);
-        v1.add(refPoly.getBody().position);
+        v1.add(refPoly.getBody().getPosition());
         refPoly.getRotateMatrix().mul(v2, v2);
-        v2.add(refPoly.getBody().position);
+        v2.add(refPoly.getBody().getPosition());
 
         // Calculate reference face side normal in world space
         // Vec2 sidePlaneNormal = (v2 - v1);
@@ -207,10 +207,10 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
         // v[1] = IncPoly->u * IncPoly->m_vertices[incidentFace] +
         // IncPoly->body->position;
         incPoly.getRotateMatrix().mul(incPoly.getVertices()[incidentFace], v[0]);
-        v[0].add(incPoly.getBody().position);
+        v[0].add(incPoly.getBody().getPosition());
         incidentFace = incidentFace + 1 >= incPoly.getVertices().length ? 0 : incidentFace + 1;
         incPoly.getRotateMatrix().mul(incPoly.getVertices()[incidentFace], v[1]);
-        v[1].add(incPoly.getBody().position);
+        v[1].add(incPoly.getBody().getPosition());
     }
 
     private int clip(Vector2f n, float c, Vector2f[] face) {
@@ -287,8 +287,8 @@ public class PolygonPolygonCollisionHandler implements IShapeCollisionHandler {
             // v = buT * v;
             Vector2f v = new Vector2f(polygonA.getVertices()[i]);
             polygonA.getRotateMatrix().mul(v, v);
-            v.add(polygonA.getBody().position);
-            v.sub(polygonB.getBody().position);
+            v.add(polygonA.getBody().getPosition());
+            v.sub(polygonB.getBody().getPosition());
             polygonB.getRotateMatrix().transposeMul(v, v);
 
             // Calculate penetration (in local coordinates B)

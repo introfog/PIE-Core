@@ -37,7 +37,7 @@ public class CircleCircleCollisionHandler implements IShapeCollisionHandler {
         Circle circleB = (Circle) bShape;
 
         Manifold manifold = new Manifold(circleA, circleB, context);
-        manifold.normal = Vector2f.sub(circleB.getBody().position, circleA.getBody().position);
+        manifold.normal = Vector2f.sub(circleB.getBody().getPosition(), circleA.getBody().getPosition());
         final float distanceWithoutSqrt = manifold.normal.lengthWithoutSqrt();
 
         if (!CircleCircleCollisionHandler.areIntersected(circleA, circleB, distanceWithoutSqrt)) {
@@ -50,12 +50,12 @@ public class CircleCircleCollisionHandler implements IShapeCollisionHandler {
         manifold.normal.normalize();
         manifold.contacts[0].set(manifold.normal);
         manifold.contacts[0].mul(circleA.getRadius());
-        manifold.contacts[0].add(circleA.getBody().position);
+        manifold.contacts[0].add(circleA.getBody().getPosition());
 
         if (distanceWithoutSqrt == 0) {
             manifold.normal.set(1f, 0f);
             manifold.penetration = circleA.getRadius();
-            manifold.contacts[0].set(circleA.getBody().position);
+            manifold.contacts[0].set(circleA.getBody().getPosition());
         }
 
         return manifold;

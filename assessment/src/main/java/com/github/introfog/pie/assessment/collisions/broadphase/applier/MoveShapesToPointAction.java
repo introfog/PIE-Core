@@ -38,21 +38,21 @@ public class MoveShapesToPointAction extends CallCountAction {
             callCounter = -iterationOneWay;
         }
 
-        Vector2f center = methodShapes.stream().map(shape -> shape.getBody().position).collect(Collectors.toList()).stream().
+        Vector2f center = methodShapes.stream().map(shape -> shape.getBody().getPosition()).collect(Collectors.toList()).stream().
                 reduce((sum, current) -> {sum.add(current); return sum;}).orElse(new Vector2f());
         center.mul(1.0f / methodShapes.size());
 
         for (IShape shape : methodShapes) {
-            float dist = (float) Math.sqrt(Vector2f.distanceWithoutSqrt(center, shape.getBody().position));
+            float dist = (float) Math.sqrt(Vector2f.distanceWithoutSqrt(center, shape.getBody().getPosition()));
             float cos = 0;
             float sin = 0;
             if (dist != 0) {
-                cos = (shape.getBody().position.x - center.x) / dist;
-                sin = (shape.getBody().position.y - center.y) / dist;
+                cos = (shape.getBody().getPosition().x - center.x) / dist;
+                sin = (shape.getBody().getPosition().y - center.y) / dist;
             }
             Vector2f offset = new Vector2f(cos, sin);
             offset.mul(callCounter > 0 ? offsetValue : -offsetValue);
-            shape.getBody().position.add(offset);
+            shape.getBody().getPosition().add(offset);
         }
     }
 }

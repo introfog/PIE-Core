@@ -39,24 +39,11 @@ public class IShapeTest extends PieTest {
     }
 
     @Test
-    public void setOrientationTest() {
-        IShape shape = new Circle(10, 0,0, 0, 0);
-        shape.setOrientation((float) Math.PI / 3);
-
-        Assert.assertEquals((float) Math.PI / 3, shape.getBody().getOrientation(), PieTest.FLOAT_EPSILON_COMPARISON);
-
-        Assert.assertEquals(0.5f, shape.getRotateMatrix().m00, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(-Math.sqrt(3) / 2, shape.getRotateMatrix().m01, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(Math.sqrt(3) / 2, shape.getRotateMatrix().m10, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.5f, shape.getRotateMatrix().m11, PieTest.FLOAT_EPSILON_COMPARISON);
-    }
-
-    @Test
     public void applyImpulseTest() {
         IShape shape = new Circle(1, 0,0, (float) (1 / Math.PI), 0);
         shape.applyImpulse(new Vector2f(10, 10), new Vector2f(1, 0));
 
-        Assert.assertEquals(new Vector2f(10, 10), shape.getBody().velocity);
-        Assert.assertEquals(10, shape.getBody().angularVelocity, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(new Vector2f(10, 10), shape.getBody().getVelocity());
+        Assert.assertEquals(10, shape.getBody().getAngularVelocity(), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 }

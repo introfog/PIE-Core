@@ -34,9 +34,9 @@ public class CircleTest extends PieTest {
     public void paramConstructorTest() {
         Circle circle = new Circle(10, 1, 3, 0.1f, 0.2f);
 
-        Assert.assertEquals(new Vector2f(1, 3), circle.getBody().position);
-        Assert.assertEquals(0.1f, circle.getBody().density, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0.2f, circle.getBody().restitution, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(new Vector2f(1, 3), circle.getBody().getPosition());
+        Assert.assertEquals(0.1f, circle.getBody().getDensity(), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0.2f, circle.getBody().getRestitution(), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

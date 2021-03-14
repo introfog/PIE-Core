@@ -56,21 +56,21 @@ public class Circle extends IShape {
 
     @Override
     public void computeAabb() {
-        getAabb().min.set(getBody().position.x - radius, getBody().position.y - radius);
-        getAabb().max.set(getBody().position.x + radius, getBody().position.y + radius);
+        getAabb().min.set(getBody().getPosition().x - radius, getBody().getPosition().y - radius);
+        getAabb().max.set(getBody().getPosition().x + radius, getBody().getPosition().y + radius);
     }
 
     @Override
     public String toString() {
         return new StringJoiner("; ", "{", "}")
-                .add("center=" + getBody().position)
+                .add("center=" + getBody().getPosition())
                 .add("radius=" + radius)
                 .toString();
     }
 
     @Override
     protected void computeMassAndInertia() {
-        float mass = (float) Math.PI * radius * radius * getBody().density;
+        float mass = (float) Math.PI * radius * radius * getBody().getDensity();
         getBody().invertedMass = (mass == 0f) ? 0f : 1f / mass;
 
         float inertia = radius * radius / (getBody().getInvertedMass() == 0 ? 1 : getBody().getInvertedMass());

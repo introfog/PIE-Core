@@ -24,34 +24,34 @@ import java.util.StringJoiner;
  * The class stores all the physical parameters of a shape, such as mass, position, speed, etc.
  */
 public class Body {
-    /** The position. */
-    public final Vector2f position;
     /** The density. */
     protected final float density;
     /** The restitution. */
-    public final float restitution;
+    protected final float restitution;
 
     /** The static friction. */
-    public final float staticFriction;
+    protected final float staticFriction;
     /** The dynamic friction. */
-    public final float dynamicFriction;
+    protected final float dynamicFriction;
+
+    /** The body orientation in radians. */
+    protected float orientation;
+    /** The angular velocity. */
+    protected float angularVelocity;
     /** The torque. */
-    public final float torque;
+    protected final float torque;
 
     /** The inverted mass. */
     protected float invertedMass;
     /** The inverted inertia. */
     protected float invertedInertia;
-    /** The body orientation in radians. */
-    protected float orientation;
 
-
-    /** The angular velocity. */
-    public float angularVelocity;
-    /** The force. */
-    public final Vector2f force;
+    /** The position. */
+    protected final Vector2f position;
     /** The velocity. */
-    public final Vector2f velocity;
+    protected final Vector2f velocity;
+    /** The force. */
+    protected final Vector2f force;
 
     /**
      * Instantiates a new {@link Body} instance.
@@ -62,15 +62,17 @@ public class Body {
      * @param restitution the body restitution
      */
     public Body(float positionX, float positionY, float density, float restitution) {
-        position = new Vector2f(positionX, positionY);
         this.density = density;
         this.restitution = restitution;
 
-        staticFriction = 0.5f;
-        dynamicFriction = 0.3f;
-        torque = 0f;
-        force = new Vector2f(0f, 0f);
-        velocity = new Vector2f(0f, 0f);
+        this.staticFriction = 0.5f;
+        this.dynamicFriction = 0.3f;
+
+        this.torque = 0;
+
+        this.position = new Vector2f(positionX, positionY);
+        this.velocity = new Vector2f(0f, 0f);
+        this.force = new Vector2f(0f, 0f);
     }
 
     @Override
@@ -82,23 +84,51 @@ public class Body {
             return false;
         }
         Body body = (Body) o;
-        return Float.compare(body.density, density) == 0 &&
-                Float.compare(body.restitution, restitution) == 0 &&
-                position.equals(body.position);
+        return Float.compare(body.getDensity(), getDensity()) == 0 &&
+                Float.compare(body.getRestitution(), getRestitution()) == 0 &&
+                getPosition().equals(body.getPosition());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(density, restitution, position);
+        return Objects.hash(getDensity(), getRestitution(), getPosition());
     }
 
     @Override
     public String toString() {
         return new StringJoiner("; ", "{", "}")
-                .add("position=" + position)
-                .add("density=" + density)
-                .add("restitution=" + restitution)
+                .add("position=" + getPosition())
+                .add("density=" + getDensity())
+                .add("restitution=" + getRestitution())
                 .toString();
+    }
+
+    public float getDensity() {
+        return density;
+    }
+
+    public float getRestitution() {
+        return restitution;
+    }
+
+    public float getStaticFriction() {
+        return staticFriction;
+    }
+
+    public float getDynamicFriction() {
+        return dynamicFriction;
+    }
+
+    public float getOrientation() {
+        return orientation;
+    }
+
+    public float getAngularVelocity() {
+        return angularVelocity;
+    }
+
+    public float getTorque() {
+        return torque;
     }
 
     public float getInvertedMass() {
@@ -109,11 +139,15 @@ public class Body {
         return invertedInertia;
     }
 
-    public float getOrientation() {
-        return orientation;
+    public Vector2f getPosition() {
+        return position;
     }
 
-    public float getDensity() {
-        return density;
+    public Vector2f getVelocity() {
+        return velocity;
+    }
+
+    public Vector2f getForce() {
+        return force;
     }
 }

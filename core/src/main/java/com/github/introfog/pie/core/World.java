@@ -18,7 +18,6 @@ package com.github.introfog.pie.core;
 import com.github.introfog.pie.core.collisions.Manifold;
 import com.github.introfog.pie.core.collisions.narrowphase.IShapeCollisionHandler;
 import com.github.introfog.pie.core.math.MathPie;
-import com.github.introfog.pie.core.shape.Body;
 import com.github.introfog.pie.core.shape.IShape;
 import com.github.introfog.pie.core.shape.ShapePair;
 
@@ -151,7 +150,7 @@ public final class World {
 
         // Integrate forces
         // Hanna modification Euler's method is used!
-        shapes.forEach(this::integrateForces);
+        shapes.forEach(this::integrateForce);
 
         // Narrow phase
         manifolds.clear();
@@ -182,35 +181,26 @@ public final class World {
 
         // Integrate forces
         // Hanna modification Euler's method is used!
-        shapes.forEach(this::integrateForces);
+        shapes.forEach(this::integrateForce);
 
         // Correct positions
         manifolds.forEach(Manifold::correctPosition);
 
         // Clear all forces
-        shapes.forEach(shape -> shape.getBody().force.set(0f, 0f));
+        shapes.forEach(shape -> shape.getBody().getForce().set(0f, 0f));
     }
 
-    private void integrateForces(IShape shape) {
-        final Body body = shape.getBody();
-        if (body.getInvertedMass() == 0.0f) {
+    private void integrateForce(IShape shape) {
+        if (shape.getBody().getInvertedMass() == 0.0f) {
             return;
         }
-        final float halfDeltaTime = context.getFixedDeltaTime() * 0.5f;
-
-        body.velocity.add(body.force, body.getInvertedMass() * halfDeltaTime);
-        body.velocity.add(context.getGravity(), halfDeltaTime);
-        body.angularVelocity += body.torque * body.getInvertedInertia() * halfDeltaTime;
+        shape.integrateForce(context.getFixedDeltaTime() * 0.5f, context.getGravity());
     }
 
     private void integrateVelocity(IShape shape) {
-        final Body body = shape.getBody();
-        if (body.getInvertedMass() == 0.0f) {
+        if (shape.getBody().getInvertedMass() == 0.0f) {
             return;
         }
-
-        body.position.add(body.velocity, context.getFixedDeltaTime());
-
-        shape.setOrientation(body.getOrientation() + body.angularVelocity * context.getFixedDeltaTime());
+        shape.integrateVelocity(context.getFixedDeltaTime());
     }
 }
