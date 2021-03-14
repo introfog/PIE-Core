@@ -43,8 +43,8 @@ public class CirclePolygonCollisionHandler implements IShapeCollisionHandler {
      */
     @Override
     public Manifold handleCollision(IShape aShape, IShape bShape, Context context) {
-        if ((Circle.class.equals(aShape.getClass()) && Polygon.class.equals(bShape.getClass()))
-                || (Polygon.class.equals(aShape.getClass()) && Circle.class.equals(bShape.getClass()))) {
+        if ((Circle.class.equals(aShape.getClass()) && Circle.class.equals(bShape.getClass()))
+                || (Polygon.class.equals(aShape.getClass()) && Polygon.class.equals(bShape.getClass()))) {
             throw new IllegalArgumentException(PieExceptionMessage.INVALID_SHAPES_TYPE_FOR_NARROW_PHASE_HANDLER);
         }
 

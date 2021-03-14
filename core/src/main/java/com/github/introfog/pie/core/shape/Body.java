@@ -24,26 +24,30 @@ import java.util.StringJoiner;
  * The class stores all the physical parameters of a shape, such as mass, position, speed, etc.
  */
 public class Body {
+    /** The position. */
+    public final Vector2f position;
     /** The density. */
-    public final float density;
+    protected final float density;
     /** The restitution. */
     public final float restitution;
-    /** The inverted mass. */
-    public float invertedMass;
+
     /** The static friction. */
     public final float staticFriction;
     /** The dynamic friction. */
     public final float dynamicFriction;
     /** The torque. */
     public final float torque;
+
+    /** The inverted mass. */
+    protected float invertedMass;
+    /** The inverted inertia. */
+    protected float invertedInertia;
     /** The body orientation in radians. */
-    public float orientation;
+    protected float orientation;
+
+
     /** The angular velocity. */
     public float angularVelocity;
-    /** The inverted inertia. */
-    public float invertedInertia;
-    /** The position. */
-    public final Vector2f position;
     /** The force. */
     public final Vector2f force;
     /** The velocity. */
@@ -95,5 +99,21 @@ public class Body {
                 .add("density=" + density)
                 .add("restitution=" + restitution)
                 .toString();
+    }
+
+    public float getInvertedMass() {
+        return invertedMass;
+    }
+
+    public float getInvertedInertia() {
+        return invertedInertia;
+    }
+
+    public float getOrientation() {
+        return orientation;
+    }
+
+    public float getDensity() {
+        return density;
     }
 }

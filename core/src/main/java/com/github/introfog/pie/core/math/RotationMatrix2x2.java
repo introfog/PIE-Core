@@ -17,7 +17,7 @@ package com.github.introfog.pie.core.math;
 
 import java.util.StringJoiner;
 
-public final class RotationMatrix2x2 {
+public class RotationMatrix2x2 {
     public float m00;
     public float m01;
     public float m10;

@@ -43,7 +43,7 @@ public class IShapeTest extends PieTest {
         IShape shape = new Circle(10, 0,0, 0, 0);
         shape.setOrientation((float) Math.PI / 3);
 
-        Assert.assertEquals((float) Math.PI / 3, shape.getBody().orientation, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals((float) Math.PI / 3, shape.getBody().getOrientation(), PieTest.FLOAT_EPSILON_COMPARISON);
 
         Assert.assertEquals(0.5f, shape.getRotateMatrix().m00, PieTest.FLOAT_EPSILON_COMPARISON);
         Assert.assertEquals(-Math.sqrt(3) / 2, shape.getRotateMatrix().m01, PieTest.FLOAT_EPSILON_COMPARISON);

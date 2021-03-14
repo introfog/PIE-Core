@@ -201,8 +201,8 @@ public class Polygon extends IShape {
             Vector2f p1 = vertices[i];
             Vector2f p2 = vertices[(i + 1) % vertices.length];
 
-            float D = Vector2f.crossProduct(p1, p2);
-            float triangleArea = 0.5f * D;
+            final float D = Vector2f.crossProduct(p1, p2);
+            final float triangleArea = 0.5f * D;
 
             area += triangleArea;
 

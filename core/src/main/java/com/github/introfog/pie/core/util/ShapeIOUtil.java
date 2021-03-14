@@ -134,7 +134,7 @@ public final class ShapeIOUtil {
         }
         str.append(shape.getBody().position.x).append(";")
                 .append(shape.getBody().position.y).append(";")
-                .append(shape.getBody().density).append(";")
+                .append(shape.getBody().getDensity()).append(";")
                 .append(shape.getBody().restitution).append("\n");
 
         return str.toString();

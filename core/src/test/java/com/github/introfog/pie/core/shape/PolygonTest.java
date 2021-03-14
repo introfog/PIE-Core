@@ -170,8 +170,8 @@ public class PolygonTest extends PieTest {
     public void computeMassAndInertiaTest() {
         Polygon polygon = Polygon.generateRectangle(0, 0, 1, 2, 5, 0.2f);
 
-        Assert.assertEquals(1f / 10f, polygon.getBody().invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1f / 4.166666f, polygon.getBody().invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 10f, polygon.getBody().getInvertedMass(), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 4.166666f, polygon.getBody().getInvertedInertia(), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  */
-package com.github.introfog.pie.core;
+package com.github.introfog.pie.core.shape;
 
 import com.github.introfog.pie.core.shape.Body;
 import com.github.introfog.pie.test.PieTest;

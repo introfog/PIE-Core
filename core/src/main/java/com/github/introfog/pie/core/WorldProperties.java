@@ -46,8 +46,7 @@ public class WorldProperties {
         correctPositionPercent = 0.5f;
         minBorderSlop = 0.1f;
         collisionSolveIterations = 1;
-        // Earth value is (0f, 9.807f)
-        gravity = new Vector2f(0f, 50f);
+        gravity = new Vector2f(0f, 9.807f);
         broadPhaseMethod = new BruteForceMethod();
         shapeCollisionHandlersMapper = ShapeCollisionHandlersMapper.createAndGetDefaultMapping();
     }

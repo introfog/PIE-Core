@@ -80,16 +80,16 @@ public class CircleTest extends PieTest {
     public void computeMassAndInertiaTest() {
         Circle circle = new Circle(10, 0, 0, (float) (1 / Math.PI), 0);
 
-        Assert.assertEquals(1f / 100f, circle.getBody().invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(1f / 10000f, circle.getBody().invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 100f, circle.getBody().getInvertedMass(), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(1f / 10000f, circle.getBody().getInvertedInertia(), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test
     public void computeMassAndInertiaZeroCircleTest() {
         Circle circle = new Circle(0, 0, 0, (float) (1 / Math.PI), 0);
 
-        Assert.assertEquals(0, circle.getBody().invertedMass, PieTest.FLOAT_EPSILON_COMPARISON);
-        Assert.assertEquals(0, circle.getBody().invertedInertia, PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, circle.getBody().getInvertedMass(), PieTest.FLOAT_EPSILON_COMPARISON);
+        Assert.assertEquals(0, circle.getBody().getInvertedInertia(), PieTest.FLOAT_EPSILON_COMPARISON);
     }
 
     @Test

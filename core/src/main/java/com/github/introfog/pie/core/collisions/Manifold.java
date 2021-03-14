@@ -74,10 +74,11 @@ public class Manifold {
                 return;
             }
 
-            float raCrossN = Vector2f.crossProduct(radA, normal);
-            float rbCrossN = Vector2f.crossProduct(radB, normal);
-            float invertMassSum = a.invertedMass + b.invertedMass + (raCrossN * raCrossN) * a.invertedInertia
-                    + (rbCrossN * rbCrossN) * b.invertedInertia;
+            final float raCrossN = Vector2f.crossProduct(radA, normal);
+            final float rbCrossN = Vector2f.crossProduct(radB, normal);
+            final float invertMassSum = a.getInvertedMass() + b.getInvertedMass() +
+                    (raCrossN * raCrossN) * a.getInvertedInertia() +
+                    (rbCrossN * rbCrossN) * b.getInvertedInertia();
 
             // Calculate the scalar of the force impulse
             float j = -(1.0f + e) * velAlongNormal;
@@ -133,16 +134,16 @@ public class Manifold {
             return;
         }
         Vector2f correction = Vector2f.mul(normal, penetration *
-                context.getCorrectPositionPercent() / (a.invertedMass + b.invertedMass));
-        a.position.sub(Vector2f.mul(correction, a.invertedMass));
-        b.position.add(Vector2f.mul(correction, b.invertedMass));
+                context.getCorrectPositionPercent() / (a.getInvertedMass() + b.getInvertedMass()));
+        a.position.sub(Vector2f.mul(correction, a.getInvertedMass()));
+        b.position.add(Vector2f.mul(correction, b.getInvertedMass()));
     }
 
     private void initializeCollision() {
         // Static friction - is a value that shows how much energy need to apply to moving the body,
-        // i.e. this is the threshold, if the energy is lower, then the body is at rest, if higher, then the body moves
-        // Dynamic friction - friction in the usual sense, when bodies rub against each other,
-        // they lose part of their energy against each other
+        // i.e. this is the threshold, if the energy is lower, then the body is at rest, if higher,
+        // then the body moves. Dynamic friction - friction in the usual sense, when bodies rub against
+        // each other, they lose part of their energy against each other
         staticFriction = (float) StrictMath.sqrt(
                 a.staticFriction * a.staticFriction + b.staticFriction * b.staticFriction);
         dynamicFriction = (float) StrictMath.sqrt(

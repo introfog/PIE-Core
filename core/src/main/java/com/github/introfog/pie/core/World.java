@@ -156,7 +156,9 @@ public final class World {
         // Narrow phase
         manifolds.clear();
         for (final ShapePair pair : mayBeCollision) {
-            if (!MathPie.areEqual(pair.getFirst().getBody().invertedMass + pair.getSecond().getBody().invertedMass, 0f)) {
+            final float invertedMassSum = pair.getFirst().getBody().getInvertedMass() +
+                    pair.getSecond().getBody().getInvertedMass();
+            if (!MathPie.areEqual(invertedMassSum, 0f)) {
 
                 final IShapeCollisionHandler handler = context.getShapeCollisionMapping().getMapping(pair);
                 if (handler == null) {
@@ -191,23 +193,24 @@ public final class World {
 
     private void integrateForces(IShape shape) {
         final Body body = shape.getBody();
-        if (body.invertedMass == 0.0f) {
+        if (body.getInvertedMass() == 0.0f) {
             return;
         }
+        final float halfDeltaTime = context.getFixedDeltaTime() * 0.5f;
 
-        body.velocity.add(body.force, body.invertedMass * context.getFixedDeltaTime() * 0.5f);
-        body.velocity.add(context.getGravity(), context.getFixedDeltaTime() * 0.5f);
-        body.angularVelocity += body.torque * body.invertedInertia * context.getFixedDeltaTime() * 0.5f;
+        body.velocity.add(body.force, body.getInvertedMass() * halfDeltaTime);
+        body.velocity.add(context.getGravity(), halfDeltaTime);
+        body.angularVelocity += body.torque * body.getInvertedInertia() * halfDeltaTime;
     }
 
     private void integrateVelocity(IShape shape) {
         final Body body = shape.getBody();
-        if (body.invertedMass == 0.0f) {
+        if (body.getInvertedMass() == 0.0f) {
             return;
         }
 
         body.position.add(body.velocity, context.getFixedDeltaTime());
 
-        shape.setOrientation(body.orientation + body.angularVelocity * context.getFixedDeltaTime());
+        shape.setOrientation(body.getOrientation() + body.angularVelocity * context.getFixedDeltaTime());
     }
 }

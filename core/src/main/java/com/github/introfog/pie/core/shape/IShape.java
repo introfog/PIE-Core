@@ -25,13 +25,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * {@link com.github.introfog.pie.core.World} that has a shape and body.
  */
 public abstract class IShape {
-    private static final AtomicInteger lastShapeId = new AtomicInteger(Integer.MIN_VALUE);
+    private static final AtomicInteger lastShapeId = new AtomicInteger();
 
     private final int shapeId;
-    /** The shape axis aligned bounding box. */
-    private final Aabb aabb;
     /** The body that stores shape physical parameters. */
     private final Body body;
+    /** The shape axis aligned bounding box. */
+    private final Aabb aabb;
     /** The rotation matrix. */
     private final RotationMatrix2x2 rotateMatrix;
 
@@ -39,10 +39,14 @@ public abstract class IShape {
      * Instantiates a new {@link IShape} instance.
      */
     public IShape(float centreX, float centreY, float density, float restitution) {
+        this(new Body(centreX, centreY, density, restitution), new Aabb(), new RotationMatrix2x2());
+    }
+
+    public IShape(Body body, Aabb aabb, RotationMatrix2x2 rotateMatrix) {
         shapeId = lastShapeId.incrementAndGet();
-        aabb = new Aabb();
-        body = new Body(centreX, centreY, density, restitution);
-        rotateMatrix = new RotationMatrix2x2();
+        this.body = body;
+        this.aabb = aabb;
+        this.rotateMatrix = rotateMatrix;
     }
 
     /**
@@ -62,8 +66,8 @@ public abstract class IShape {
      * @param contactVector the point of impulse application (coordinates are set relative to the center of the shape)
      */
     public void applyImpulse(Vector2f impulse, Vector2f contactVector) {
-        body.velocity.add(impulse, body.invertedMass);
-        body.angularVelocity += body.invertedInertia * Vector2f.crossProduct(contactVector, impulse);
+        body.velocity.add(impulse, body.getInvertedMass());
+        body.angularVelocity += body.getInvertedInertia() * Vector2f.crossProduct(contactVector, impulse);
     }
 
     /**
@@ -71,7 +75,7 @@ public abstract class IShape {
      *
      * @return the axis aligned bounding box
      */
-    public final Aabb getAabb() {
+    public Aabb getAabb() {
         return aabb;
     }
 
@@ -80,7 +84,7 @@ public abstract class IShape {
      *
      * @return the body
      */
-    public final Body getBody() {
+    public Body getBody() {
         return body;
     }
 
@@ -89,7 +93,7 @@ public abstract class IShape {
      *
      * @return the rotation matrix
      */
-    public final RotationMatrix2x2 getRotateMatrix() {
+    public RotationMatrix2x2 getRotateMatrix() {
         return rotateMatrix;
     }
 

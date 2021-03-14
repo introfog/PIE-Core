@@ -73,7 +73,7 @@ public class Circle extends IShape {
         float mass = (float) Math.PI * radius * radius * getBody().density;
         getBody().invertedMass = (mass == 0f) ? 0f : 1f / mass;
 
-        float inertia = radius * radius / (getBody().invertedMass == 0 ? 1 : getBody().invertedMass);
+        float inertia = radius * radius / (getBody().getInvertedMass() == 0 ? 1 : getBody().getInvertedMass());
         getBody().invertedInertia = (inertia != 0.0f) ? 1.0f / inertia : 0.0f;
     }
 }
